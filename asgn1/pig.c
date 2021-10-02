@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "names.h"
+
+
 
 int main() {
 
-
-typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
- const  Position  pig[7] = {
-	SIDE ,
-	SIDE ,
-	RAZORBACK ,
-	TROTTER ,
-	SNOUTER ,
-	JOWLER ,
-	JOWLER
-};
-
+	typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
+	const  Position  pig[7] = {
+	        SIDE ,
+	        SIDE ,
+	        RAZORBACK ,
+	        TROTTER ,
+	        SNOUTER ,
+	        JOWLER ,
+	        JOWLER
+	};
 
 	int numPlayers = 2;
 	int seed = 2021;
@@ -49,6 +50,36 @@ typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
 	srandom(seed);
 	
 
-	printf("%d\n", numPlayers);
-	printf("%lu\n", random());
+	int i;
+	int r;
+	int points[10] = {0,0,0,0,0,0,0,0,0,0};
+
+	for (i = 0; i < numPlayers; i+=1) 
+	{	
+		r = random() % 7;
+		printf("%s rolls the pig...pig lands on %d\n", names[i], pig[r]);
+		points[i] += pig[r];
+		while (pig[r] != SIDE)
+		{
+			r = random() % 7;
+                	printf("%s rolls the pig...pig lands on %d\n", names[i], pig[r]);
+			points[i] += pig[r];
+		}
+		if (points[i] >= 50) 
+		{
+			printf("%s wins with 100 points!\n", names[i]);
+			break;
+		}
+		if (i == numPlayers-1)
+		{
+			i = -1;
+		} 
+	}
+
+	int j = 0;
+	for (j=0;j<10;j++)
+	{
+		printf("%d ", points[j]);
+	}
+
 }
