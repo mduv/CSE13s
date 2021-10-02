@@ -17,29 +17,29 @@ typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
 };
 
 
-	int numPlayers;
-	int seed;
+	int numPlayers = 2;
+	int seed = 2021;
 
+	printf("How many players? ");
 	int numPlayersInput = 0;
 	scanf("%d", &numPlayersInput);
 
 	if (numPlayersInput < 2 || numPlayersInput > 10)
 	{ 
 		fprintf(stderr , "Invalid number of players. Using 2 instead .\n");
-		numPlayers = 2;
 	}
 	else
 	{
 		numPlayers = numPlayersInput;
 	}
 	
-	int inputSeed = 0;
-        scanf("%d", &inputSeed);
+	printf("Random seed: ");
+	unsigned int inputSeed = 0;
+        scanf("%u", &inputSeed);
 
-        if (inputSeed < 0 || inputSeed > pow(2, 31)-1)
+        if (inputSeed < 0 || inputSeed > (pow(2.0, 31.0)-1))
         {
                 fprintf(stderr , "Invalid random seed. Using 2021 instead .\n");
-                seed = 2021;
         }
         else
         {
@@ -49,8 +49,6 @@ typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
 	srandom(seed);
 	
 
-	
 	printf("%d\n", numPlayers);
 	printf("%lu\n", random());
-	
 }
