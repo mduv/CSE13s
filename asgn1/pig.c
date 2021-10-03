@@ -9,94 +9,87 @@ int main() {
 
 	typedef  enum { SIDE , RAZORBACK , TROTTER , SNOUTER , JOWLER } Position;
 	const  Position  pig[7] = {
-	        SIDE ,
-	        SIDE ,
-	        RAZORBACK ,
-	        TROTTER ,
-	        SNOUTER ,
-	        JOWLER ,
-	        JOWLER
+		SIDE ,
+		SIDE ,
+		RAZORBACK ,
+		TROTTER ,
+		SNOUTER ,
+		JOWLER ,
+		JOWLER
+	};
+
+	const int Points[7] = {
+		0, 
+		0,
+		10, 
+		10,
+		15, 
+		5,
+		5 
 	};
 
 
 	char mapstr[7][20] = {
-                                "on side",
-				"on side",
-                                "on back",
-                                "upright",
-                                "on snout",
-                                "on ear",
-				"on ear"
+		"on side",
+		"on side",
+		"on back",
+		"upright",
+		"on snout",
+		"on ear",
+		"on ear"
 
-                        };	
+	};	
 	int numPlayers = 2;
 	int seed = 2021;
 
 	printf("How many players? ");
-	int numPlayersInput = 0;
-	scanf("%d", &numPlayersInput);
-
-	if (numPlayersInput < 2 || numPlayersInput > 10)
+	int userInput = -1;
+	scanf("%d", &userInput);
+	if (userInput < 2 || userInput > 10)
 	{ 
 		fprintf(stderr , "Invalid number of players. Using 2 instead .\n");
-	}
-	else
-	{
-		numPlayers = numPlayersInput;
-	}
-	
-	printf("Random seed: ");
-	unsigned int inputSeed = 0;
-        scanf("%u", &inputSeed);
+		numPlayers = 2;
+	} else {
+		numPlayers = userInput;
+	} 
 
-        if (inputSeed < 0 || inputSeed > (pow(2.0, 31.0)-1))
-        {
-                fprintf(stderr , "Invalid random seed. Using 2021 instead .\n");
-        }
-        else
-        {
-                seed = inputSeed;
-        }
+	printf("Random seed: ");
+	userInput = -1;
+	scanf("%d", &userInput);
+
+	if (userInput < 0 || userInput > (pow(2.0, 31.0)-1))
+	{
+		fprintf(stderr , "Invalid random seed. Using 2021 instead .\n");
+		seed = 2021; 
+	} else {
+		seed = userInput; 
+	}
 
 	srandom(seed);
-	
 
-	int i;
-	int r;
+	int roll;
 	int points[10] = {0,0,0,0,0,0,0,0,0,0};
-	char*  phrase;
 
 
-	for (i = 0; i < numPlayers; i+=1) 
-	{	
-		r = random() % 7;
-		printf("%s rolls the pig...pig lands %s\n", names[i], mapstr[pig[r]]);
-		points[i] += pig[r];
-		while (pig[r] != SIDE)
+	int currentPlayer = 0;
+	printf("%s rolls the pig...", names[currentPlayer]);
+	while (1) {
+		roll = random() % 7;
+		points[currentPlayer] += Points[roll];
+		printf("pig lands %s ", mapstr[roll]);
+		if (pig[roll] == SIDE)
+		{
+			currentPlayer += 1;
+			currentPlayer %= numPlayers;
+			printf("\n%s rolls the pig...", names[currentPlayer]);
+		} else {
+			if (points[currentPlayer] >= 100)
 			{
-				r = random() % 7;
-                		printf("%s rolls the pig...pig lands %s\n", names[i], mapstr[pig[r]]);
-				points[i] += pig[r];
-				if (points[i] >= 20)
-                			{
-                                		break;
-                			}
+				printf("\n%s wins with 100 points!\n", names[currentPlayer]);
+				break;
 			}
-		if (points[i] >= 20)
-               		{	
-                               	printf("%s wins with 100 points!\n", names[i]);
-                               	break;
-       	 		}
-		if (i == numPlayers-1)
-			{
-				i = -1;
-			}	 
+		}
 	}
 
-	int j = 0;
-	for (j=0;j<10;j++)
-	{
-		printf("%d ", points[j]);
-	}
 
 }
