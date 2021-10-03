@@ -3,6 +3,7 @@
 #include <math.h>
 #include "names.h"
 #include <string.h>
+#include <limits.h>
 
 
 int main() {
@@ -43,8 +44,8 @@ int main() {
 	int seed = 2021;
 
 	printf("How many players? ");
-	int userInput = -1;
-	scanf("%d", &userInput);
+	long userInput = -1;
+	scanf("%ld", &userInput);
 	if (userInput < 2 || userInput > 10)
 	{ 
 		fprintf(stderr , "Invalid number of players. Using 2 instead .\n");
@@ -55,9 +56,10 @@ int main() {
 
 	printf("Random seed: ");
 	userInput = -1;
-	scanf("%d", &userInput);
+	scanf("%ld", &userInput);
 
-	if (userInput < 0 || userInput > (pow(2.0, 31.0)-1))
+
+	if ((userInput < 0) || (userInput > 4294967295U))
 	{
 		fprintf(stderr , "Invalid random seed. Using 2021 instead .\n");
 		seed = 2021; 
