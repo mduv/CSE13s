@@ -51,7 +51,7 @@ int main() {
     while (1) {
         roll = random() % 7;
         points[currentPlayer] += Points[roll];
-        printf("pig lands %s ", mapstr[roll]);
+        printf(" pig lands %s", mapstr[roll]);
         if (pig[roll] == SIDE) {
             currentPlayer += 1;
             currentPlayer %= numPlayers;
