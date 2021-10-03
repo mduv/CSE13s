@@ -58,7 +58,7 @@ int main() {
             printf("\n%s rolls the pig...", names[currentPlayer]);
         } else {
             if (points[currentPlayer] >= 100) {
-                printf("\n%s wins with 100 points!\n", names[currentPlayer]);
+                printf("\n%s wins with %d points!\n", names[currentPlayer], points[currentPlayer]);
                 break;
             }
         }
