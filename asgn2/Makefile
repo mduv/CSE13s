@@ -10,8 +10,8 @@ e_test: e.o
 # mathlib-test: mathlib-test.o e.o euler.o madhava.o newton.o viete.o bbp.o
 #	$(CC) $(CFLAGS) mathlib-test.o e.o euler.o madhava.o newton.o viete.o bbp.o
 
-mathlib-test: mathlib-test.o e.o viete.o newton.o madhava.o
-	$(CC) $(CFLAGS) mathlib-test.o e.o viete.o newton.o madhava.o -o mathlib-test
+mathlib-test: mathlib-test.o e.o viete.o newton.o madhava.o euler.o bbp.o
+	$(CC) $(CFLAGS) mathlib-test.o e.o viete.o newton.o madhava.o euler.o bbp.o -o mathlib-test
 
 
 
