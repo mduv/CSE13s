@@ -23,8 +23,6 @@ double e(void) {
             current_val += (1/k_factorial);
             k = k + 1;
         }
-        printf("current val: %f, k factorial: %f, prev val: %f, diff: %f\n", 
-            current_val, k_factorial, prev_val, absolute(prev_val - current_val));
 
         num_terms = num_terms + 1;
     }
