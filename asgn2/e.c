@@ -1,6 +1,7 @@
 #include "mathlib.h"
-#include <stdlib.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 
 static int num_terms = 0;
 
@@ -17,11 +18,10 @@ double e(void) {
         if (k == 0) {
             k_factorial = 1;
             k = k + 1;
-        }
-        else {
+        } else {
             prev_val = current_val;
             k_factorial = k_factorial * k;
-            current_val += (1/k_factorial);
+            current_val += (1 / k_factorial);
             k = k + 1;
         }
 
@@ -34,4 +34,3 @@ double e(void) {
 int e_terms(void) {
     return num_terms;
 }
-
