@@ -11,6 +11,7 @@ double e(void) {
     double k_factorial = 0;
     double k = 0;
 
+    num_terms = 0;
 
     while (absolute(current_val - prev_val) > EPSILON) {
         if (k == 0) {

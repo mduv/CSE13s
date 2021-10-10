@@ -7,11 +7,12 @@ static int num_terms = 0;
 double pi_madhava(void) {
     double prev_val = 0;
     double current_val = 1;
-    int k;
+    int k = 0;
     double num = 1;
     double den = 0;
     double num_frac = 0; //fraction portion of series
-
+    
+    num_terms = 0;
    while (absolute(prev_val - current_val) > EPSILON) {
        // -3 pow -2 == 1/(-3pow-2)
        // prev_val = current_val;
@@ -33,8 +34,12 @@ double pi_madhava(void) {
        // current value is updated to num_frac/den
        // update the terms 
        num_terms = num_terms + 1;
+        //    printf("current_val = %.20f, perv_valu = %.20f, num_terms = %d\n", 
+        //             current_val, prev_val, num_terms);
+
     }
 
+    // printf("num_terms = %d\n", num_terms);
     return sqrt_newton(12) * current_val; 
 
 }

@@ -12,7 +12,8 @@ double pi_bbp(void) { // I get 63440 terms before converging
     double current_val = 0;
     double k = 0;
     // int i = 5;
-
+    num_terms = 0;
+    
     while (absolute(prev_val - current_val) > EPSILON) {
 
            prev_val = current_val;

@@ -10,7 +10,7 @@ double pi_viete(void) {
     double prev_value = 0;
     double current_value = 1;
     // int i = 7;
-
+    num_terms = 0;
     while (absolute(current_value - prev_value) > EPSILON) {
         prev_value = current_value;
         num = sqrt_newton(2 + num);
@@ -31,5 +31,5 @@ double pi_viete(void) {
 }
 
 int pi_viete_factors(void) {
-    return num_terms;
+    return num_terms-1;
 }
