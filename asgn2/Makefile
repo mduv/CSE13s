@@ -11,7 +11,7 @@ mathlib-test: mathlib-test.o e.o viete.o newton.o madhava.o euler.o bbp.o
 mathlib-test.o: mathlib-test.c mathlib.h
 	$(CC) $(CFLAGS) -c mathlib-test.c 
 clean:
-	rm -f *.o
+	rm -f *.o mathlib-test
 
 format:
 	clang-format -i -style=file *.[ch]
