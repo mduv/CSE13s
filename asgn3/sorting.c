@@ -16,7 +16,7 @@ typedef enum { HEAP, SHELL, INSERT, QUICK, ALL } SortType;
 void intializeArray(uint32_t *numbersArray, int arraySize, uint32_t seed) {
     srandom(seed);
     for (int i = 0; i < arraySize; i++) {
-        numbersArray[i] = (uint32_t) (random() & 0x3FFFFFFF);
+        numbersArray[i] = (uint32_t)(random() & 0x3FFFFFFF);
     }
 }
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
     }
     srandom(seed);
     for (int i = 0; i < arraySize; i++) {
-        numbersArray[i] = (uint32_t) (random() & 0x3FFFFFFF);
+        numbersArray[i] = (uint32_t)(random() & 0x3FFFFFFF);
     }
 
     if (member_set(HEAP, bitmap)) {
