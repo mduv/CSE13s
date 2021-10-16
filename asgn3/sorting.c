@@ -120,8 +120,8 @@ int main(int argc, char **argv) {
         reset(&stats);
         intializeArray(numbersArray, arraySize, seed);
         heap_sort(&stats, numbersArray, arraySize);
-        printf("Heap Sort, %u elements, %lu moves, %lu compares\n", arraySize, (long int)stats.moves,
-            (long int)stats.compares);
+        printf("Heap Sort, %u elements, %lu moves, %lu compares\n", arraySize,
+            (long int) stats.moves, (long int) stats.compares);
         printArray(numbersArray, arraySize, pElements);
     }
 
@@ -129,8 +129,8 @@ int main(int argc, char **argv) {
         reset(&stats);
         intializeArray(numbersArray, arraySize, seed);
         shell_sort(&stats, numbersArray, arraySize);
-        printf("Shell Sort, %u elements, %lu moves, %lu compares\n", arraySize, (long int)stats.moves,
-            (long int)stats.compares);
+        printf("Shell Sort, %u elements, %lu moves, %lu compares\n", arraySize,
+            (long int) stats.moves, (long int) stats.compares);
         printArray(numbersArray, arraySize, pElements);
     }
 
@@ -138,8 +138,8 @@ int main(int argc, char **argv) {
         reset(&stats);
         intializeArray(numbersArray, arraySize, seed);
         insertion_sort(&stats, numbersArray, arraySize);
-        printf("Insertion Sort, %u elements, %lu moves, %lu compares\n", arraySize, (long int)stats.moves,
-            (long int)stats.compares);
+        printf("Insertion Sort, %u elements, %lu moves, %lu compares\n", arraySize,
+            (long int) stats.moves, (long int) stats.compares);
         printArray(numbersArray, arraySize, pElements);
     }
 
@@ -147,8 +147,8 @@ int main(int argc, char **argv) {
         reset(&stats);
         intializeArray(numbersArray, arraySize, seed);
         quick_sort(&stats, numbersArray, arraySize);
-        printf("Quick Sort, %u elements, %lu moves, %lu compares\n", arraySize, (long int)stats.moves,
-            (long int)stats.compares);
+        printf("Quick Sort, %u elements, %lu moves, %lu compares\n", arraySize,
+            (long int) stats.moves, (long int) stats.compares);
         printArray(numbersArray, arraySize, pElements);
     }
 
