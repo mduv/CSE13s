@@ -5,7 +5,7 @@ all: sorting
 
 
 sorting: sorting.o insert.o stats.o shell.o quick.o heap.o
-	$(CC) $(CFLAGS) insert.o stats.o sorting.o shell.o quick.o heap.o  -lm -o sorting
+	$(CC) $(CFLAGS) sorting.o insert.o stats.o shell.o quick.o heap.o -lm -o sorting
 
 
 sorting.o: sorting.c 
