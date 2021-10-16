@@ -4,8 +4,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 all: sorting
 
 
-sorting: sorting.o bbp.o
-	$(CC) $(CFLAGS) sorting.o bbp.o -lm -o sorting
+sorting: sorting.o insert.o stats.o shell.o quick.o heap.o
+	$(CC) $(CFLAGS) insert.o stats.o sorting.o shell.o quick.o heap.o  -lm -o sorting
 
 
 sorting.o: sorting.c 
