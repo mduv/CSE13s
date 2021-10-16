@@ -12,6 +12,5 @@ sorting.o: sorting.c
 	$(CC) $(CFLAGS) -c sorting.c 
 clean:
 	rm -f *.o sorting
-
 format:
 	clang-format -i -style=file *.[ch]
