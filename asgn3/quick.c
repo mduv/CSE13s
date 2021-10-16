@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include "quick.h"
 
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // def  partition(A: list , lo: int , hi: int):
 // 2      i = lo - 1
@@ -16,7 +16,7 @@
 unsigned int partition(Stats *stats, uint32_t *A, int lo, int hi) {
     int i = lo - 1;
     for (int j = lo; j < hi; j++) {
-        if ( cmp(stats, A[j - 1], A[hi - 1]) == -1 ) {
+        if (cmp(stats, A[j - 1], A[hi - 1]) == -1) {
             i += 1;
             swap(stats, &A[i - 1], &A[j - 1]);
         }
@@ -28,7 +28,7 @@ unsigned int partition(Stats *stats, uint32_t *A, int lo, int hi) {
 void quick_sorter(Stats *stats, uint32_t *A, uint32_t lo, uint32_t hi) {
     uint32_t p = 0;
     if (lo < hi) {
-        p = partition(stats, A, lo , hi);
+        p = partition(stats, A, lo, hi);
         quick_sorter(stats, A, lo, p - 1);
         quick_sorter(stats, A, p + 1, hi);
     }
@@ -37,4 +37,3 @@ void quick_sorter(Stats *stats, uint32_t *A, uint32_t lo, uint32_t hi) {
 void quick_sort(Stats *stats, uint32_t *A, uint32_t n) {
     quick_sorter(stats, A, 1, n);
 }
-

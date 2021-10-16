@@ -1,10 +1,11 @@
+#include "stats.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "stats.h"
 
 int cmp(Stats *stats, uint32_t x, uint32_t y) {
     stats->compares += 1;
-    
+
     if (x < y) {
         return -1;
     }
@@ -35,4 +36,3 @@ void reset(Stats *stats) {
     stats->compares = 0;
     return;
 }
-

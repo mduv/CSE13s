@@ -1,6 +1,7 @@
+#include "heap.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "heap.h"
 
 // def  max_child(A: list , first: int , last: int):
 // 2      left = 2 * first
@@ -9,15 +10,14 @@
 // 5           return  right
 // 6      return  left
 
-
 uint32_t max_child(Stats *stats, uint32_t *A, uint32_t first, uint32_t last) {
-        uint32_t left = 2 * first;
-        uint32_t right = left + 1;
+    uint32_t left = 2 * first;
+    uint32_t right = left + 1;
 
-        if (right <= last && (cmp(stats, A[right -1], A[left -1]) == 1)) {
-            return right;
-        }
-        return left;
+    if (right <= last && (cmp(stats, A[right - 1], A[left - 1]) == 1)) {
+        return right;
+    }
+    return left;
 }
 
 // def  fix_heap(A: list , first: int , last: int):
@@ -38,8 +38,8 @@ void fix_heap(Stats *stats, uint32_t *A, uint32_t first, uint32_t last) {
     uint32_t mother = first;
     uint32_t great = max_child(stats, A, mother, last);
 
-    while( (mother <= last / 2 ) && found == 0) {
-        if (cmp(stats, A[mother - 1], A[great -1]) == -1) {
+    while ((mother <= last / 2) && found == 0) {
+        if (cmp(stats, A[mother - 1], A[great - 1]) == -1) {
             swap(stats, &A[mother - 1], &A[great - 1]);
             mother = great;
             great = max_child(stats, A, mother, last);
@@ -53,9 +53,8 @@ void fix_heap(Stats *stats, uint32_t *A, uint32_t first, uint32_t last) {
 // 2      for  father  in  range(last // 2, first  - 1,  -1):
 // 3           fix_heap(A, father , last)
 
-
 void build_heap(Stats *stats, uint32_t *A, uint32_t first, uint32_t last) {
-    for (uint32_t father = last/2; father > (first - 1); father--) {
+    for (uint32_t father = last / 2; father > (first - 1); father--) {
         fix_heap(stats, A, father, last);
     }
 }
@@ -77,4 +76,3 @@ void heap_sort(Stats *stats, uint32_t *A, uint32_t n) {
         fix_heap(stats, A, first, leaf - 1);
     }
 }
-
