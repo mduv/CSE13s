@@ -31,9 +31,6 @@ void printArray(uint32_t *numbersArray, int arraySize, int pElements) {
             printf("%13u", numbersArray[i - 1]);
         }
     }
-    // if ((arraySize % 5) != 0) {
-    //     printf("\n");
-    // }
 }
 
 int main(int argc, char **argv) {
