@@ -46,7 +46,7 @@ uint32_t graph_vertices(Graph *G) {
 }
 
 bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
-    if ((i > 0 && i < G->vertices) || (j > 0 && j < G->vertices)) {
+    if ((verticesWithinBounds(i) && verticesWithinBounds(j))) {
         G->matrix[i][j] = k;
         if (G->undirected) {
             G->matrix[j][i] = k;
