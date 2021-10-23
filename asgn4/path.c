@@ -30,17 +30,14 @@ void path_delete(Path **p) {
 }
 
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
-    uint32_t x = 0;
-    if (p == NULL || G == NULL) {
-        return false;
-    }
-    else if (stack_full(p->vertices) || stack_empty(p->vertices))
+    uint32_t y = 0;
+    if (stack_full(p->vertices) || stack_empty(p->vertices))
     {
         return false;
     }
     else {
-        stack_peek(p->vertices, &x);                                  // use peak to get last vertex
-        p->length += graph_edge_weight(G, x, v);                      // add graph edge weight to plength
+        stack_peek(p->vertices, &y);                                  // use peak to get last vertex
+        p->length += graph_edge_weight(G, y, v);                      // add graph edge weight to plength
         return stack_push(p->vertices, v);                            // call stack_push and return if able to do it or not
     }
 }
@@ -73,7 +70,7 @@ void path_copy(Path *dst, Path *src) {
 void path_print(Path *p, FILE *outfile, char *cities[]) {
     // call stack_print
     stack_print(p->vertices, outfile, cities);
-    return;
 }
+
 
 
