@@ -16,7 +16,7 @@ struct Graph {
 };
 
 bool verticesWithinBounds(uint32_t v) {
-    if ((START_VERTEX <= v && v <= VERTICES)) {
+    if ((START_VERTEX <= v && v < VERTICES)) {
         return true;
     }
     else {
