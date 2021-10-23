@@ -40,7 +40,7 @@ bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     }
     else {
         stack_peek(p->vertices, &y);                                  // use peak to get last vertex
-        p->length += graph_edge_weight(G, v, y);                      // add graph edge weight to plength
+        p->length += graph_edge_weight(G, y, v);                      // add graph edge weight to plength
         return stack_push(p->vertices, v);                            // call stack_push and return if able to do it or not
     }
 }
@@ -53,7 +53,7 @@ bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     }
     else {
         stack_pop(p->vertices, &x);
-        p->length -= graph_edge_weight(G, x, *v);
+        p->length -= graph_edge_weight(G, *v, x);
         return true;
     }
 }
