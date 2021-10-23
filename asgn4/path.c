@@ -19,6 +19,10 @@ Path *path_create(void) {
         // for student to do
         p->vertices = stack_create(VERTICES);
         p->length = 0;
+        if (!p->vertices) {
+            free(p);
+            p = NULL;
+        }
     }
     return p;
 }
