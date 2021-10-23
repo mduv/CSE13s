@@ -16,7 +16,6 @@ struct Path {
 Path *path_create(void) {
     Path *p = (Path *) malloc(sizeof(Path));
     if (p) {
-        // for student to do
         p->vertices = stack_create(VERTICES);
         p->length = 0;
         if (!p->vertices) {
@@ -35,7 +34,7 @@ void path_delete(Path **p) {
 
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     uint32_t y = 0;
-    if (stack_full(p->vertices) || stack_empty(p->vertices))
+    if (p == NULL || G == NULL || stack_full(p->vertices))
     {
         return false;
     }
