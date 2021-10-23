@@ -15,8 +15,8 @@ struct Graph {
     uint32_t matrix[VERTICES][VERTICES];    // Adjaceny Matrix
 };
 
-bool verticesWithinBounds(uint32_t v) {
-    if ((START_VERTEX <= v && v < VERTICES)) {
+bool verticesWithinBounds(Graph *G, uint32_t v) {
+    if ((START_VERTEX <= v && v < G->vertices)) {
         return true;
     }
     else {
@@ -46,7 +46,7 @@ uint32_t graph_vertices(Graph *G) {
 }
 
 bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
-    if ((verticesWithinBounds(i) && verticesWithinBounds(j))) {
+    if ((verticesWithinBounds(G, i) && verticesWithinBounds(G, j))) {
         G->matrix[i][j] = k;
         if (G->undirected) {
             G->matrix[j][i] = k;
@@ -59,7 +59,7 @@ bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
 }
 
 bool graph_has_edge(Graph *G, uint32_t i, uint32_t j) {
-    if ((verticesWithinBounds(i) && verticesWithinBounds(j)) && (G->matrix[i][j] > 0)) {
+    if ((verticesWithinBounds(G, i) && verticesWithinBounds(G, j)) && (G->matrix[i][j] > 0)) {
         return true;
     }
     else {
@@ -87,13 +87,13 @@ bool graph_visited(Graph *G, uint32_t v) {
 }
 
 void graph_mark_visited(Graph *G, uint32_t v) {
-    if (verticesWithinBounds(v)) {
+    if (verticesWithinBounds(G, v)) {
         G->visited[v] = true;
     }
 }
 
 void graph_mark_unvisited(Graph *G, uint32_t v) {
-    if (verticesWithinBounds(v)) {
+    if (verticesWithinBounds(G, v)) {
         G->visited[v] = false;
     }
 }
