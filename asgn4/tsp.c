@@ -126,12 +126,9 @@ int main(int argc, char **argv) {
     graph_delete(&locations);
     for (uint32_t i = 0; i < vertices; i++) {
         free(cities[i]);
-	cities[i] = NULL;
+        cities[i] = NULL;
     }
     free(cities);
     fclose(input);
     fclose(output);
-
-
-    
 }
