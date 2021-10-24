@@ -40,7 +40,8 @@ int main(int argc, char **argv) {
                    "\t-u             Use undirected graph."
                    "\n \t-v             Enable verbose printing.\n \t-h             Program usage and help.\n \t"
                    "\n \t-i infile      Input containing graph (default: stdin)"
-                   "\n \t-o outfile     Output of computed path (default: stdout)");
+                   "\n \t-o outfile     Output of computed path (default: stdout)\n");
+                   return(-1);
                 break;
             case 'i':
                 // inputfile_name = optarg;
