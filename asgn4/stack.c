@@ -83,7 +83,12 @@ bool stack_peek(Stack *s, uint32_t *x) {
         return false;
     }
     else {
-        *x = s->items[s->top];
+        *x = s->items[s->top-1];
+        // printf("stack_peek: top %d:  ", s->top);
+        //  for (uint32_t i = 0; i < s->top; i++) {
+        //     printf("%d ", s->items[i]);
+        // }
+        // printf("\n");
         return true;
     }
 }
