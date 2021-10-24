@@ -54,7 +54,7 @@ bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     }
     else {
         stack_pop(p->vertices, &x);
-        p->length -= graph_edge_weight(G, *v, x);
+        p->length -= graph_edge_weight(G, x, *v);
         return true;
     }
 }
