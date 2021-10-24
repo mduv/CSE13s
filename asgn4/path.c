@@ -27,6 +27,7 @@ Path *path_create(void) {
 }
 
 void path_delete(Path **p) {
+    stack_delete(&((*p)->vertices));
     free(*p);
     *p = NULL;
     return;

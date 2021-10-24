@@ -118,4 +118,20 @@ int main(int argc, char **argv) {
 
     // Print total number of recursive calls
     fprintf(output, "Total recursive calls: %d\n", counter);
+
+    // free memory
+    path_delete(&curr);
+    path_delete(&shortest);
+
+    graph_delete(&locations);
+    for (uint32_t i = 0; i < vertices; i++) {
+        free(cities[i]);
+	cities[i] = NULL;
+    }
+    free(cities);
+    fclose(input);
+    fclose(output);
+
+
+    
 }
