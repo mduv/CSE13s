@@ -1,18 +1,19 @@
+#include "dfs.h"
+
 #include "graph.h"
 #include "path.h"
 #include "stack.h"
 #include "vertices.h"
-#include "dfs.h"
 
+#include <inttypes.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <inttypes.h>
-#include <stdbool.h>
 
-
-void dfs(Graph *G, uint32_t v, Path *curr, char *cities[], Path *shortest, int *counter, FILE *outfile, bool verbose) {
+void dfs(Graph *G, uint32_t v, Path *curr, char *cities[], Path *shortest, int *counter,
+    FILE *outfile, bool verbose) {
     *counter = *counter + 1;
     //printf("counter: %d\n", *counter);
     uint32_t num_vertices = graph_vertices(G);
@@ -23,10 +24,10 @@ void dfs(Graph *G, uint32_t v, Path *curr, char *cities[], Path *shortest, int *
     path_push_vertex(curr, v, G);
     for (uint32_t i = 0; i < num_vertices; i++) {
         //printf("current node: %d, other node: %d\n", v, i);
-        if (graph_has_edge(G, v, i)) {   
+        if (graph_has_edge(G, v, i)) {
             if (graph_visited(G, i) == false) {
                 if ((path_vertices(shortest) == 0) || (path_length(curr) < path_length(shortest))) {
-                    dfs(G , i, curr, cities, shortest, counter, outfile, verbose);
+                    dfs(G, i, curr, cities, shortest, counter, outfile, verbose);
                 }
             }
         }
@@ -42,8 +43,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, char *cities[], Path *shortest, int *
             }
             if (path_vertices(shortest) == 0) {
                 path_copy(shortest, curr);
-            }
-            else {
+            } else {
                 if (path_length(curr) < path_length(shortest)) {
                     path_copy(shortest, curr);
                 }
@@ -52,7 +52,7 @@ void dfs(Graph *G, uint32_t v, Path *curr, char *cities[], Path *shortest, int *
         }
     }
 
-    uint32_t i = 0; 
+    uint32_t i = 0;
     path_pop_vertex(curr, &i, G);
     graph_mark_unvisited(G, v);
 }
