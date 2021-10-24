@@ -39,22 +39,29 @@ bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
         return false;
     }
     else {
-        stack_peek(p->vertices, &y);                                  // use peak to get last vertex
-        // printf("add %d after %d weight %d\n", v, y, graph_edge_weight(G, y, v));
-        p->length += graph_edge_weight(G, y, v);                      // add graph edge weight to plength
+        if (!stack_empty(p->vertices)) {
+            stack_peek(p->vertices, &y);                                  // use peak to get last vertex
+            p->length += graph_edge_weight(G, y, v);                      // add graph edge weight to plength
+        } else {
+            //p->length += graph_edge_weight(G, START_VERTEX, v);                      // add graph edge weight to plength
+            p->length = 0;
+        }
         return stack_push(p->vertices, v);                            // call stack_push and return if able to do it or not
     }
 }
 
 bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     uint32_t x = 0;
+    uint32_t y = 0;
     if (p == NULL || G == NULL || stack_empty(p->vertices))
     {
         return false;
     }
     else {
         stack_pop(p->vertices, &x);
-        p->length -= graph_edge_weight(G, x, *v);
+        stack_peek(p->vertices, &y);                                  // use peak to get last vertex
+        p->length -= graph_edge_weight(G, y, x);
+        *v = x;
         return true;
     }
 }

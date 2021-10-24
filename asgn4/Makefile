@@ -4,8 +4,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 all: tsp
 
 
-tsp: tsp.o graph.o stack.o path.o
-	$(CC) $(CFLAGS) tsp.o graph.o stack.o path.o -lm -o tsp
+tsp: tsp.o graph.o stack.o path.o dfs.o
+	$(CC) $(CFLAGS) tsp.o graph.o stack.o path.o dfs.o -lm -o tsp
 
 
 tsp.o: tsp.c 
