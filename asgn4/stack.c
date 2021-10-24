@@ -72,7 +72,7 @@ bool stack_pop(Stack *s, uint32_t *x) {
         return false;
     }
     else {
-        *x = s->items[s->top];
+        *x = s->items[s->top-1];
         s->top -= 1;
         return true;
     }
