@@ -2,137 +2,149 @@
 #include "path.h"
 #include "stack.h"
 #include "vertices.h"
+#include "dfs.h"
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <inttypes.h>
+#include <stdbool.h>
 
-#define OPTIONS "uvhi:o:"
+
+
+// #define OPTIONS "uvhi:o:"
+
+// static FILE *input = NULL;
+// static FILE *output = NULL;
+
+// // any other static variables
+
+// // helper for proccesing files
+// // process_files(char *infile_name, char *outfile_name) {
+// //     input = fopen(infile_name, "r") {
+
+// //     }
+// //     input = fopen(outfile_name, "r") {
+        
+// //     }
+
+// //     return true;
+// // }
 
 // int main(int argc, char **argv) {
-    // int opt = 0;
-    // optind = 1;
+//     int opt = 0;
+//     optind = 1;
+//     char *inputfile_name = NULL;
+//     // char *outputfile_name = NULL;
+//     bool undirected = false;
+//     uint32_t vertices;
 
-    // Stats stats;
-    // Set bitmap = 0;
+//     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+//         switch (opt) {
+//             case 'h':
+//                 printf("SYNOPSIS\nSYNOPSIS\n\tTraveling Salesman Problem using DFS."
+//                    "\n\nUSAGE\n"
+//                    "\t../tsp [-u] [-v] [-h] [-i infile] [-o outfile]\n\nOPTIONS\n "
+//                    "\t-u             Use undirected graph."
+//                    "\n \t-v             Enable verbose printing.\n \t-h             Program usage and help.\n \t"
+//                    "\n \t-i infile      Input containing graph (default: stdin)"
+//                    "\n \t-o outfile     Output of computed path (default: stdout)");
+//                 break;
+//             case 'i':
+//                 inputfile_name = optarg;
+//                 break;
+//             return 0;
+//         // default:
+//         //     printf();
+//         }
+//     }
 
-    // int arraySize = 100;
-    // int pElements = 100;
-    // uint32_t seed = 13371453;
-
-    // if (argc == 1) { // no args
-    //     printf("Select at least one sort to perform\nSYNOPSIS\n\tA collection of comparison-based "
-    //            "sorting algorithms.\n\nUSAGE\n "
-    //            "\t./sorting [-haeisqn:p:r:] [-n length] [-p elements] [-r seed]\n\nOPTIONS\n \t-h  "
-    //            " display program help and usage."
-    //            "\n \t-a   enable all sorts.\n \t-e   enable Heap Sort.\n \t-i   enable Insertion "
-    //            "Sort.\n \t-s   enable Shell Sort."
-    //            "\n \t-q   enable Quick Sort.\n \t-n length   specify number of array elements "
-    //            "(default: 100)\n \t-p elements  "
-    //            " specify number of elements to print (default: 100).\n \t-r seed  specify random "
-    //            "seed (default: 13371453).\n");
-    //     return 0;
-    // }
-    // while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
-    //     switch (opt) {
-    //     case 'n': arraySize = atoi(optarg); break;
-    //     case 'p': pElements = atoi(optarg); break;
-    //     case 'r': seed = atoi(optarg);
-    //     default: break;
-    //     }
-    // }
-
-    // uint32_t *numbersArray = (uint32_t *) malloc(arraySize * sizeof(uint32_t));
-
-    // optind = 1;
-
-    // while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
-    //     switch (opt) {
-    //     case 'a':
-    //         bitmap = insert_set(HEAP, bitmap);
-    //         bitmap = insert_set(SHELL, bitmap);
-    //         bitmap = insert_set(INSERT, bitmap);
-    //         bitmap = insert_set(QUICK, bitmap);
-    //         break;
-    //     case 'n': break;
-    //     case 'i': bitmap = insert_set(INSERT, bitmap); break;
-    //     case 's': bitmap = insert_set(SHELL, bitmap); break;
-    //     case 'q': bitmap = insert_set(QUICK, bitmap); break;
-    //     case 'e': bitmap = insert_set(HEAP, bitmap); break;
-    //     case 'h':
-    //         printf("Select at least one sort to perform\nSYNOPSIS\n\tA collection of "
-    //                "comparison-based sorting algorithms.\n\nUSAGE\n"
-    //                "\t./sorting [-haeisqn:p:r:] [-n length] [-p elements] [-r seed]\n\nOPTIONS\n "
-    //                "\t-h   display program help and usage."
-    //                "\n \t-a   enable all sorts.\n \t-e   enable Heap Sort.\n \t-i   enable "
-    //                "Insertion Sort.\n \t-s   enable Shell Sort."
-    //                "\n \t-q   enable Quick Sort.\n \t-n length   specify number of array elements "
-    //                "(default: 100)\n \t-p elements  "
-    //                " specify number of elements to print (default: 100).\n \t-r seed  specify "
-    //                "random seed (default: 13371453).\n");
-    //         return 0;
-    //     default:
-    //         printf("Select at least one sort to perform\nSYNOPSIS\n\tA collection of "
-    //                "comparison-based sorting algorithms.\n\nUSAGE\n "
-    //                "\t./sorting [-haeisqn:p:r:] [-n length] [-p elements] [-r seed]\n\nOPTIONS\n "
-    //                "\t-h   display program help and usage."
-    //                "\n \t-a   enable all sorts.\n \t-e   enable Heap Sort.\n \t-i   enable "
-    //                "Insertion Sort.\n \t-s   enable Shell Sort."
-    //                "\n \t-q   enable Quick Sort.\n \t-n length   specify number of array elements "
-    //                "(default: 100)\n \t-p elements  "
-    //                " specify number of elements to print (default: 100).\n \t-r seed  specify "
-    //                "random seed (default: 13371453).\n");
-    //     }
-    // }
-    // srandom(seed);
-    // for (int i = 0; i < arraySize; i++) {
-    //     numbersArray[i] = (uint32_t)(random() & 0x3FFFFFFF);
-    // }
-
-    // if (member_set(HEAP, bitmap)) {
-    //     reset(&stats);
-    //     intializeArray(numbersArray, arraySize, seed);
-    //     heap_sort(&stats, numbersArray, arraySize);
-    //     printf("Heap Sort, %u elements, %lu moves, %lu compares\n", arraySize,
-    //         (long int) stats.moves, (long int) stats.compares);
-    //     printArray(numbersArray, arraySize, pElements);
-    // }
-
-    // if (member_set(SHELL, bitmap)) {
-    //     reset(&stats);
-    //     intializeArray(numbersArray, arraySize, seed);
-    //     shell_sort(&stats, numbersArray, arraySize);
-    //     printf("Shell Sort, %u elements, %lu moves, %lu compares\n", arraySize,
-    //         (long int) stats.moves, (long int) stats.compares);
-    //     printArray(numbersArray, arraySize, pElements);
-    // }
-
-    // if (member_set(INSERT, bitmap)) {
-    //     reset(&stats);
-    //     intializeArray(numbersArray, arraySize, seed);
-    //     insertion_sort(&stats, numbersArray, arraySize);
-    //     printf("Insertion Sort, %u elements, %lu moves, %lu compares\n", arraySize,
-    //         (long int) stats.moves, (long int) stats.compares);
-    //     printArray(numbersArray, arraySize, pElements);
-    // }
-
-    // if (member_set(QUICK, bitmap)) {
-    //     reset(&stats);
-    //     intializeArray(numbersArray, arraySize, seed);
-    //     quick_sort(&stats, numbersArray, arraySize);
-    //     printf("Quick Sort, %u elements, %lu moves, %lu compares\n", arraySize,
-    //         (long int) stats.moves, (long int) stats.compares);
-    //     printArray(numbersArray, arraySize, pElements);
-    // }
-
-    // free(numbersArray);
 
 //     return 0;
+
+//     input = stdin;
+//     output = stdout;
+
+//     Graph *locations = graph_create(vertices, undirected);
+
+//     if (locations == NULL) {
+//         // printf(stderr, "%s", "error");       //print stderror to stderr using printf
+//         graph_delete(&locations);
+//         return 1;
+//     }
+
+//     path_create();  // call path create
+//     // call dfs function
+//     // print shortest path
+//     // clean up memory
+//     // return 0;
+
 // }
 
+
+
+
 int main() {
-    return 0;
+    struct Graph *graph = graph_create(10, true);
+
+    char *cities[4];
+    
+    cities[0] = "A"; 
+    cities[1] = "B"; 
+    cities[2] = "C"; 
+    cities[3] = "D"; 
+    graph_add_edge(graph, 0, 1, 100);
+    graph_add_edge(graph, 1, 2, 250);
+    graph_add_edge(graph, 2, 3, 375);
+    graph_add_edge(graph, 3, 0, 425);
+    // graph_add_edge(graph, 2, 0, 2);
+    // graph_add_edge(graph, 2, 1, 1);
+    graph_print(graph);
+    // printf("%d", graph_add_edge(graph, 0, 2, 2));
+    // printf("\n%d", graph_edge_weight(graph, -1, 1));
+
+
+    struct Path *path1 = path_create();
+    path_push_vertex(path1, 0, graph);
+    path_push_vertex(path1, 1, graph);
+    path_push_vertex(path1, 2, graph);
+    
+    // path_push_vertex(path1, 3, graph);
+
+    printf("path1 -> %d\n", path_length(path1));
+    path_print(path1, stdout, cities);
+
+    // printf("%d\n", path_push_vertex(path1, 2, graph));
+    // printf("\n%d", path_length(path1));
+
+    struct Path *path2 = path_create();
+    path_push_vertex(path2, 2, graph);
+    // path_push_vertex(path2, 3, graph);
+    printf("path2 -> %d\n", path_length(path2));
+    path_print(path2, stdout, cities);
+
+
+    
+    path_copy(path2, path1);
+    printf("path1 -> %d\n", path_length(path1));
+    path_print(path1, stdout, cities);
+    printf("path2 -> %d\n", path_length(path2));
+    path_print(path2, stdout, cities);
+
+
+    // printf("\n%d", path_vertices(path1));
+    // printf("\n%d", path_vertices(path2));
+    // printf("\n%d", path_length(path2));
+
+
+    // path_print(path, stdout, *cities[]);
+
+
+    
+
+
+    
+    // path_print(path, *output, *cities[]);
+
 }
-
-
