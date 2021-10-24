@@ -6,9 +6,9 @@
 #include <unistd.h>
 
 struct Stack {
-    uint32_t top;           // index of next empty slot
-    uint32_t capacity;      // number of items that can be pushed
-    uint32_t *items;        // array of items
+    uint32_t top; // index of next empty slot
+    uint32_t capacity; // number of items that can be pushed
+    uint32_t *items; // array of items
 };
 
 Stack *stack_create(uint32_t capacity) {
@@ -41,8 +41,7 @@ uint32_t stack_size(Stack *s) {
 bool stack_empty(Stack *s) {
     if (stack_size(s) == 0) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -50,8 +49,7 @@ bool stack_empty(Stack *s) {
 bool stack_full(Stack *s) {
     if (stack_size(s) == s->capacity) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -59,8 +57,7 @@ bool stack_full(Stack *s) {
 bool stack_push(Stack *s, uint32_t x) {
     if (s == NULL || stack_full(s)) {
         return false;
-    }
-    else {
+    } else {
         s->items[s->top] = x;
         s->top += 1;
         return true;
@@ -70,9 +67,8 @@ bool stack_push(Stack *s, uint32_t x) {
 bool stack_pop(Stack *s, uint32_t *x) {
     if (stack_empty(s)) {
         return false;
-    }
-    else {
-        *x = s->items[s->top-1];
+    } else {
+        *x = s->items[s->top - 1];
         s->top -= 1;
         return true;
     }
@@ -81,9 +77,8 @@ bool stack_pop(Stack *s, uint32_t *x) {
 bool stack_peek(Stack *s, uint32_t *x) {
     if (stack_empty(s)) {
         return false;
-    }
-    else {
-        *x = s->items[s->top-1];
+    } else {
+        *x = s->items[s->top - 1];
         // printf("stack_peek: top %d:  ", s->top);
         //  for (uint32_t i = 0; i < s->top; i++) {
         //     printf("%d ", s->items[i]);
@@ -104,15 +99,10 @@ void stack_copy(Stack *dst, Stack *src) {
 
 void stack_print(Stack *s, FILE *outfile, char *cities[]) {
     for (uint32_t i = 0; i < s->top; i += 1) {
-        fprintf(outfile , "%s", cities[s->items[i]]);
+        fprintf(outfile, "%s", cities[s->items[i]]);
         if (i + 1 != s->top) {
-            fprintf(outfile , " -> ");
+            fprintf(outfile, " -> ");
         }
     }
-    fprintf(outfile , "\n");
+    fprintf(outfile, "\n");
 }
-
-
-
-
-

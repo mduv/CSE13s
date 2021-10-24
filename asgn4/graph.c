@@ -1,38 +1,35 @@
 #include "graph.h"
+
 #include "vertices.h"
+
 #include <inttypes.h>
-
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 struct Graph {
-    uint32_t vertices;                      // Number of vertics
-    bool undirected;                        // Undirected Graph?
-    bool visited[VERTICES];                 // Where have we gone?
-    uint32_t matrix[VERTICES][VERTICES];    // Adjaceny Matrix
+    uint32_t vertices; // Number of vertics
+    bool undirected; // Undirected Graph?
+    bool visited[VERTICES]; // Where have we gone?
+    uint32_t matrix[VERTICES][VERTICES]; // Adjaceny Matrix
 };
 
 bool verticesWithinBounds(Graph *G, uint32_t v) {
     if ((START_VERTEX <= v && v < G->vertices)) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
 
-
-
 Graph *graph_create(uint32_t vertices, bool undirected) {
-	Graph *G = (Graph *)calloc(1, sizeof(Graph));
+    Graph *G = (Graph *) calloc(1, sizeof(Graph));
     if (G) {
         G->vertices = vertices;
-	    G->undirected = undirected;
+        G->undirected = undirected;
     }
-	return G;
+    return G;
 }
 
 void graph_delete(Graph **G) {
@@ -52,8 +49,7 @@ bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
             G->matrix[j][i] = k;
         }
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -61,18 +57,15 @@ bool graph_add_edge(Graph *G, uint32_t i, uint32_t j, uint32_t k) {
 bool graph_has_edge(Graph *G, uint32_t i, uint32_t j) {
     if ((verticesWithinBounds(G, i) && verticesWithinBounds(G, j)) && (G->matrix[i][j] > 0)) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
-
 }
 
 uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j) {
     if (graph_has_edge(G, i, j)) {
         return G->matrix[i][j];
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -80,8 +73,7 @@ uint32_t graph_edge_weight(Graph *G, uint32_t i, uint32_t j) {
 bool graph_visited(Graph *G, uint32_t v) {
     if (G->visited[v]) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -106,11 +98,6 @@ void graph_print(Graph *G) {
         }
         printf("\n");
     }
-    
 
-    // print if visited array 
-
-
+    // print if visited array
 }
-
-

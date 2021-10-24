@@ -1,4 +1,5 @@
 #include "path.h"
+
 #include "stack.h"
 #include "vertices.h"
 
@@ -6,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
 
 struct Path {
     Stack *vertices; // The vertices comprising the path
@@ -34,32 +34,28 @@ void path_delete(Path **p) {
 
 bool path_push_vertex(Path *p, uint32_t v, Graph *G) {
     uint32_t y = 0;
-    if (p == NULL || G == NULL || stack_full(p->vertices))
-    {
+    if (p == NULL || G == NULL || stack_full(p->vertices)) {
         return false;
-    }
-    else {
+    } else {
         if (!stack_empty(p->vertices)) {
-            stack_peek(p->vertices, &y);                                  // use peak to get last vertex
-            p->length += graph_edge_weight(G, y, v);                      // add graph edge weight to plength
+            stack_peek(p->vertices, &y); // use peak to get last vertex
+            p->length += graph_edge_weight(G, y, v); // add graph edge weight to plength
         } else {
             //p->length += graph_edge_weight(G, START_VERTEX, v);                      // add graph edge weight to plength
             p->length = 0;
         }
-        return stack_push(p->vertices, v);                            // call stack_push and return if able to do it or not
+        return stack_push(p->vertices, v); // call stack_push and return if able to do it or not
     }
 }
 
 bool path_pop_vertex(Path *p, uint32_t *v, Graph *G) {
     uint32_t x = 0;
     uint32_t y = 0;
-    if (p == NULL || G == NULL || stack_empty(p->vertices))
-    {
+    if (p == NULL || G == NULL || stack_empty(p->vertices)) {
         return false;
-    }
-    else {
+    } else {
         stack_pop(p->vertices, &x);
-        stack_peek(p->vertices, &y);                                  // use peak to get last vertex
+        stack_peek(p->vertices, &y); // use peak to get last vertex
         p->length -= graph_edge_weight(G, y, x);
         *v = x;
         return true;
@@ -83,7 +79,3 @@ void path_print(Path *p, FILE *outfile, char *cities[]) {
     // call stack_print
     stack_print(p->vertices, outfile, cities);
 }
-
-
-
-
