@@ -61,7 +61,8 @@ bool stack_push(Stack *s, uint32_t x) {
         return false;
     }
     else {
-        s->items[s->top++] = x;
+        s->items[s->top] = x;
+        s->top += 1;
         return true;
     }
 }
@@ -71,7 +72,8 @@ bool stack_pop(Stack *s, uint32_t *x) {
         return false;
     }
     else {
-        *x = s->items[--s->top];
+        *x = s->items[s->top];
+        s->top -= 1;
         return true;
     }
 }
@@ -81,7 +83,6 @@ bool stack_peek(Stack *s, uint32_t *x) {
         return false;
     }
     else {
-        s->top--;
         *x = s->items[s->top];
         return true;
     }
@@ -105,6 +106,8 @@ void stack_print(Stack *s, FILE *outfile, char *cities[]) {
     }
     fprintf(outfile , "\n");
 }
+
+
 
 
 
