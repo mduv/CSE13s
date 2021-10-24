@@ -67,7 +67,8 @@ uint32_t path_length(Path *p) {
 }
 
 void path_copy(Path *dst, Path *src) {
-    dst->vertices = src->vertices;
+    // stack_copy(dst->vertices, src->vertices);
+    *dst = *src;
     dst->length = src->length;
 }
 
