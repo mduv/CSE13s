@@ -6,8 +6,6 @@
 #include <stdlib.h>
 
 struct PriorityQueue {
-    uint32_t head;      // head of the priority queue
-    uint32_t tail;      // tail of the priority queue
     uint32_t size;      // size of the priority queue
     uint32_t capacity;  // capacity of the priority queue
     Node **items;       // an array of nodes
@@ -17,8 +15,6 @@ struct PriorityQueue {
 PriorityQueue *pq_create(uint32_t capacity) {
     PriorityQueue *q = (PriorityQueue *) malloc(sizeof(PriorityQueue));                
     if (q) {
-        q->head = 0;
-        q->tail = 0;
         q->size = 0;
         q->capacity = capacity;
         q->items = (Node **) malloc(capacity * sizeof(Node *));
@@ -101,10 +97,10 @@ queued should have the highest priority over all the nodes in the priority queue
 priority queue is empty prior to dequeuing a node and true otherwise to indicate the successful de-
 queuing of a node. */
 bool dequeue(PriorityQueue *q, Node **n) {
-    if (pq_empty(q)) {
+    if (pq_empty(q) || q == NULL) {
         return false;
     } else {
-        *n = q->items[q->size];
+        *n = q->items[q->size-1];
         q->size--;
         return true;
     }
@@ -122,14 +118,12 @@ bool dequeue(PriorityQueue *q, Node **n) {
 //         return item;
 // }
 
-// void pq_print(PriorityQueue *q);
+void pq_print(PriorityQueue *q) {
+    for (uint32_t i = 0; i < q->size; i += 1) {
+        node_print(q->items[i]);
+    }
+}
 
-// Static Node *get_pq_element(PriorityQueue *q, uint32_t index) {
 
-// }
-
-// void heapify(PriorityQueue *q) {
-
-// }
 
 

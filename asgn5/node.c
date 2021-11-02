@@ -41,7 +41,7 @@ void node_print(Node *n) {
     
     if (n->left == NULL && n->right == NULL) {
         // print symbol
-        printf("No children\n");
+        // printf("No children\n");
         printf("Symbol: %" PRIx8 "\n", n->symbol);
         // print the frequency PRIu64
         printf("Frequency: %" PRIu64 "\n", n->frequency);
@@ -49,10 +49,10 @@ void node_print(Node *n) {
         // print symbol and freq of the children
         printf("Symbol: %" PRIx8 "\n", n->symbol);
         printf("Freq: %" PRIu64 "\n", n->frequency);
-        printf("Symbol of left: %" PRIx8 "\n", n->left->symbol);
-        printf("Frequency of left: %" PRIu64 "\n", n->left->frequency);
-        printf("Symbol of right: %" PRIx8 "\n", n->right->symbol);
-        printf("Frequency of right: %" PRIu64 "\n", n->right->frequency);
+        // printf("Symbol of left: %" PRIx8 "\n", n->left->symbol);
+        // printf("Frequency of left: %" PRIu64 "\n", n->left->frequency);
+        // printf("Symbol of right: %" PRIx8 "\n", n->right->symbol);
+        // printf("Frequency of right: %" PRIu64 "\n", n->right->frequency);
 
     }
    

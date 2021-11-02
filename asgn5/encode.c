@@ -62,13 +62,20 @@ int main(int argc, char **argv) {
 
     Node *test_node_left = node_create('a', 2);
     Node *test_node_right = node_create('b', 3);
-    Node *test_node_parent = node_join(test_node_left, test_node_right);
-    node_print(test_node_parent);
+    // Node *test_node_parent = node_join(test_node_left, test_node_right);
+    // node_print(test_node_parent);
+    Node *test_extra = node_create('z', 10);
 
     PriorityQueue *test_pq = pq_create(3);
-    printf("%d", enqueue(test_pq, test_node_left));
-//    return enqueue(test_pq, test_node_left);
- //   return 1;
+    enqueue(test_pq, test_node_left);
+    // pq_print(test_pq);
+    enqueue(test_pq, test_node_right);
+    dequeue(test_pq, &test_extra);
+    pq_print(test_pq);
+    node_print(test_extra);
+
+//  return enqueue(test_pq, test_node_left);
+//  return 1;
 
 }
 
