@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
     Node *test_node_right = node_create('b', 3);
     Node *test_node_parent = node_join(test_node_left, test_node_right);
     node_print(test_node_parent);
+    return 1;
 
 }
 
