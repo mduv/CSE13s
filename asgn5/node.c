@@ -47,10 +47,13 @@ void node_print(Node *n) {
         printf("Frequency: %" PRIu64 "\n", n->frequency);
     } else {
         // print symbol and freq of the children
+        printf("Symbol: %" PRIx8 "\n", n->symbol);
+        printf("Freq: %" PRIu64 "\n", n->frequency);
         printf("Symbol of left: %" PRIx8 "\n", n->left->symbol);
         printf("Frequency of left: %" PRIu64 "\n", n->left->frequency);
         printf("Symbol of right: %" PRIx8 "\n", n->right->symbol);
         printf("Frequency of right: %" PRIu64 "\n", n->right->frequency);
+
     }
    
 }

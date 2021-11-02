@@ -64,7 +64,11 @@ int main(int argc, char **argv) {
     Node *test_node_right = node_create('b', 3);
     Node *test_node_parent = node_join(test_node_left, test_node_right);
     node_print(test_node_parent);
-    return 1;
+
+    PriorityQueue *test_pq = pq_create(3);
+    printf("%d", enqueue(test_pq, test_node_left));
+//    return enqueue(test_pq, test_node_left);
+ //   return 1;
 
 }
 

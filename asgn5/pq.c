@@ -60,12 +60,40 @@ uint32_t pq_size(PriorityQueue *q) {
 }
 
 // Enqueues a node into the priority queue. Returns false if the priority queue is full prior to enqueuing the node and true otherwise to indicate the successful enqueuing of the node.
-// bool enqueue(PriorityQueue *q, Node *n) {
-//     if (pq_full(q)) {
-//         return false;
-//     } else {
-//         return true;
-//     }
+bool enqueue(PriorityQueue *q, Node *n) {
+    if (pq_full(q)) {
+        return false;
+    } else if (pq_empty(q)) {
+        q->items[0] = n;
+        q->size++;
+        return true;
+    } else {
+        // code
+        uint32_t i = q->size- 1;
+        while (i >= 0 && n->frequency < q->items[i]->frequency) {
+            q->items[i+1]->frequency = q->items[i]->frequency;
+            i--;
+        }
+        q->items[i+1] = n;
+        q->size++;
+        return true;
+    }
+}
+
+// void enqueue(int item) {
+//         // Check if the queue is full
+//         if (n == MAX_SIZE - 1) {
+//                 printf("%s\n", "ERROR: Queue is full");
+//                 return;
+//         }
+
+//         int i = n - 1;
+//         while (i >= 0 && item < queue[i]) {
+//                 queue[i + 1] = queue[i];
+//                 i--;
+//         }
+//         queue[i + 1] = item;
+//         n++;
 // }
 
 /* Dequeues a node from the priority queue, passing it back through the double pointer n. The node de-
@@ -76,12 +104,32 @@ bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        *n = q->items[q->head++];
+        *n = q->items[q->size- 1];
         q->size--;
         return true;
     }
 }
 
+// int dequeue() {
+//         int item;
+//         // Check if the queue is empty
+//         if (n == 0) {
+//                 printf("%s\n", "ERROR: Queue is empty");
+//                 return -999999;
+//         }
+//         item = queue[n - 1];
+//         n = n - 1;
+//         return item;
+// }
+
 // void pq_print(PriorityQueue *q);
+
+// Static Node *get_pq_element(PriorityQueue *q, uint32_t index) {
+
+// }
+
+// void heapify(PriorityQueue *q) {
+
+// }
 
 
