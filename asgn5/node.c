@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 // The constructor for a node. Sets the node’s symbol as symbol and its frequency as frequency.
 Node *node_create(uint8_t symbol, uint64_t frequency) {     
@@ -44,13 +45,10 @@ void node_print(Node *n) {
         // print the frequency PRIu64
         printf("Frequency: %" PRIu64 "\n", n->frequency);
     } else {
-        // print symbol of the children
+        // print symbol and freq of the children
         printf("Symbol of left: %" PRIx8 "\n", n->left->symbol);
-        // print the frequency PRIu64
         printf("Frequency of left: %" PRIu64 "\n", n->left->frequency);
         printf("Symbol of right: %" PRIx8 "\n", n->right->symbol);
-        // print the frequency PRIu64
-        // print the frequency PRIu64
         printf("Frequency of right: %" PRIu64 "\n", n->right->frequency);
     }
    
