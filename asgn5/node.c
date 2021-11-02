@@ -7,7 +7,7 @@
 Node *node_create(uint8_t symbol, uint64_t frequency) {     
     Node *n = (Node *) malloc(sizeof(Node));                
     if (n) {
-        if (n->left != NULL || n->right != NULL ) {     // make sure left and right pointers are NULL
+        if (n->left == NULL || n->right == NULL ) {     // make sure left and right pointers are NULL
             n->symbol = symbol;                         // sets the node’s symbol as symbol
             n->frequency = frequency;                   // sets the node’s frequency as frequency
         }
@@ -34,6 +34,13 @@ Node *node_join(Node *left, Node *right) {
 
 }
 
-// void node_print(Node *n) {
+// A debug function to verify that your nodes are created and joined correctly.
+void node_print(Node *n) {
+    // print symbol
+    printf("%" PRIx8 "\n", n->symbol);
+    // print symbol of the children
+    // print the frequency PRIu64
+    printf("%" PRIu64 "\n", n->frequency);
+}
 
-// }
+
