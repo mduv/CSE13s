@@ -1,5 +1,5 @@
-#include "code.h"
-#include "defines.h"
+// #include "code.h"
+// #include "defines.h"
 #include "node.h"
 #include "huffman.h"
 #include <string.h>
