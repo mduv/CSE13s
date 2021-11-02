@@ -80,13 +80,14 @@ bool code_push_bit(Code *c, uint8_t bit) {
 
 }
 
-// Pops a bit off the Code. The value of the popped bit is passed back with the pointer bit. Returns false if the Code is empty prior to popping a bit and true otherwise to indicate the successful popping of a bit.
+// Pops a bit off the Code. The value of the popped bit is passed back with the pointer bit.
+// Returns false if the Code is empty prior to popping a bit and true otherwise to indicate the successful popping of a bit.
 bool code_pop_bit(Code *c, uint8_t *bit) {
     if (code_empty(c)) {
         return false;
     }
     else {
-        *bit = c->bits[c->top-1];
+        *bit = c->bits[c->top];
         c->top -= 1;
         return true;
     }
