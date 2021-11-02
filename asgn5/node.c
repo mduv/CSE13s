@@ -1,4 +1,5 @@
 #include "node.h"
+#include "code.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
