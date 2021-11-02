@@ -1,9 +1,11 @@
-// #include "code.h"
-// #include "defines.h"
+#include "code.h"
+#include "defines.h"
 #include "node.h"
-// #include "huffman.h"
-// #include <string.h>
-// #include "stack.h"
+#include "huffman.h"
+#include <string.h>
+#include "stack.h"
+#include "pq.h"
+#include "header.h"
 
 #include <math.h>
 #include <stdio.h>
