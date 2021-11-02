@@ -4,8 +4,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 all: encode
 
 
-encode: encode.o node.o
-	$(CC) $(CFLAGS) encode.o node.o -lm -o encode
+encode: encode.o node.o code.o
+	$(CC) $(CFLAGS) encode.o node.o code.o -lm -o encode
 
 
 encode.o: encode.c 
