@@ -65,9 +65,9 @@ bool enqueue(PriorityQueue *q, Node *n) {
         return true;
     } else {
         // code
-        uint32_t i = q->size- 1;
-        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
-            q->items[i+1]->frequency = q->items[i]->frequency;
+        uint32_t i = q->size-1;
+        while (i >= 0 && (n < (q->items[i]))) {
+            q->items[i+1] = q->items[i];
             i--;
         }
         q->items[i+1] = n;
@@ -97,7 +97,7 @@ queued should have the highest priority over all the nodes in the priority queue
 priority queue is empty prior to dequeuing a node and true otherwise to indicate the successful de-
 queuing of a node. */
 bool dequeue(PriorityQueue *q, Node **n) {
-    if (pq_empty(q) || q == NULL) {
+    if (pq_empty(q)) {
         return false;
     } else {
         *n = q->items[q->size-1];
