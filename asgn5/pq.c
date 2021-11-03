@@ -8,6 +8,7 @@
 struct PriorityQueue {
     uint32_t size;      // size of the priority queue
     uint32_t capacity;  // capacity of the priority queue
+    uint32_t head;
     Node **items;       // an array of nodes
 };
 
@@ -17,6 +18,7 @@ PriorityQueue *pq_create(uint32_t capacity) {
     if (q) {
         q->size = 0;
         q->capacity = capacity;
+        q->head = 0;
         q->items = (Node **) malloc(capacity * sizeof(Node *));
     }
     return q;
@@ -113,9 +115,7 @@ bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        uint32_t j = 0;
-        *n = q->items[j];
-        j = 1;
+        *n = q->items[q->head++];
         q->size--;
         return true;
     }
