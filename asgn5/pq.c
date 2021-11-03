@@ -76,31 +76,32 @@ bool enqueue(PriorityQueue *q, Node *n) {
     }
 }
 
-// void enqueue(int item) {
-//         // Check if the queue is full
-//         if (n == MAX_SIZE - 1) {
-//                 printf("%s\n", "ERROR: Queue is full");
-//                 return;
-//         }
-
-//         int i = n - 1;
-//         while (i >= 0 && item < queue[i]) {
-//                 queue[i + 1] = queue[i];
-//                 i--;
-//         }
-//         queue[i + 1] = item;
-//         n++;
-// }
-
 /* Dequeues a node from the priority queue, passing it back through the double pointer n. The node de-
 queued should have the highest priority over all the nodes in the priority queue. Returns false if the
 priority queue is empty prior to dequeuing a node and true otherwise to indicate the successful de-
 queuing of a node. */
+// bool dequeue(PriorityQueue *q, Node **n) {
+//     if (pq_empty(q)) {
+//         return false;
+//     } else {
+//         *n = q->items[q->size-1];
+//         q->size--;
+//         return true;
+//     }
+// }
+
 bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        *n = q->items[q->size+1];
+        uint32_t i, max = 0;
+        for (i = 1; i < q->size; i++) {
+            if (q->items[max] < q->items[i]) {
+                max = i;
+            }
+        }
+        *n = q->items[max];
+        q->items[max] = q->items[q->size-1];
         q->size--;
         return true;
     }
@@ -108,12 +109,17 @@ bool dequeue(PriorityQueue *q, Node **n) {
 
 // int dequeue() {
 //         int item;
-//         // Check if the queue is empty
-//         if (n == 0) {
-//                 printf("%s\n", "ERROR: Queue is empty");
-//                 return -999999;
+//         int i, max = 0;
+//         // find the maximum priority
+//         for (i = 1; i < n; i++) {
+//                 if (queue[max] < queue[i]) {
+//                         max = i;
+//                 }
 //         }
-//         item = queue[n - 1];
+//         item = queue[max];
+
+//         // replace the max with the last element
+//         queue[max] = queue[n - 1];
 //         n = n - 1;
 //         return item;
 // }
