@@ -63,18 +63,37 @@ bool enqueue(PriorityQueue *q, Node *n) {
         q->items[0] = n;
         q->size++;
         return true;
-    } else {
+    } else if (q->size == 1) {
+        if (q->items[0]->frequency > n->frequency) {
+            q->items[1] = q->items[0];
+            q->items[0] = n;
+            q->size++;
+            return true;
+        } else {
         // code
         uint32_t i = q->size-1;
-        while (i >= 0 && (n->frequency > (q->items[i]->frequency))) {
+        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
             q->items[i+1] = q->items[i];
             i--;
         }
         q->items[i+1] = n;
         q->size++;
         return true;
-        }   
+        }
+        
     }
+    else {
+        // code
+        uint32_t i = q->size-1;
+        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
+            q->items[i+1] = q->items[i];
+            i--;
+        }
+        q->items[i+1] = n;
+        q->size++;
+        return true;
+    }
+}
 
 /* Dequeues a node from the priority queue, passing it back through the double pointer n. The node de-
 queued should have the highest priority over all the nodes in the priority queue. Returns false if the
@@ -127,6 +146,9 @@ void pq_print(PriorityQueue *q) {
 
 
 
+
+
+//////////////////////////////////// dequeue works but not enqueu
 // bool enqueue(PriorityQueue *q, Node *n) {
 //     if (pq_full(q)) {
 //         return false;
@@ -134,16 +156,10 @@ void pq_print(PriorityQueue *q) {
 //         q->items[0] = n;
 //         q->size++;
 //         return true;
-//     } else if (q->size == 1) {
-//         if (q->items[0]->frequency > n->frequency) {
-//             q->items[1] = q->items[0];
-//             q->items[0] = n;
-//             q->size++;
-//             return true;
-//         } else {
+//     } else {
 //         // code
 //         uint32_t i = q->size-1;
-//         while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
+//         while (i >= 0 && (n->frequency > (q->items[i]->frequency))) {
 //             q->items[i+1] = q->items[i];
 //             i--;
 //         }
@@ -151,18 +167,5 @@ void pq_print(PriorityQueue *q) {
 //         q->size++;
 //         return true;
 //         }
-        
-//     }
-//     else {
-//         // code
-//         uint32_t i = q->size-1;
-//         while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
-//             q->items[i+1] = q->items[i];
-//             i--;
-//         }
-//         q->items[i+1] = n;
-//         q->size++;
-//         return true;
-//     }
 // }
 
