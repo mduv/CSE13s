@@ -94,15 +94,7 @@ bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        uint32_t i, max = 0;
-        for (i = 1; i < q->size; i++) {
-            if (q->items[max] < q->items[i]) {
-                max = i;
-            }
-        }
-        *n = q->items[max];
-        q->items[max] = q->items[q->size-1];
-        q->size--;
+        *n = q->items[q->size-1];
         return true;
     }
 }
