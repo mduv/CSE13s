@@ -87,7 +87,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
         return false;
     }
     else {
-        *bit = c->bits[c->top];
+        *bit = c->bits[c->top-1];
         c->top -= 1;
         return true;
     }
