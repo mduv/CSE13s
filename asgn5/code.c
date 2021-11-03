@@ -87,7 +87,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
         return false;
     }
     else {
-        bit = &c->bits[c->top-1];
+        *bit = c->bits[c->top-1];
         c->top -= 1;
         return true;
     }
@@ -96,7 +96,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
 // for debugging
 void code_print(Code *c) {
     for (uint32_t i = 0; i < c->top; i += 1) {
-        printf("bit array value: %" PRIu32 "\n", c->bits[i]);
+        printf("%" PRIu32, c->bits[i]);
     }
 }
 
