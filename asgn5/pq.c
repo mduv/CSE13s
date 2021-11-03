@@ -63,7 +63,26 @@ bool enqueue(PriorityQueue *q, Node *n) {
         q->items[0] = n;
         q->size++;
         return true;
-    } else {
+    } else if (q->size == 1) {
+        if (q->items[0]->frequency > n->frequency) {
+            q->items[1] = q->items[0];
+            q->items[0] = n;
+            q->size++;
+            return true;
+        } else {
+        // code
+        uint32_t i = q->size-1;
+        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
+            q->items[i+1] = q->items[i];
+            i--;
+        }
+        q->items[i+1] = n;
+        q->size++;
+        return true;
+        }
+        
+    }
+    else {
         // code
         uint32_t i = q->size-1;
         while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
@@ -94,7 +113,8 @@ bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        n = &q->items[q->size-1];
+        *n = q->items[q->size-1];
+        q->size--;
         return true;
     }
 }
