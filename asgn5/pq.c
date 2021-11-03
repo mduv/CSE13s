@@ -100,7 +100,7 @@ bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        *n = q->items[q->size-1];
+        *n = q->items[q->size+1];
         q->size--;
         return true;
     }
