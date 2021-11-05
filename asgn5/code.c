@@ -71,10 +71,10 @@ bool code_get_bit(Code *c, uint32_t i) {
     uint32_t pos = i % 8;  // bit position in uint8 bit
     uint8_t flag = 1;
     flag = flag << pos;
-    if ((k > ALPHABET / 8) || (c->bits[k] && flag == 0)) {
+    if ((k > ALPHABET / 8)) {
         return false;
     }
-    if ((c->bits[k] && flag == 1)) {
+    if ((c->bits[k] && flag) == 1) {
         return true;
     } else {
         return false;
@@ -113,7 +113,7 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
 // for debugging
 void code_print(Code *c) {
     for (uint32_t i = 0; i < c->top; i += 1) {
-        printf("%" PRIu32, c->bits[i]);
+        printf("%u", c->bits[i]);
     }
 }
 
