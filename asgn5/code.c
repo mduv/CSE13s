@@ -38,43 +38,59 @@ bool code_full(Code *c) {
 
 // Sets the bit at index i in the Code, setting it to 1. If i is out of range, return false. Otherwise, return true to indicate success.
 bool code_set_bit(Code *c, uint32_t i) {
-    if (i > ALPHABET) {
+    uint32_t k = i/32;  // index of which uint8 bits
+    uint32_t pos = i % 32;  // bit position in uint8 bit
+    uint8_t flag = 1; // 00...1
+    if (k >= ALPHABET / 32) {
         return false;
     } else {
-        c->bits[i / 8] = 1;
+        flag = flag << pos;
+        c->bits[k] = c->bits[k] | flag;
         return true;
     }
 }
 
 // Clears the bit at index i in the Code, clearing it to 0. If i is out of range, return false. Otherwise, return true to indicate success.
 bool code_clr_bit(Code *c, uint32_t i) {
-    if (i > ALPHABET) {
+    uint32_t k = i/32;  // index of which uint8 bits
+    uint32_t pos = i % 32;  // bit position in uint8 bit
+    uint8_t flag = 0; // 00...0
+    if (k > ALPHABET) {
         return false;
     } else {
-        c->bits[i / 8] = 0;
+        flag = flag << pos;
+        flag = ~flag;
+        c->bits[k] = c->bits[k] && flag;
         return true;
     }
 }
 
 // Gets the bit at index i in the Code. If i is out of range, or if bit i is equal to 0, return false. Return true if and only if bit i is equal to 1.
 bool code_get_bit(Code *c, uint32_t i) {
-    if (i > ALPHABET || c->bits[i / 8] == 0) {
+    uint32_t k = i/32;  // index of which uint8 bits
+    uint32_t pos = i % 32;  // bit position in uint8 bit
+    uint8_t flag = 1;
+    flag = flag << pos;
+    if (k > ALPHABET || (c->bits[k] && flag == 0)) {
         return false;
     }
-    if (c->bits[i / 8] == 1) {
+    if ((c->bits[k] && flag == 1)) {
         return true;
     } else {
         return false;
     }
 }
 
+
 // Pushes a bit onto the Code. The value of the bit to push is given by bit. Returns false if the Code is full prior to pushing a bit and true otherwise to indicate the successful pushing of a bit.
 bool code_push_bit(Code *c, uint8_t bit) {
     if (code_full(c)) {
         return false;
     } else {
-        c->bits[c->top] = bit;
-        c->top += 1;
+        if (bit) {
+            code_set_bit(c, c->top);
+        }
+        c->top++;
         return true;
     }
 
@@ -87,8 +103,9 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
         return false;
     }
     else {
-        *bit = c->bits[c->top-1];
-        c->top -= 1;
+        *bit = code_get_bit(c, c->top-1);
+        code_clr_bit(c, c->top-1);
+        c->top --;
         return true;
     }
 }
