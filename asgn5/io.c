@@ -10,9 +10,10 @@
 
 int read_bytes(int infile, uint8_t *buf, int nbytes) {
     int numBytesRead = 0;
+    
     if (infile != 0) {
         while (nbytes > 0) {
-            int n = read(infile, buf+numBytesRead, nbytes);
+            int n = read(infile, buf+numBytesRead, BLOCK);
             if (n <= 0) {
                 break;
             }
