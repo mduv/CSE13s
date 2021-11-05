@@ -54,13 +54,15 @@ bool code_set_bit(Code *c, uint32_t i) {
 bool code_clr_bit(Code *c, uint32_t i) {
     uint32_t k = i / 8;  // index of which uint8 bits
     uint32_t pos = i % 8;  // bit position in uint8 bit
-    uint8_t flag = 0; // 00...0
+    uint8_t flag = 1; // 00...0
     if (k > ALPHABET / 8) {
         return false;
     } else {
         flag = flag << pos;
         flag = ~flag;
-        c->bits[k] = c->bits[k] && flag;
+//        printf("\nin clear bit: flag - %X, bits: %X\n", flag, c->bits[k]);
+        c->bits[k] = c->bits[k] & flag;
+  //      printf("\nbits after clearing: %X\n", c->bits[k]);
         return true;
     }
 }
@@ -71,10 +73,10 @@ bool code_get_bit(Code *c, uint32_t i) {
     uint32_t pos = i % 8;  // bit position in uint8 bit
     uint8_t flag = 1;
     flag = flag << pos;
-    if ((k > ALPHABET / 8)) {
+    if (k > ALPHABET / 8) {
         return false;
     }
-    if ((c->bits[k] && flag) == 1) {
+    if ((c->bits[k] & flag) == flag) {
         return true;
     } else {
         return false;
@@ -112,8 +114,8 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
 
 // for debugging
 void code_print(Code *c) {
-    for (uint32_t i = 0; i < c->top; i += 1) {
-        printf("%u", c->bits[i]);
+    for (uint32_t i = 0; i < c->top; i++) {
+        printf("%d", code_get_bit(c, i));
     }
 }
 
