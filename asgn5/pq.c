@@ -71,18 +71,19 @@ bool enqueue(PriorityQueue *q, Node *n) {
             q->items[0] = n;
             q->size++;
             return true;
-        } else {
-        // code
-        uint32_t i = q->size-1;
-        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
-            q->items[i+1] = q->items[i];
-            i--;
         }
-        q->items[i+1] = n;
-        q->size++;
-        return true;
+        // else {
+        //     // code
+        //     uint32_t i = q->size-1;
+        //     while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
+        //         q->items[i+1] = q->items[i];
+        //         i--;
+        // }
+        else {
+            q->items[1] = n;
+            q->size++;
+            return true;
         }
-        
     }
     else {
         // code
