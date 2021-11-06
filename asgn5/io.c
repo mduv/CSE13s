@@ -8,7 +8,8 @@
 
 #define BITS_IN_BLOCK         (BLOCK * 8)             // 4KB blocks.
 
-
+uint64_t bytes_read;
+uint64_t bytes_written;
 
 int read_bytes(int infile, uint8_t *buf, int nbytes) {
     int numBytesRead = 0;
@@ -36,8 +37,8 @@ int write_bytes(int outfile, uint8_t *buf, int nbytes) {
             if (n <= 0) {
                 break;
             }
-        numBytesWritten += n;
-        nbytes -= n;
+            numBytesWritten += n;
+            nbytes -= n;
         }
         return numBytesWritten;
     }
@@ -84,7 +85,7 @@ void write_code(int outfile, Code *c) {
         code_get_bit(c, i); // code bit
         // write code bit into correct index of buffer
         uint32_t k = index / 8;  // index of which byte in buffer
-        uint32_t pos = index % 8;  // bit position in uint8 bit in buffer
+        uint8_t pos = index % 8;  // bit position in uint8 bit in buffer
         uint8_t flag = 1 << pos;  // shifted position
         if (code_get_bit(c, i) == 1) {
             write_code_buffer[k] = code_get_bit(c, i) | flag;
@@ -104,7 +105,7 @@ void write_code(int outfile, Code *c) {
 bool clear_bit(uint32_t bit_position) {
     if (bit_position < (BITS_IN_BLOCK)) {
         uint32_t k = bit_position / 8;  // index of which byte in buffer
-        uint32_t pos = bit_position % 8;  // bit position in uint8 bit in buffer
+        uint8_t pos = bit_position % 8;  // bit position in uint8 bit in buffer
         uint8_t flag = 1 << pos;  // shifted position
         flag = ~flag;
         write_code_buffer[k] = write_code_buffer[k] & flag;
@@ -120,6 +121,5 @@ void flush_codes(int outfile) {
     }
     write_bytes(outfile, write_code_buffer, BLOCK);
 }
-
 
 
