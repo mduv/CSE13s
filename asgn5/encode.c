@@ -28,7 +28,6 @@ Code table[ALPHABET] = {0};
 uint16_t permissions;
 uint16_t unique_symbols;
 uint64_t file_size;
-int input_fd;
 int output_fd = 1;
 
 
@@ -82,7 +81,6 @@ int main(int argc, char **argv) {
                 // inputfile_name = optarg;
                 input = fopen(optarg, "r");
                 input2 = fopen(optarg, "r");
-                input_fd = open(optarg, O_RDONLY);
                 if(input == NULL) {
                     perror("Error opening infile");
                     return(-1);
@@ -138,6 +136,3 @@ int main(int argc, char **argv) {
     fclose(input2);
     close(output_fd);
 }
-
-
-
