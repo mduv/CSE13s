@@ -87,27 +87,30 @@ an index. Each bit in the code c will be buffered into the buffer. The bits will
 static uint8_t write_code_buffer[BLOCK] = {0};
 static uint32_t index = 0;
 
-
 void write_code(int outfile, Code *c) {
+    code_print(c);
+
     for (uint32_t i = 0; i < code_size(c); i++) {
-        code_get_bit(c, i); // code bit
         // write code bit into correct index of buffer
         uint32_t k = index / 8;  // index of which byte in buffer
         uint8_t pos = index % 8;  // bit position in uint8 bit in buffer
         uint8_t flag = 1 << pos;  // shifted position
         if (code_get_bit(c, i) == 1) {
-            write_code_buffer[k] = code_get_bit(c, i) | flag;
+            write_code_buffer[k] = write_code_buffer[k] | flag;
         } else {
             flag = ~flag;
-            write_code_buffer[k] = code_get_bit(c, i) & flag;
+            write_code_buffer[k] = write_code_buffer[k] & flag;
         }
+        printf("pos: %x, flag: %x, k:%x ", pos, flag, k);
+        printf("write_code_buffer: %x\n", write_code_buffer[k]);
         index++;
         if (index == BITS_IN_BLOCK) {
+            printf("ahah  write_bytes from write_codes\n");
             write_bytes(outfile, write_code_buffer, BLOCK);
             index = 0;
-            // write_code_buffer[BLOCK] = {0};
         }
     }
+    //write_bytes(outfile, write_code_buffer, index);
 }
 
 bool clear_bit(uint32_t bit_position) {
@@ -124,10 +127,17 @@ bool clear_bit(uint32_t bit_position) {
 }
 
 void flush_codes(int outfile) {
-    for (uint32_t i = index; i < BITS_IN_BLOCK; i++) {
-        clear_bit(i);
+    printf("in flush\n");
+    uint32_t k = index / 8;  // index of which byte in buffer
+    uint8_t pos = index % 8;  // bit position in uint8 bit in buffer
+
+    for (uint32_t i = pos; i < 8; i++) {
+        clear_bit(index+i);
     }
-    write_bytes(outfile, write_code_buffer, BLOCK);
+    for (unsigned int i = 0; i < k+1; i++) {
+        printf("\n#### write_code_buffer[%d], %X\n", i, write_code_buffer[i]);
+    }
+    write_bytes(outfile, write_code_buffer, k+1);
 }
 
 

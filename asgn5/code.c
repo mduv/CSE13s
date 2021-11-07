@@ -114,10 +114,11 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
 
 // for debugging
 void code_print(Code *c) {
+    printf("\ncode_print: ");
     for (uint32_t i = 0; i < c->top; i++) {
         printf("%d", code_get_bit(c, i));
     }
-    printf("top: %d\n", c->top);
+    printf("\n");
 }
 
 

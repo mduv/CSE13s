@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
     Node *root = rebuild_tree(h.tree_size, tree_buf);
     
     // printf("first##########\n");
-    dump_tree(output_fd, root);
+    //dump_tree(output_fd, root);
     // printf("##########\n");
     
     uint8_t bit = 0;

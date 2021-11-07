@@ -142,12 +142,12 @@ int main(int argc, char **argv) {
         }
         Code c = table[buf];
         write_code(output_fd, &c);
-        code_print(&c);
     }
     flush_codes(output_fd);
 
     fclose(input);
     fclose(input2);
+    close(output_fd);
 
 }
 
