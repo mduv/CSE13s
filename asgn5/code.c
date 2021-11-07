@@ -60,9 +60,7 @@ bool code_clr_bit(Code *c, uint32_t i) {
     } else {
         flag = flag << pos;
         flag = ~flag;
-//        printf("\nin clear bit: flag - %X, bits: %X\n", flag, c->bits[k]);
         c->bits[k] = c->bits[k] & flag;
-  //      printf("\nbits after clearing: %X\n", c->bits[k]);
         return true;
     }
 }
@@ -95,7 +93,6 @@ bool code_push_bit(Code *c, uint8_t bit) {
         c->top = c->top + 1;
         return true;
     }
-
 }
 
 // Pops a bit off the Code. The value of the popped bit is passed back with the pointer bit.

@@ -24,7 +24,7 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
             enqueue(tree_queue, element_node);
         }
     }
-    // pq_print(tree_queue);
+    
     while (pq_size(tree_queue) > 1) {
         Node *left = 0;
         dequeue(tree_queue, &left);
@@ -32,8 +32,6 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
         dequeue(tree_queue, &right); 
         Node *parent = node_join(left, right);
         enqueue(tree_queue, parent);
-        // pq_print(tree_queue);
-        
     }
     Node *root = 0;
     dequeue(tree_queue, &root);

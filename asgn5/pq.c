@@ -91,7 +91,6 @@ bool dequeue(PriorityQueue *q, Node **n) {
 
 void pq_print(PriorityQueue *q) {
     for (uint32_t i = 0; i < q->size; i += 1) {
-        printf("index %d\n", i);
         node_print(q->items[i]);
     }
 }

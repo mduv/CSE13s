@@ -105,12 +105,10 @@ void write_code(int outfile, Code *c) {
         printf("write_code_buffer: %x\n", write_code_buffer[k]);
         index++;
         if (index == BITS_IN_BLOCK) {
-            printf("ahah  write_bytes from write_codes\n");
             write_bytes(outfile, write_code_buffer, BLOCK);
             index = 0;
         }
     }
-    //write_bytes(outfile, write_code_buffer, index);
 }
 
 bool clear_bit(uint32_t bit_position) {
@@ -127,15 +125,11 @@ bool clear_bit(uint32_t bit_position) {
 }
 
 void flush_codes(int outfile) {
-    printf("in flush\n");
     uint32_t k = index / 8;  // index of which byte in buffer
     uint8_t pos = index % 8;  // bit position in uint8 bit in buffer
 
     for (uint32_t i = pos; i > 0 && i < 8; i++) {
         clear_bit(index+i);
-    }
-    for (unsigned int i = 0; i < k+1; i++) {
-        printf("\n#### write_code_buffer[%d], %X\n", i, write_code_buffer[i]);
     }
     write_bytes(outfile, write_code_buffer, k+1);
 }
