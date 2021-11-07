@@ -23,14 +23,13 @@
 
 static FILE *input = NULL;
 static FILE *input2 = NULL;
-static FILE *output = NULL;
 uint64_t hist[ALPHABET] = {0};
 Code table[ALPHABET] = {0};
 uint16_t permissions;
 uint16_t unique_symbols;
 uint64_t file_size;
 int input_fd;
-int output_fd;
+int output_fd = 1;
 
 
 void build_histogram() {
@@ -73,7 +72,6 @@ int main(int argc, char **argv) {
 
     input = stdin;
     input2 = stdin;
-    output = stdout;
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -98,9 +96,8 @@ int main(int argc, char **argv) {
                 file_size = stat_buf.st_size;
                 break;
             case 'o':
-                output = fopen(optarg, "w");
                 output_fd = open(optarg, O_WRONLY | O_APPEND);
-                if(output == NULL) {
+                if (output_fd < 0) {
                     perror("Error opening outfile");
                     return(-1);
                 }
@@ -117,12 +114,11 @@ int main(int argc, char **argv) {
 
 
     build_histogram();
-    // print_hist();
-    Node *root = build_tree(hist);
     Header h = header_create();
-    fwrite(&h, sizeof(h), 1, output);
-    //dump_tree(output_fd, root);
-    // fprintf(output, "\n");
+    write(output_fd, &h, sizeof(h));
+
+    Node *root = build_tree(hist);
+    dump_tree(output_fd, root);
         
     build_codes(root, table);
     while (true) {
@@ -133,18 +129,10 @@ int main(int argc, char **argv) {
         Code c = table[buf];
         write_code(output_fd, &c);
     }
+    flush_codes(output_fd);
 
     fclose(input);
     fclose(input2);
-    fclose(output);
-
-
-
-    
-
-
-
-
 
 }
 
