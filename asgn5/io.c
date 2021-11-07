@@ -16,7 +16,12 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
     
     if (infile != 0) {
         while (nbytes > 0) {
-            int n = read(infile, buf+numBytesRead, BLOCK);
+            int numBytesToRead = BLOCK;
+            if (nbytes < BLOCK) {
+                numBytesToRead = nbytes;
+            }
+
+            int n = read(infile, buf+numBytesRead, numBytesToRead);
             if (n <= 0) {
                 break;
             }
@@ -30,10 +35,13 @@ int read_bytes(int infile, uint8_t *buf, int nbytes) {
 
 int write_bytes(int outfile, uint8_t *buf, int nbytes) {
     int numBytesWritten = 0;
-
     if (outfile > 0) {
         while (nbytes > 0) {
-            int n = write(outfile, buf+numBytesWritten, BLOCK);
+            int numBytesToWrite = BLOCK;
+            if (nbytes < BLOCK) {
+                numBytesToWrite = nbytes;
+            }
+            int n = write(outfile, buf+numBytesWritten, numBytesToWrite);
             if (n <= 0) {
                 break;
             }
