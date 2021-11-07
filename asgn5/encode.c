@@ -36,6 +36,7 @@ void build_histogram() {
     uint8_t buf = 0;
     hist[0] = 1;
     hist[255] = 1;
+    unique_symbols = 2;
     while (true) {
         buf = fgetc(input);
         if (feof(input)) {
@@ -95,7 +96,7 @@ int main(int argc, char **argv) {
                 file_size = stat_buf.st_size;
                 break;
             case 'o':
-                output_fd = open(optarg, O_WRONLY | O_APPEND);
+                output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
                 if (output_fd < 0) {
                     perror("Error opening outfile");
                     return(-1);
@@ -114,29 +115,6 @@ int main(int argc, char **argv) {
 
     build_histogram();
     Header h = header_create();
-    uint8_t b = 0xd0;
-    write(output_fd, &b, 1);
-    b = 0x0d;
-    write(output_fd, &b, 1);
-    b = 0xbe;
-    write(output_fd, &b, 1);
-    b = 0xef;
-    write(output_fd, &b, 1);
-
-    b = 0x81;
-    write(output_fd, &b, 1);
-    b = 0xb4;
-    write(output_fd, &b, 1);
-    b = 0x00;
-    write(output_fd, &b, 1);
-    b = 0x0e;
-    write(output_fd, &b, 1);
-
-    b = 0x00;
-    write(output_fd, &b, 1);
-    b = 0x07;
-    write(output_fd, &b, 1);
-
     write(output_fd, &h, sizeof(h));
 
     Node *root = build_tree(hist);
