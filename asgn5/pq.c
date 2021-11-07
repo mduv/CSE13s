@@ -8,7 +8,6 @@
 struct PriorityQueue {
     uint32_t size;      // size of the priority queue
     uint32_t capacity;  // capacity of the priority queue
-    uint32_t head;
     Node **items;       // an array of nodes
 };
 
@@ -18,7 +17,6 @@ PriorityQueue *pq_create(uint32_t capacity) {
     if (q) {
         q->size = 0;
         q->capacity = capacity;
-        q->head = 0;
         q->items = (Node **) malloc(capacity * sizeof(Node *));
     }
     return q;
@@ -61,34 +59,10 @@ uint32_t pq_size(PriorityQueue *q) {
 bool enqueue(PriorityQueue *q, Node *n) {
     if (pq_full(q)) {
         return false;
-    } else if (pq_empty(q)) {
-        q->items[0] = n;
-        q->size++;
-        return true;
-    } else if (q->size == 1) {
-        if (q->items[0]->frequency > n->frequency) {
-            q->items[1] = q->items[0];
-            q->items[0] = n;
-            q->size++;
-            return true;
-        }
-        // else {
-        //     // code
-        //     uint32_t i = q->size-1;
-        //     while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
-        //         q->items[i+1] = q->items[i];
-        //         i--;
-        // }
-        else {
-            q->items[1] = n;
-            q->size++;
-            return true;
-        }
     }
     else {
-        // code
-        uint32_t i = q->size-1;
-        while (i >= 0 && (n->frequency < (q->items[i]->frequency))) {
+        int i = q->size-1;
+        while (i >= 0 && (n->frequency > (q->items[i]->frequency))) {
             q->items[i+1] = q->items[i];
             i--;
         }
@@ -102,42 +76,18 @@ bool enqueue(PriorityQueue *q, Node *n) {
 queued should have the highest priority over all the nodes in the priority queue. Returns false if the
 priority queue is empty prior to dequeuing a node and true otherwise to indicate the successful de-
 queuing of a node. */
-// bool dequeue(PriorityQueue *q, Node **n) {
-//     if (pq_empty(q)) {
-//         return false;
-//     } else {
-//         *n = q->items[q->size-1];
-//         q->size--;
-//         return true;
-//     }
-// }
+
 
 bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
         return false;
     } else {
-        *n = q->items[q->head++];
-        q->size--;
+        *n = q->items[q->size - 1];
+        q->size = q->size - 1;
         return true;
     }
 }
 
-// int dequeue() {
-//         int item;
-//         int i, max = 0;
-//         // find the maximum priority
-//         for (i = 1; i < n; i++) {
-//                 if (queue[max] < queue[i]) {
-//                         max = i;
-//                 }
-//         }
-//         item = queue[max];
-
-//         // replace the max with the last element
-//         queue[max] = queue[n - 1];
-//         n = n - 1;
-//         return item;
-// }
 
 void pq_print(PriorityQueue *q) {
     for (uint32_t i = 0; i < q->size; i += 1) {
@@ -147,28 +97,4 @@ void pq_print(PriorityQueue *q) {
 }
 
 
-
-
-
-
-//////////////////////////////////// dequeue works but not enqueu
-// bool enqueue(PriorityQueue *q, Node *n) {
-//     if (pq_full(q)) {
-//         return false;
-//     } else if (pq_empty(q)) {
-//         q->items[0] = n;
-//         q->size++;
-//         return true;
-//     } else {
-//         // code
-//         uint32_t i = q->size-1;
-//         while (i >= 0 && (n->frequency > (q->items[i]->frequency))) {
-//             q->items[i+1] = q->items[i];
-//             i--;
-//         }
-//         q->items[i+1] = n;
-//         q->size++;
-//         return true;
-//         }
-// }
 

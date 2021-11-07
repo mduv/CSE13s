@@ -49,6 +49,14 @@ void build_histogram() {
     }
 }
 
+void print_hist() {
+    for (uint64_t i = 0; i < ALPHABET; i++) {
+        if (hist[i] > 0) {
+            printf("ASCII: %llu, %c, count: %llu\n", i, (char)i, hist[i]);
+        }
+    } 
+}
+
 Header header_create() {
     Header h;
     h.magic = MAGIC;
@@ -109,11 +117,15 @@ int main(int argc, char **argv) {
 
 
     build_histogram();
+    // print_hist();
     Node *root = build_tree(hist);
     build_codes(root, table);
     Header h = header_create();
-    fprintf(output, "%x %x %x %llx ", h.magic, h.permissions, h.tree_size, h.file_size);
+    fwrite(&h, 1, sizeof(h), output);
+    //fprintf(output, " %x %x %x %llx\n", h.magic, h.permissions, h.tree_size, h.file_size);
+    //fprintf(output, "####\n");
     dump_tree(output_fd, root);
+    // fprintf(output, "\n");
     
     
     while (true) {

@@ -9,7 +9,7 @@
 Node *node_create(uint8_t symbol, uint64_t frequency) {     
     Node *n = (Node *) malloc(sizeof(Node));                
     if (n) {
-        if (n->left == NULL && n->right == NULL ) {     // make sure left and right pointers are NULL
+        if (n->left == NULL && n->right == NULL) {     // make sure left and right pointers are NULL
             n->symbol = symbol;                         // sets the node’s symbol as symbol
             n->frequency = frequency;                   // sets the node’s frequency as frequency
         }
@@ -28,10 +28,14 @@ void node_delete(Node **n) {
     node’s left child will be left and its right child will be right. The parent node’s symbol will be ‘$’ and
     its frequency the sum of its left child’s frequency and its right child’s frequency. */
 Node *node_join(Node *left, Node *right) {
-    uint64_t parent_frequency = left->frequency + right->frequency;  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
+    uint64_t parent_frequency = (left->frequency) + (right->frequency);  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
+    // printf("parent freq: %llu\n", parent_frequency);
     Node *parent_node = node_create('$', parent_frequency); // creates parent node with symbol '$' and frequency: parent_frequency
     parent_node->left = left;                               // parent node's left child will be left
+    // node_print(left);
     parent_node->right = right;                             // parent node's right child will be right
+    // node_print(right);
+    // node_print(parent_node);
     return parent_node;
 
 }
