@@ -122,6 +122,21 @@ int main(int argc, char **argv) {
     write(output_fd, &b, 1);
     b = 0xef;
     write(output_fd, &b, 1);
+
+    b = 0x81;
+    write(output_fd, &b, 1);
+    b = 0xb4;
+    write(output_fd, &b, 1);
+    b = 0x00;
+    write(output_fd, &b, 1);
+    b = 0x0e;
+    write(output_fd, &b, 1);
+
+    b = 0x00;
+    write(output_fd, &b, 1);
+    b = 0x07;
+    write(output_fd, &b, 1);
+
     write(output_fd, &h, sizeof(h));
 
     Node *root = build_tree(hist);
