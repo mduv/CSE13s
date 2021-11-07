@@ -119,15 +119,12 @@ int main(int argc, char **argv) {
     build_histogram();
     // print_hist();
     Node *root = build_tree(hist);
-    build_codes(root, table);
     Header h = header_create();
-    fwrite(&h, 1, sizeof(h), output);
-    //fprintf(output, " %x %x %x %llx\n", h.magic, h.permissions, h.tree_size, h.file_size);
-    //fprintf(output, "####\n");
+    fwrite(&h, sizeof(h), 1, output);
     dump_tree(output_fd, root);
     // fprintf(output, "\n");
-    
-    
+        
+    build_codes(root, table);
     while (true) {
         int buf = fgetc(input2);
         if (feof(input2)) {
