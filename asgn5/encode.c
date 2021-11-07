@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
     Node *root = build_tree(hist);
     Header h = header_create();
     fwrite(&h, sizeof(h), 1, output);
-    dump_tree(output_fd, root);
+    //dump_tree(output_fd, root);
     // fprintf(output, "\n");
         
     build_codes(root, table);
