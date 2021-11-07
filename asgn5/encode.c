@@ -115,7 +115,11 @@ int main(int argc, char **argv) {
 
     build_histogram();
     Header h = header_create();
-    write(output_fd, &h, sizeof(h));
+
+Header *ptr_to_h = &h;
+uint8_t *ptr_to_bytes = (uint8_t *) ptr_to_h;
+
+    write_bytes(output_fd, ptr_to_bytes, sizeof(Header));
 
     Node *root = build_tree(hist);
     dump_tree(output_fd, root);
