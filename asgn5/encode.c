@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
                     perror("Error stat'ing infile");
                     return(-1);
                 }
-                permissions = stat_buf.st_mode;
+                permissions = stat_buf.st_mode & 0x777;
                 file_size = stat_buf.st_size;
                 break;
             case 'o':
