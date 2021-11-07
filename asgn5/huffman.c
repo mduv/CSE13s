@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "node.h"
 #include "pq.h"
+#include "stack.h"
 
 
 #include <stdint.h>
@@ -35,12 +36,82 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     dequeue(tree_queue, &root);
     return root;
 }
-// void build_codes(Node *root, Code table[static ALPHABET]);
 
-// void dump_tree(int outfile, Node *root);
 
-// Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]);
+void build_codes(Node *root, Code table[static ALPHABET]) {
+    Code c = code_init();
 
-// void delete_tree(Node **root);
+    if (root != NULL) {
+        if (root->left == NULL && root->right == NULL) {
+            // leaf node
+            table[root->symbol] = c;
+        } else {
+            code_push_bit(&c, 0);
+            build_codes(root->left, table);
+            uint8_t x = 0;
+            code_pop_bit(&c, &x);
+            
+            code_push_bit(&c, 1);
+            build_codes(root->right, table);
+            code_pop_bit(&c, &x);
+        }
+    }
+}
+
+void dump_tree(int outfile, Node *root) {
+    if (root != NULL) {
+        dump_tree(outfile, root->left);
+        dump_tree(outfile, root->right);
+
+        if (root->left == NULL && root->right == NULL) {
+            // leaf node
+            char l = 'L';
+            write(outfile, &l, sizeof(l));
+            uint8_t symbol = root->symbol;
+            write(outfile, &symbol, sizeof(symbol));
+        } else {
+            // interior node
+            char i = 'I';
+            write(outfile, &i, sizeof(i));
+        }
+    }
+}
+
+Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
+    Stack *s_nodes = stack_create(nbytes);
+
+    for (int16_t i = 0; i < nbytes; i++) {
+        if (tree[i] == 'L') {
+            // leaf
+            Node *next = node_create(tree[i+1], 0);
+            stack_push(s_nodes, next);
+        }
+        if (tree[i] == 'I') {
+            // interior
+            Node *right = 0;
+            stack_pop(s_nodes, &right);
+
+            Node *left = 0;
+            stack_pop(s_nodes, &left);
+
+            Node *parent = node_join(left, right);
+            stack_push(s_nodes, parent);
+        }
+    }
+    Node *root = 0;
+    stack_pop(s_nodes, &root);
+    return root;
+}
+
+void delete_tree(Node **root) {
+    if (root != NULL) {
+        Node *nodePtr = *root;
+        if (nodePtr != NULL) {
+            delete_tree(&(nodePtr->left));
+            delete_tree(&(nodePtr->right));
+            node_delete(&nodePtr);
+        }
+    }
+}
 
 

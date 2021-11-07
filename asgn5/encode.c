@@ -6,6 +6,8 @@
 #include "stack.h"
 #include "pq.h"
 #include "header.h"
+#include "io.h"
+
 
 #include <math.h>
 #include <stdio.h>
@@ -13,6 +15,7 @@
 #include <unistd.h>
 #include <inttypes.h>
 #include <stdbool.h>
+#include <fcntl.h>
 
 #define OPTIONS "vhi:o:"
 
@@ -60,22 +63,59 @@ int main(int argc, char **argv) {
     }
 
 
-    Node *test_node_left = node_create('a', 2);
-    Node *test_node_right = node_create('b', 3);
+    // Node *test_node_left = node_create('a', 20);
+    // Node *test_node_right = node_create('b', 1);
+    // Node *test_node_middle = node_create('c', 10);
     // Node *test_node_parent = node_join(test_node_left, test_node_right);
     // node_print(test_node_parent);
-    Node *test_extra = node_create('z', 10);
+    // Node *test_extra = node_create('z', 10);
 
-    PriorityQueue *test_pq = pq_create(3);
-    enqueue(test_pq, test_node_left);
+    // PriorityQueue *test_pq = pq_create(3);
+    
+    // enqueue(test_pq, test_node_left);
+    // enqueue(test_pq, test_node_right);
+    // enqueue(test_pq, test_node_middle);
+    // dequeue(test_pq, &test_node_middle);
+    //dequeue(test_pq, &test_node_left);
+    //printf("%d\n", dequeue(test_pq, &test_extra));
     // pq_print(test_pq);
-    enqueue(test_pq, test_node_right);
-    dequeue(test_pq, &test_extra);
-    pq_print(test_pq);
-    node_print(test_extra);
+    // pq_print(test_pq);
+    // dequeue(test_pq, &test_node_right);
+    // dequeue(test_pq, &test_node_left);
+    // pq_print(test_pq);
+
+    // pq_print(test_pq);
+    //node_print(test_node_right);
 
 //  return enqueue(test_pq, test_node_left);
 //  return 1;
+    // uint8_t x = 0;
+    // Code c = code_init();
+    // code_push_bit(&c, 1);
+    // code_push_bit(&c, 0);
+    // code_push_bit(&c, 1);
+    // code_print(&c);
+    // printf("\n");
+    
+    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
+    // code_print(&c);
+    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
+    // code_print(&c);
+    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
+    // code_print(&c);
+    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
+    // code_print(&c);
+    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
+    // code_print(&c)
+
+    // int x = read_bytes(test.txt, uint8_t *buf, int nbytes) 
+    // printf( )
+    uint8_t buf[1000000];   // 1mil
+    // int filedesc = open("test.txt", O_RDONLY);
+    // printf("num of bytes read: %d\n", read_bytes(filedesc, buf, 1000000));
+    int filedesc = open("testwrite.txt", O_WRONLY);
+    printf("num of bytes written: %d\n", write_bytes(filedesc, buf, 1000000));
+   // printf("%s", buf);
 
 }
 
