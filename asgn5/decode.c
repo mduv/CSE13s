@@ -21,13 +21,8 @@
 
 #define OPTIONS "vhi:o:"
 
-static FILE *input = NULL;
-static FILE *input2 = NULL;
 uint64_t hist[ALPHABET] = {0};
 Code table[ALPHABET] = {0};
-uint16_t permissions;
-uint16_t unique_symbols;
-uint64_t file_size;
 int input_fd;
 int output_fd = 1;
 
@@ -36,31 +31,17 @@ int main(int argc, char **argv) {
     int opt = 0;
     optind = 1;
 
-    input = stdin;
-    input2 = stdin;
-
-
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
             case 'h':
                 printf("SYNOPSIS\n\tA Huffman encoder.\n\tCompresses a file using the Huffman coding algorithm.\n\nUSAGE\n\t./encode [-h] [-i infile] [-o outfile]\n\nOPTIONS\n\t-h             Program usage and help.\n\t-v             Print compression statistics.\n\t-i infile      Input file to compress.\n\t-o outfile     Output of compressed data.\n");
                 break;
             case 'i':
-                // inputfile_name = optarg;
-                input = fopen(optarg, "r");
-                input2 = fopen(optarg, "r");
                 input_fd = open(optarg, O_RDONLY);
-                if(input == NULL) {
+                if(input_fd < 0) {
                     perror("Error opening infile");
                     return(-1);
                 }
-                struct stat stat_buf;
-                if (stat(optarg, &stat_buf) == -1) {
-                    perror("Error stating infile");
-                    return(-1);
-                }
-                permissions = stat_buf.st_mode;
-                file_size = stat_buf.st_size;
                break;
             case 'o':
                 output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
