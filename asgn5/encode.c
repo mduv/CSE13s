@@ -52,7 +52,7 @@ void build_histogram() {
 void print_hist() {
     for (uint64_t i = 0; i < ALPHABET; i++) {
         if (hist[i] > 0) {
-            printf("ASCII: %llu, %c, count: %llu\n", i, (char)i, hist[i]);
+            // printf("ASCII: %llu, %c, count: %llu\n", i, (char)i, hist[i]);
         }
     } 
 }
