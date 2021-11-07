@@ -31,6 +31,7 @@ uint64_t file_size;
 int input_fd;
 int output_fd = 1;
 
+
 void build_histogram() {
     uint8_t buf = 0;
     hist[0] = 1;
@@ -41,7 +42,6 @@ void build_histogram() {
         if (feof(input)) {
             break;
         }
-
         if (hist[buf] == 0) {
             unique_symbols++;
         }
@@ -114,20 +114,27 @@ int main(int argc, char **argv) {
 
 
     build_histogram();
-
-    // Build and dump header. Call header_create only after build_histogram
     Header h = header_create();
     //write(output_fd, &h, sizeof(Header));
+
     Header *ptr_to_h = &h;
     uint8_t *ptr_to_bytes = (uint8_t *) ptr_to_h;
+
     write_bytes(output_fd, ptr_to_bytes, sizeof(h));
 
-    // Build and dump tree
     Node *root = build_tree(hist);
     dump_tree(output_fd, root);
 
-    // Build and dump codes
     build_codes(root, table);
+    // printf("########## build codes table begin\n");
+    // for (int j = 0; j < ALPHABET; j++) {
+    //     if (!code_empty(&table[j])) {
+    //         printf("j: %c\n", j);
+    //         code_print(&table[j]);
+    //     }
+    // }
+    //     printf("########## build codes table end\n");
+
     while (true) {
         int buf = fgetc(input2);
         if (feof(input2)) {
