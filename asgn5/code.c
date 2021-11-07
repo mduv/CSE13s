@@ -69,7 +69,7 @@ bool code_clr_bit(Code *c, uint32_t i) {
 
 // Gets the bit at index i in the Code. If i is out of range, or if bit i is equal to 0, return false. Return true if and only if bit i is equal to 1.
 bool code_get_bit(Code *c, uint32_t i) {
-    uint32_t k = i / 8;  // index of which uint8 bits
+    uint32_t k = i / 8;  // index of which byte
     uint32_t pos = i % 8;  // bit position in uint8 bit
     uint8_t flag = 1;
     flag = flag << pos;
@@ -92,7 +92,7 @@ bool code_push_bit(Code *c, uint8_t bit) {
         if (bit) {
             code_set_bit(c, c->top);
         }
-        c->top++;
+        c->top = c->top + 1;
         return true;
     }
 
@@ -117,6 +117,7 @@ void code_print(Code *c) {
     for (uint32_t i = 0; i < c->top; i++) {
         printf("%d", code_get_bit(c, i));
     }
+    printf("top: %d\n", c->top);
 }
 
 

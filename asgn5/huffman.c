@@ -40,9 +40,13 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     return root;
 }
 
-
+Code c;
+int i = 0;
 void build_codes(Node *root, Code table[static ALPHABET]) {
-    Code c = code_init();
+    if (i==0) {
+        c = code_init();
+    }
+    i++;
 
     if (root != NULL) {
         if (root->left == NULL && root->right == NULL) {
@@ -53,7 +57,7 @@ void build_codes(Node *root, Code table[static ALPHABET]) {
             build_codes(root->left, table);
             uint8_t x = 0;
             code_pop_bit(&c, &x);
-            
+
             code_push_bit(&c, 1);
             build_codes(root->right, table);
             code_pop_bit(&c, &x);
