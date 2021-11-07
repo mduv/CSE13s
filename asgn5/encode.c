@@ -112,29 +112,18 @@ int main(int argc, char **argv) {
         }
     }
 
-
     build_histogram();
     Header h = header_create();
-    //write(output_fd, &h, sizeof(Header));
+    write(output_fd, &h, sizeof(Header));
 
-    Header *ptr_to_h = &h;
-    uint8_t *ptr_to_bytes = (uint8_t *) ptr_to_h;
-
-    write_bytes(output_fd, ptr_to_bytes, sizeof(h));
+    // Header *ptr_to_h = &h;
+    // uint8_t *ptr_to_bytes = (uint8_t *) ptr_to_h;
+    // write_bytes(output_fd, ptr_to_bytes, sizeof(h));
 
     Node *root = build_tree(hist);
     dump_tree(output_fd, root);
 
     build_codes(root, table);
-    // printf("########## build codes table begin\n");
-    // for (int j = 0; j < ALPHABET; j++) {
-    //     if (!code_empty(&table[j])) {
-    //         printf("j: %c\n", j);
-    //         code_print(&table[j]);
-    //     }
-    // }
-    //     printf("########## build codes table end\n");
-
     while (true) {
         int buf = fgetc(input2);
         if (feof(input2)) {
