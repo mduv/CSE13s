@@ -21,8 +21,13 @@
 
 #define OPTIONS "vhi:o:"
 
+static FILE *input = NULL;
+static FILE *input2 = NULL;
 uint64_t hist[ALPHABET] = {0};
 Code table[ALPHABET] = {0};
+uint16_t permissions;
+uint16_t unique_symbols;
+uint64_t file_size;
 int input_fd;
 int output_fd = 1;
 
@@ -31,6 +36,10 @@ int main(int argc, char **argv) {
     int opt = 0;
     optind = 1;
 
+    input = stdin;
+    input2 = stdin;
+
+
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
             case 'h':
@@ -38,12 +47,21 @@ int main(int argc, char **argv) {
                 break;
             case 'i':
                 // inputfile_name = optarg;
+                input = fopen(optarg, "r");
+                input2 = fopen(optarg, "r");
                 input_fd = open(optarg, O_RDONLY);
-                if(input_fd < 0) {
+                if(input == NULL) {
                     perror("Error opening infile");
                     return(-1);
                 }
-                break;
+                struct stat stat_buf;
+                if (stat(optarg, &stat_buf) == -1) {
+                    perror("Error stating infile");
+                    return(-1);
+                }
+                permissions = stat_buf.st_mode;
+                file_size = stat_buf.st_size;
+               break;
             case 'o':
                 output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
                 if (output_fd < 0) {
