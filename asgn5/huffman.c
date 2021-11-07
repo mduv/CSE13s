@@ -72,14 +72,14 @@ void dump_tree(int outfile, Node *root) {
 
         if (root->left == NULL && root->right == NULL) {
             // leaf node
-            char l = 'L';
-            write(outfile, &l, sizeof(l));
+            uint8_t l = 'L';
+            write_bytes(outfile, &l, sizeof(l));
             uint8_t symbol = root->symbol;
-            write(outfile, &symbol, sizeof(symbol));
+            write_bytes(outfile, &symbol, sizeof(symbol));
         } else {
             // interior node
-            char i = 'I';
-            write(outfile, &i, sizeof(i));
+            uint8_t i = 'I';
+            write_bytes(outfile, &i, sizeof(i));
         }
     }
 }
