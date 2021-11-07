@@ -16,11 +16,47 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define OPTIONS "vhi:o:"
 
 static FILE *input = NULL;
+static FILE *input2 = NULL;
 static FILE *output = NULL;
+uint64_t hist[ALPHABET] = {0};
+Code table[ALPHABET] = {0};
+uint16_t permissions;
+uint16_t unique_symbols;
+uint64_t file_size;
+int input_fd;
+int output_fd;
+
+
+void build_histogram() {
+    uint8_t buf = 0;
+    hist[0] = 1;
+    hist[255] = 1;
+    while (true) {
+        buf = fgetc(input);
+        if (feof(input)) {
+            break;
+        }
+        if (hist[buf] == 0) {
+            unique_symbols++;
+        }
+        hist[buf]++;
+    }
+}
+
+Header header_create() {
+    Header h;
+    h.magic = MAGIC;
+    h.permissions = permissions;
+    h.tree_size = (3 * unique_symbols) - 1;
+    h.file_size = file_size;
+    return h;
+}
 
 int main(int argc, char **argv) {
     int opt = 0;
@@ -28,6 +64,7 @@ int main(int argc, char **argv) {
 
 
     input = stdin;
+    input2 = stdin;
     output = stdout;
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -38,13 +75,23 @@ int main(int argc, char **argv) {
             case 'i':
                 // inputfile_name = optarg;
                 input = fopen(optarg, "r");
+                input2 = fopen(optarg, "r");
+                input_fd = open(optarg, O_RDONLY);
                 if(input == NULL) {
                     perror("Error opening infile");
                     return(-1);
                 }
+                struct stat stat_buf;
+                if (stat(optarg, &stat_buf) == -1) {
+                    perror("Error stat'ing infile");
+                    return(-1);
+                }
+                permissions = stat_buf.st_mode;
+                file_size = stat_buf.st_size;
                 break;
             case 'o':
                 output = fopen(optarg, "w");
+                output_fd = open(optarg, O_WRONLY | O_APPEND);
                 if(output == NULL) {
                     perror("Error opening outfile");
                     return(-1);
@@ -57,66 +104,40 @@ int main(int argc, char **argv) {
             //     verbose = 1;
             //     break;
             return 0;
-        // default:
-        //     printf();
         }
     }
 
 
-    // Node *test_node_left = node_create('a', 20);
-    // Node *test_node_right = node_create('b', 1);
-    // Node *test_node_middle = node_create('c', 10);
-    // Node *test_node_parent = node_join(test_node_left, test_node_right);
-    // node_print(test_node_parent);
-    // Node *test_extra = node_create('z', 10);
-
-    // PriorityQueue *test_pq = pq_create(3);
+    build_histogram();
+    Node *root = build_tree(hist);
+    build_codes(root, table);
+    Header h = header_create();
+    fprintf(output, "%x %x %x %llx ", h.magic, h.permissions, h.tree_size, h.file_size);
+    dump_tree(output_fd, root);
     
-    // enqueue(test_pq, test_node_left);
-    // enqueue(test_pq, test_node_right);
-    // enqueue(test_pq, test_node_middle);
-    // dequeue(test_pq, &test_node_middle);
-    //dequeue(test_pq, &test_node_left);
-    //printf("%d\n", dequeue(test_pq, &test_extra));
-    // pq_print(test_pq);
-    // pq_print(test_pq);
-    // dequeue(test_pq, &test_node_right);
-    // dequeue(test_pq, &test_node_left);
-    // pq_print(test_pq);
-
-    // pq_print(test_pq);
-    //node_print(test_node_right);
-
-//  return enqueue(test_pq, test_node_left);
-//  return 1;
-    // uint8_t x = 0;
-    // Code c = code_init();
-    // code_push_bit(&c, 1);
-    // code_push_bit(&c, 0);
-    // code_push_bit(&c, 1);
-    // code_print(&c);
-    // printf("\n");
     
-    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
-    // code_print(&c);
-    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
-    // code_print(&c);
-    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
-    // code_print(&c);
-    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
-    // code_print(&c);
-    // printf("\ncode_pop returned: %d popped bit:%d\n", code_pop_bit(&c, &x),  x);
-    // code_print(&c)
+    while (true) {
+        int buf = fgetc(input2);
+        if (feof(input2)) {
+            break;
+        }
+        Code c = table[buf];
+        write_code(output_fd, &c);
+    }
 
-    // int x = read_bytes(test.txt, uint8_t *buf, int nbytes) 
-    // printf( )
-    uint8_t buf[1000000];   // 1mil
-    // int filedesc = open("test.txt", O_RDONLY);
-    // printf("num of bytes read: %d\n", read_bytes(filedesc, buf, 1000000));
-    int filedesc = open("testwrite.txt", O_WRONLY);
-    printf("num of bytes written: %d\n", write_bytes(filedesc, buf, 1000000));
-   // printf("%s", buf);
+    fclose(input);
+    fclose(input2);
+    fclose(output);
+
+
+
+    
+
+
+
+
 
 }
+
 
 
