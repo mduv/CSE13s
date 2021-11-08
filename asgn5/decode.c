@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
             }
         }
     }
-    
+
     free(tree_buf);
     delete_tree(&root);
     close(input_fd);
