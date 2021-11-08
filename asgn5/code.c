@@ -9,7 +9,7 @@
 /* This function will not require any dynamic memory allocation. You will simply create a new Code on
 the stack, setting top to 0, and zeroing out the array of bits, bits. The initialized Code is then returned. */
 Code code_init(void) {
-    Code c = {.top = 0, .bits = {0}};
+    Code c = { .top = 0, .bits = { 0 } };
     return c;
 }
 
@@ -27,9 +27,10 @@ bool code_empty(Code *c) {
     }
 }
 
-// Returns true if the Code is full and false otherwise. 
+// Returns true if the Code is full and false otherwise.
 bool code_full(Code *c) {
-    if (c->top == ALPHABET) { // The maximum length of a code in bits is 256, which we have defined using the macro ALPHABET.
+    if (c->top
+        == ALPHABET) { // The maximum length of a code in bits is 256, which we have defined using the macro ALPHABET.
         return true;
     } else {
         return false;
@@ -38,8 +39,8 @@ bool code_full(Code *c) {
 
 // Sets the bit at index i in the Code, setting it to 1. If i is out of range, return false. Otherwise, return true to indicate success.
 bool code_set_bit(Code *c, uint32_t i) {
-    uint32_t k = i / 8;  // index of which uint8 bits
-    uint32_t pos = i % 8;  // bit position in uint8 bit
+    uint32_t k = i / 8; // index of which uint8 bits
+    uint32_t pos = i % 8; // bit position in uint8 bit
     uint8_t flag = 1; // 00...1
     if (k >= ALPHABET / 8) {
         return false;
@@ -52,8 +53,8 @@ bool code_set_bit(Code *c, uint32_t i) {
 
 // Clears the bit at index i in the Code, clearing it to 0. If i is out of range, return false. Otherwise, return true to indicate success.
 bool code_clr_bit(Code *c, uint32_t i) {
-    uint32_t k = i / 8;  // index of which uint8 bits
-    uint32_t pos = i % 8;  // bit position in uint8 bit
+    uint32_t k = i / 8; // index of which uint8 bits
+    uint32_t pos = i % 8; // bit position in uint8 bit
     uint8_t flag = 1; // 00...0
     if (k > ALPHABET / 8) {
         return false;
@@ -67,8 +68,8 @@ bool code_clr_bit(Code *c, uint32_t i) {
 
 // Gets the bit at index i in the Code. If i is out of range, or if bit i is equal to 0, return false. Return true if and only if bit i is equal to 1.
 bool code_get_bit(Code *c, uint32_t i) {
-    uint32_t k = i / 8;  // index of which byte
-    uint32_t pos = i % 8;  // bit position in uint8 bit
+    uint32_t k = i / 8; // index of which byte
+    uint32_t pos = i % 8; // bit position in uint8 bit
     uint8_t flag = 1;
     flag = flag << pos;
     if (k > ALPHABET / 8) {
@@ -80,7 +81,6 @@ bool code_get_bit(Code *c, uint32_t i) {
         return false;
     }
 }
-
 
 // Pushes a bit onto the Code. The value of the bit to push is given by bit. Returns false if the Code is full prior to pushing a bit and true otherwise to indicate the successful pushing of a bit.
 bool code_push_bit(Code *c, uint8_t bit) {
@@ -100,10 +100,9 @@ bool code_push_bit(Code *c, uint8_t bit) {
 bool code_pop_bit(Code *c, uint8_t *bit) {
     if (code_empty(c)) {
         return false;
-    }
-    else {
-        *bit = code_get_bit(c, c->top-1);
-        code_clr_bit(c, c->top-1);
+    } else {
+        *bit = code_get_bit(c, c->top - 1);
+        code_clr_bit(c, c->top - 1);
         c->top--;
         return true;
     }
@@ -117,5 +116,3 @@ void code_print(Code *c) {
     }
     printf("\n");
 }
-
-

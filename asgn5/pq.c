@@ -6,14 +6,14 @@
 #include <stdlib.h>
 
 struct PriorityQueue {
-    uint32_t size;      // size of the priority queue
-    uint32_t capacity;  // capacity of the priority queue
-    Node **items;       // an array of nodes
+    uint32_t size; // size of the priority queue
+    uint32_t capacity; // capacity of the priority queue
+    Node **items; // an array of nodes
 };
 
 // The constructor for a priority queue. The priority queue’s maximum capacity is specified by capacity.
 PriorityQueue *pq_create(uint32_t capacity) {
-    PriorityQueue *q = (PriorityQueue *) malloc(sizeof(PriorityQueue));                
+    PriorityQueue *q = (PriorityQueue *) malloc(sizeof(PriorityQueue));
     if (q) {
         q->size = 0;
         q->capacity = capacity;
@@ -59,14 +59,13 @@ uint32_t pq_size(PriorityQueue *q) {
 bool enqueue(PriorityQueue *q, Node *n) {
     if (pq_full(q)) {
         return false;
-    }
-    else {
-        int i = q->size-1;
+    } else {
+        int i = q->size - 1;
         while (i >= 0 && (n->frequency > (q->items[i]->frequency))) {
-            q->items[i+1] = q->items[i];
+            q->items[i + 1] = q->items[i];
             i--;
         }
-        q->items[i+1] = n;
+        q->items[i + 1] = n;
         q->size++;
         return true;
     }
@@ -76,7 +75,6 @@ bool enqueue(PriorityQueue *q, Node *n) {
 queued should have the highest priority over all the nodes in the priority queue. Returns false if the
 priority queue is empty prior to dequeuing a node and true otherwise to indicate the successful de-
 queuing of a node. */
-
 
 bool dequeue(PriorityQueue *q, Node **n) {
     if (pq_empty(q)) {
@@ -88,12 +86,8 @@ bool dequeue(PriorityQueue *q, Node **n) {
     }
 }
 
-
 void pq_print(PriorityQueue *q) {
     for (uint32_t i = 0; i < q->size; i += 1) {
         node_print(q->items[i]);
     }
 }
-
-
-

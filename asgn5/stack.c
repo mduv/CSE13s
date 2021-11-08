@@ -6,9 +6,9 @@
 #include <unistd.h>
 
 struct Stack {
-    uint32_t top;       // top of the stack
-    uint32_t capacity;  // capacity of the stack
-    Node **items;       // an array of nodes
+    uint32_t top; // top of the stack
+    uint32_t capacity; // capacity of the stack
+    Node **items; // an array of nodes
 };
 
 // The constructor for a stack. The maximum number of nodes the stack can hold is specified by capacity.
@@ -26,12 +26,12 @@ Stack *stack_create(uint32_t capacity) {
     return s;
 }
 
-// The destructor for a stack. 
+// The destructor for a stack.
 void stack_delete(Stack **s) {
     if (*s && (*s)->items) {
         free((*s)->items);
         free(*s);
-        *s = NULL;  // set the pointer to NULL after freeing the memory allocated by the stack.
+        *s = NULL; // set the pointer to NULL after freeing the memory allocated by the stack.
     }
     return;
 }
@@ -87,7 +87,3 @@ bool stack_pop(Stack *s, Node **n) {
 // void stack_print(Stack *s) {
 //     for (uint32_t i = 0; i < s->top; i += 1) {
 // }
-
-
-
-

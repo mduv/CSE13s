@@ -5,11 +5,9 @@
 #include "pq.h"
 #include "stack.h"
 
-
 #include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
-
 
 /* Constructs a Huffman tree given a computed histogram. The histogram will have ALPHABET indices,
 one index for each possible symbol. Returns the root node of the constructed tree. The use of static
@@ -24,12 +22,12 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
             enqueue(tree_queue, element_node);
         }
     }
-    
+
     while (pq_size(tree_queue) > 1) {
         Node *left = 0;
         dequeue(tree_queue, &left);
         Node *right = 0;
-        dequeue(tree_queue, &right); 
+        dequeue(tree_queue, &right);
         Node *parent = node_join(left, right);
         enqueue(tree_queue, parent);
     }
@@ -41,7 +39,7 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
 Code c;
 int i = 0;
 void build_codes(Node *root, Code table[static ALPHABET]) {
-    if (i==0) {
+    if (i == 0) {
         c = code_init();
     }
     i++;
@@ -88,11 +86,10 @@ Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
     for (int16_t i = 0; i < nbytes; i++) {
         if (tree[i] == 'L') {
             // leaf
-            Node *next = node_create(tree[i+1], 0);
+            Node *next = node_create(tree[i + 1], 0);
             stack_push(s_nodes, next);
             i++;
-        }
-        else if (tree[i] == 'I') {
+        } else if (tree[i] == 'I') {
             // interior
             Node *right = 0;
             stack_pop(s_nodes, &right);
@@ -119,5 +116,3 @@ void delete_tree(Node **root) {
         }
     }
 }
-
-
