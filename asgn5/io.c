@@ -128,11 +128,6 @@ void flush_codes(int outfile) {
     uint32_t k = index / 8; // index of which byte in buffer
     uint8_t pos = index % 8; // bit position in uint8 bit in buffer
 
-    if (pos == 0) {
-        // Nothing to flush
-        return;
-    }
-
     for (uint32_t i = pos; i > 0 && i < 8; i++) {
         clear_bit(index + i);
     }
