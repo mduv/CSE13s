@@ -48,14 +48,6 @@ void build_histogram() {
     }
 }
 
-void print_hist() {
-    for (uint64_t i = 0; i < ALPHABET; i++) {
-        if (hist[i] > 0) {
-            printf("ASCII: %lu, %c, count: %lu\n", i, (char) i, hist[i]);
-        }
-    }
-}
-
 Header header_create() {
     Header h;
     h.magic = MAGIC;
