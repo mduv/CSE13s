@@ -82,12 +82,12 @@ int main(int argc, char **argv) {
                 input = fopen(optarg, "r");
                 input2 = fopen(optarg, "r");
                 if(input == NULL) {
-                    perror("Error opening infile");
+                    // perror("Error opening infile");
                     return(-1);
                 }
                 struct stat stat_buf;
                 if (stat(optarg, &stat_buf) == -1) {
-                    perror("Error stat'ing infile");
+                    // perror("Error stat'ing infile");
                     return(-1);
                 }
                 permissions = stat_buf.st_mode;
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
             case 'o':
                 output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
                 if (output_fd < 0) {
-                    perror("Error opening outfile");
+                    // perror("Error opening outfile");
                     return(-1);
                 }
                 break;
