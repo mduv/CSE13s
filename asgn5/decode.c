@@ -39,14 +39,14 @@ int main(int argc, char **argv) {
             case 'i':
                 input_fd = open(optarg, O_RDONLY);
                 if(input_fd < 0) {
-                    perror("Error opening infile");
+                    // perror("Error opening infile");
                     return(-1);
                 }
                break;
             case 'o':
                 output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
                 if (output_fd < 0) {
-                    perror("Error opening outfile");
+                    // perror("Error opening outfile");
                     return(-1);
                 }
                 break;
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     uint8_t *ptr_to_bytes = (uint8_t *) ptr_to_h;
     read_bytes(input_fd, ptr_to_bytes, sizeof(Header));
     if (h.magic != MAGIC) {
-        perror("Error: magic number does not match");
+        // perror("Error: magic number does not match");
         return -1;
     }
 
