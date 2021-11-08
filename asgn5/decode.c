@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
                    "            Program usage and help.\n\t-v             Print compression "
                    "statistics.\n\t-i infile      Input file to decompress.\n\t-o outfile     "
                    "Output of decompressed data.\n");
+            return 0;
             break;
         case 'i':
             input_fd = open(optarg, O_RDONLY);
