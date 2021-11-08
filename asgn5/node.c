@@ -28,17 +28,17 @@ void node_delete(Node **n) {
     node’s left child will be left and its right child will be right. The parent node’s symbol will be ‘$’ and
     its frequency the sum of its left child’s frequency and its right child’s frequency. */
 Node *node_join(Node *left, Node *right) {
-    // uint64_t left_frequency = 0;
+    uint64_t left_frequency = 0;
     
-    // if (left) {
-    //     left_frequency = left->frequency;
-    // }
-    // uint64_t right_frequency = 0;
-    // if (right) {
-    //     right_frequency = right->frequency;
-    // }
-    // // uint64_t parent_frequency = left_frequency + right_frequency;  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
-    uint64_t parent_frequency = (left->frequency) + (right->frequency);  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
+    if (left) {
+        left_frequency = left->frequency;
+    }
+    uint64_t right_frequency = 0;
+    if (right) {
+        right_frequency = right->frequency;
+    }
+    uint64_t parent_frequency = left_frequency + right_frequency;  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
+    // uint64_t parent_frequency = (left->frequency) + (right->frequency);  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
 
     Node *parent_node = node_create('$', parent_frequency); // creates parent node with symbol '$' and frequency: parent_frequency
     parent_node->left = left;                               // parent node's left child will be left
