@@ -24,7 +24,7 @@ PriorityQueue *pq_create(uint32_t capacity) {
 
 // The destructor for a priority queue.
 void pq_delete(PriorityQueue **q) {
-     if (*q) {
+    if (*q) {
         if ((*q)->items) {
             free((*q)->items);
             (*q)->items = NULL;
@@ -32,7 +32,7 @@ void pq_delete(PriorityQueue **q) {
         free(*q);
         *q = NULL; // Set the pointer to NULL after freeing the memory for a priority queue.
     }
-   return;
+    return;
 }
 
 // Returns true if the priority queue is empty and false otherwise.
