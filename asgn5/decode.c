@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
             case 'v':
                 verbose_mode = true;
                 // Uncompressed file size: 7 bytes
-                printf("Compressed file size: %llu bytes\n", compressed_file_size);
+                //printf("Compressed file size: %llu bytes\n", compressed_file_size);
                 // Compressed file size: 32 bytes
                 // Space saving: -357.14%
                 break;
@@ -120,10 +120,10 @@ int main(int argc, char **argv) {
             return(-1);
         }
         uncompressed_file_size = stat_buf.st_size;
-        printf("Uncompressed file size: %llu bytes\n", uncompressed_file_size);
+        //printf("Uncompressed file size: %llu bytes\n", uncompressed_file_size);
 
         float space_savings = 100 * (1-((float)compressed_file_size/uncompressed_file_size));
-        printf("Space saving: %f%%\n", space_savings);
+        //printf("Space saving: %f%%\n", space_savings);
     }
     close(output_fd);
 }
