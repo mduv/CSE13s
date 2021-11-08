@@ -29,6 +29,8 @@ uint16_t permissions;
 uint16_t unique_symbols;
 uint64_t file_size;
 int output_fd = 1;
+bool verbose_mode = false;
+uint64_t compressed_file_size;
 
 
 void build_histogram() {
@@ -82,12 +84,12 @@ int main(int argc, char **argv) {
                 input = fopen(optarg, "r");
                 input2 = fopen(optarg, "r");
                 if(input == NULL) {
-                    // perror("Error opening infile");
+                    perror("Error: unable to read header.");
                     return(-1);
                 }
                 struct stat stat_buf;
                 if (stat(optarg, &stat_buf) == -1) {
-                    // perror("Error stat'ing infile");
+                    perror("Error: unable to read header.");
                     return(-1);
                 }
                 permissions = stat_buf.st_mode;
@@ -96,16 +98,17 @@ int main(int argc, char **argv) {
             case 'o':
                 output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
                 if (output_fd < 0) {
-                    // perror("Error opening outfile");
+                    perror("Error: unable to open file.");
                     return(-1);
                 }
                 break;
-            // case 'u':
-            //     undirected = 1;
-            //     break;
-            // case 'v':
-            //     verbose = 1;
-            //     break;
+            case 'v':
+                verbose_mode = true;
+                // Uncompressed file size: 7 bytes
+                printf("Uncompressed file size: %llu bytes\n", file_size);
+                // Compressed file size: 32 bytes
+                // Space saving: -357.14%
+                break;
             return 0;
         }
     }
@@ -134,5 +137,17 @@ int main(int argc, char **argv) {
 
     fclose(input);
     fclose(input2);
+    if (verbose_mode) {
+        struct stat stat_buf;
+        if (fstat(output_fd, &stat_buf) == -1) {
+            perror("Error: unable to read header.");
+            return(-1);
+        }
+        compressed_file_size = stat_buf.st_size;
+        printf("Compressed file size: %llu bytes\n", compressed_file_size);
+
+        float space_savings = 100 * (1-((float)compressed_file_size/file_size));
+        printf("Space saving: %f%%\n", space_savings);
+    }
     close(output_fd);
 }

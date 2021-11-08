@@ -90,8 +90,9 @@ Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
             // leaf
             Node *next = node_create(tree[i+1], 0);
             stack_push(s_nodes, next);
+            i++;
         }
-        if (tree[i] == 'I') {
+        else if (tree[i] == 'I') {
             // interior
             Node *right = 0;
             stack_pop(s_nodes, &right);
