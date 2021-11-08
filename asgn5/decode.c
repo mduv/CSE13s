@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    printf("h.magic:%X, h.permissions:%X, h.tree_size:%X, h.file_size:%llX\n", h.magic, h.permissions, h.tree_size, h.file_size);
+    // printf("h.magic:%X, h.permissions:%X, h.tree_size:%X, h.file_size:%llX\n", h.magic, h.permissions, h.tree_size, h.file_size);
     fchmod(output_fd, h.permissions);
 
     // Rebuild tree from the bytes read from the file
