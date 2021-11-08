@@ -88,7 +88,7 @@ static uint8_t write_code_buffer[BLOCK] = {0};
 static uint32_t index = 0;
 
 void write_code(int outfile, Code *c) {
-    code_print(c);
+    // code_print(c);
 
     for (uint32_t i = 0; i < code_size(c); i++) {
         // write code bit into correct index of buffer
@@ -101,8 +101,8 @@ void write_code(int outfile, Code *c) {
             flag = ~flag;
             write_code_buffer[k] = write_code_buffer[k] & flag;
         }
-        printf("pos: %x, flag: %x, k:%x ", pos, flag, k);
-        printf("write_code_buffer: %x\n", write_code_buffer[k]);
+        // printf("pos: %x, flag: %x, k:%x ", pos, flag, k);
+        // printf("write_code_buffer: %x\n", write_code_buffer[k]);
         index++;
         if (index == BITS_IN_BLOCK) {
             write_bytes(outfile, write_code_buffer, BLOCK);

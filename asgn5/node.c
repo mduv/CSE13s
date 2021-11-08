@@ -29,23 +29,17 @@ void node_delete(Node **n) {
     its frequency the sum of its left child’s frequency and its right child’s frequency. */
 Node *node_join(Node *left, Node *right) {
     uint64_t parent_frequency = (left->frequency) + (right->frequency);  // parent node's frequency is the sum of its left child's frequency and its right child's frequency
-    // printf("parent freq: %llu\n", parent_frequency);
     Node *parent_node = node_create('$', parent_frequency); // creates parent node with symbol '$' and frequency: parent_frequency
     parent_node->left = left;                               // parent node's left child will be left
-    // node_print(left);
     parent_node->right = right;                             // parent node's right child will be right
-    // node_print(right);
-    // node_print(parent_node);
     return parent_node;
 
 }
 
 // A debug function to verify that your nodes are created and joined correctly.
 void node_print(Node *n) {
-    
     if (n->left == NULL && n->right == NULL) {
         // print symbol
-        // printf("No children\n");
         printf("Symbol: %" PRIx8 "\n", n->symbol);
         // print the frequency PRIu64
         printf("Frequency: %" PRIu64 "\n", n->frequency);
@@ -53,13 +47,8 @@ void node_print(Node *n) {
         // print symbol and freq of the children
         printf("Symbol: %" PRIx8 "\n", n->symbol);
         printf("Freq: %" PRIu64 "\n", n->frequency);
-        // printf("Symbol of left: %" PRIx8 "\n", n->left->symbol);
-        // printf("Frequency of left: %" PRIu64 "\n", n->left->frequency);
-        // printf("Symbol of right: %" PRIx8 "\n", n->right->symbol);
-        // printf("Frequency of right: %" PRIu64 "\n", n->right->frequency);
 
     }
-   
 }
 
 
