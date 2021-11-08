@@ -109,6 +109,8 @@ int main(int argc, char **argv) {
 
     build_histogram();
     Header h = header_create();
+    //printf("h.magic:%X, h.permissions:%X, h.tree_size:%X, h.file_size:%llX\n", h.magic, h.permissions, h.tree_size, h.file_size);
+    fchmod(output_fd, h.permissions);
     write(output_fd, &h, sizeof(Header));
 
     Node *root = build_tree(hist);
