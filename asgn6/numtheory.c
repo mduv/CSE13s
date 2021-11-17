@@ -81,15 +81,39 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     mpz_set (i, t); // set i to t
     
 
-
-
-
-
-
-
+    mpz_clear (r);
+    mpz_clear (r_inverse);
+    mpz_clear (t);
+    mpz_clear (t_inverse);
+    mpz_clear (q);
+    mpz_clear (aux1);
+    mpz_clear(fake_i);
 }
 
-void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus);
+// Performs fast modular exponentiation, computing base raised to the exponent power modulo modulus,
+// and storing the computed result in out.
+void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
+
+    mpz_t p, v, aux1; // initialize p, v
+    mpz_init(p);
+    mpz_init(aux1);
+
+    mpz_set (p, base); // set p to base
+    mpz_init_set_ui(v, 1); // set v to 1
+
+    while ((mpz_cmp_ui(exponent, 0)) > 0) { // while exp > 0
+        if(mpz_odd_p(exponent) != 0) { // if d is odd
+            mpz_mul (aux1, v, p); // v ←(v×p) mod n
+            mpz_mod (v, aux1, modulus);
+        }
+        mpz_mul (aux1, p, p); // p ←(p×p) mod n
+        mpz_mod (p, aux1, modulus);
+        mpz_fdiv_q_ui(exponent, exponent, 2); //d ← d/2 
+    }
+
+    mpz_set (out, v); // set out to v
+
+}
 
 bool is_prime(mpz_t n, uint64_t iters);
 
