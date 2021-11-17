@@ -1,5 +1,5 @@
-// #include "code.h"
-// #include "defines.h"
+#include "randstate.h"
+#include "numtheory.h"
 // #include "node.h"
 // #include "huffman.h"
 // #include <string.h>
@@ -147,5 +147,15 @@
 // }
 
 int main() {
+    // rintf("hello\n");
+    mpz_t a, b, d;
+    // mpz_init (a);
+    // mpz_init (b);
+    mpz_init (d);
+    mpz_init_set_ui(a, 5);
+    mpz_init_set_ui(b, 2);
+    // gmp_printf("result: %d\n", (mpz_get_ui(a) == 20));
+    gcd(d, a, b);
+    // gmp_printf("gcd: %d\n", (mpz_get_ui(d) == 1));
     return 1;
 }
