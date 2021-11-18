@@ -113,9 +113,66 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
     mpz_set (out, v); // set out to v
 
+    mpz_clear (p);
+    mpz_clear (v);
+    mpz_clear (aux1);
+
 }
 
-bool is_prime(mpz_t n, uint64_t iters);
+bool is_prime(mpz_t n, uint64_t iters) {
+    int counter = 0;
+    mpz_t j, r, s, y, n_minus_1, a, n_minus_3, two, two_s, denom, s_minus_1; // initialize r, s
+    mpz_init(r);
+    mpz_init(y);
+    mpz_init(a);
+    mpz_init(denom);
+    mpz_init(two_s);
+    mpz_init(n_minus_1);
+    mpz_init(n_minus_3);
+    mpz_init(n_minus_1);
+    mpz_sub_ui(r, n, 1); // set r to n -1
+    mpz_sub_ui(n_minus_1, n, 1); // set nminus1 to n -1
+    mpz_sub_ui(n_minus_3, n, 3);
+    mpz_init_set_ui(s, 0); // set s to 1
+    mpz_init_set_ui(two, 2); // set s to 1
+
+    if (mpz_even_p(n) != 0) { // if n is even return false
+        return false;
+    }
+    while (mpz_even_p(r) != 0) // while r is even
+    {
+        mpz_add_ui(s,s,1); // s++
+        counter++;
+        // r = (n-1) / 2^s
+        mpz_pow_ui(denom, two, counter);
+        mpz_fdiv_q(r, n_minus_1, denom);
+    }
+
+    mpz_sub_ui(s_minus_1, s, 1);
+
+    for(uint64_t i = 0; i<iters; i++) {
+        mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-3
+        pow_mod(y, a, r, n);
+        if ((mpz_cmp_ui(y, 0) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 0 and y != n-1
+            mpz_init_set_ui(j, 1);
+            
+            while ((mpz_cmp(j,s_minus_1) > 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
+                pow_mod(y, y, two, n);
+                if (mpz_cmp_ui(y, 1) == 0) {
+                    return false;
+                }
+                mpz_add_ui(j,j,1);
+            }
+
+            if ((mpz_cmp(y,n_minus_1) != 0)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+    
+}
 
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters);
 
