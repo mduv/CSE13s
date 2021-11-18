@@ -174,6 +174,10 @@ bool is_prime(mpz_t n, uint64_t iters) {
     
 }
 
-void make_prime(mpz_t p, uint64_t bits, uint64_t iters);
+void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
+    while (!is_prime(p, iters)) {
+        mpz_rrandomb (p, state, bits);
+    }
+}
 
 
