@@ -148,14 +148,19 @@
 
 int main() {
     // rintf("hello\n");
-    mpz_t a, b, d;
+    mpz_t a, n, i;
     // mpz_init (a);
     // mpz_init (b);
-    mpz_init (d);
-    mpz_init_set_ui(a, 5);
-    mpz_init_set_ui(b, 2);
+    mpz_init (i);
+    mpz_init_set_ui(a, 11);
+    mpz_init_set_ui(n, 8);
     // gmp_printf("result: %d\n", (mpz_get_ui(a) == 20));
-    gcd(d, a, b);
-    // gmp_printf("gcd: %d\n", (mpz_get_ui(d) == 1));
+    // mod_inverse(i, a, n);
+    mod_inverse(i, a, n);
+    // gmp_printf
+    // gmp_printf("i: %Zd\n", i);
+
+    // is_prime(mpz_t n, uint64_t iters);
+    // printf("%d\n", is_prime(n, 100));
     return 1;
 }

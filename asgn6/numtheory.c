@@ -43,8 +43,9 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
 // Computes the inverse i of a modulo n. In the event that a modular inverse cannot be found, set i to 0.
 void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     // initialize variables
-    mpz_t r, r_inverse, t, t_inverse, q, aux1, fake_i;
+    mpz_t r, r_inverse, t, t_inverse, q, aux1, aux2, fake_i;
     mpz_init (r);
+    mpz_init (aux2);
     mpz_init (r_inverse);
     // mpz_init (t);
     // mpz_init (t_inverse);
@@ -53,32 +54,54 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 
     // set variables
     mpz_set (r, n); // set r to n
+    // gmp_printf("r: %Zd\n", r);
     mpz_set (r_inverse, a); // set r' to a
-    mpz_init_set_ui(t, 0); // set t to 0
-    mpz_init_set_ui(t_inverse, 1); // set t' to 1
+    // gmp_printf("r': %Zd\n", r_inverse);
+    mpz_init_set_si(t, 0); // set t to 0
+    mpz_init_set_si(t_inverse, 1); // set t' to 1
 
-    while ((mpz_cmp_ui(r_inverse, 0)) != 0)  // r' != 0
-    {
+    
+
+    while ((mpz_cmp_si(r_inverse, 0)) != 0) { // r' != 0
+        // printf("loop begins..........\n");
         mpz_fdiv_q(q, r, r_inverse); // set q to r/r'
-        
-        mpz_set (r, r_inverse); // set r to r'
-        mpz_mul (aux1, q, r_inverse); // set aux1 tp q*r'
-        mpz_sub (r_inverse, r, aux1);   // set r' to r-aux1
+        // gmp_printf("q: %Zd\n", q);
 
+        mpz_set (aux2, r); // set aux2 to r
+        // gmp_printf("aux2: %Zd\n", r);
+        mpz_set (r, r_inverse); // set r to r'
+        // gmp_printf("r: %Zd\n", r);
+        mpz_mul (aux1, q, r_inverse); // set aux1 tp q*r'
+        // gmp_printf("aux1: %Zd\n", aux1);
+        mpz_sub (r_inverse, aux2, aux1);   // set r' to r-aux1
+        // gmp_printf("r': %Zd\n", r_inverse);
+        
+        
+
+
+        mpz_set (aux2, t); // set aux2 to t
+        // gmp_printf("aux2: %Zd\n", t);
         mpz_set (t, t_inverse); // set t to t'
+        // gmp_printf("t: %Zd\n", t);
         mpz_mul (aux1, q, t_inverse); // set aux1 tp q*t'
-        mpz_sub (t_inverse, t, aux1);   // set t' to t-aux1
+        // gmp_printf("aux1: %Zd\n", aux1);
+        mpz_sub (t_inverse, aux2, aux1);   // set t' to t-aux1
+        // gmp_printf("t': %Zd\n", t_inverse);
+
+        
     }
 
-    if ((mpz_cmp_ui(r, 1)) > 0) {   // if r > 1
+    if ((mpz_cmp_si(r, 1)) > 0) {   // if r > 1
         mpz_init_set_ui(fake_i, 0); // set fakei to 0
         mpz_set (i, fake_i);        // set i to 0
     }
-    if ((mpz_cmp_ui(t, 0)) < 0) {   // if t < 0
+    if ((mpz_cmp_si(t, 0)) < 0) {   // if t < 0
         mpz_add (t, t, n);          // t = t + n
+        gmp_printf("t: %Zd\n", t);
     }
     
     mpz_set (i, t); // set i to t
+    gmp_printf("i: %Zd\n", i);
     
 
     mpz_clear (r);
@@ -175,6 +198,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
 }
 
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
+    mpz_rrandomb (p, state, bits);
     while (!is_prime(p, iters)) {
         mpz_rrandomb (p, state, bits);
     }
