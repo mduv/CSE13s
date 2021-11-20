@@ -5,14 +5,14 @@ LFLAGS = $(shell pkg-config --libs gmp)
 all: encrypt decrypt keygen
 
 
-encrypt: encrypt.o randstate.o numtheory.o
-	$(CC) encrypt.o randstate.o numtheory.o -lm -lgmp -o encrypt $(LFLAGS)
+encrypt: encrypt.o randstate.o numtheory.o rsa.o
+	$(CC) encrypt.o randstate.o numtheory.o rsa.o -lm -lgmp -o encrypt $(LFLAGS)
 
-decrypt: decrypt.o randstate.o numtheory.o
-	$(CC) decrypt.o randstate.o numtheory.o -lm -lgmp -o decrypt $(LFLAGS)
+decrypt: decrypt.o randstate.o numtheory.o rsa.o
+	$(CC) decrypt.o randstate.o numtheory.o rsa.o -lm -lgmp -o decrypt $(LFLAGS)
 
-keygen: keygen.o randstate.o numtheory.o
-	$(CC) keygen.o randstate.o numtheory.o -lm -lgmp -o keygen $(LFLAGS)
+keygen: keygen.o randstate.o numtheory.o rsa.o
+	$(CC) keygen.o randstate.o numtheory.o rsa.o -lm -lgmp -o keygen $(LFLAGS)
 
 encrypt.o: encrypt.c decrypt.c keygen.c
 	$(CC) $(CFLAGS) -c encrypt.c decrypt.c keygen.c

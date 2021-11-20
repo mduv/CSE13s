@@ -1,6 +1,6 @@
 #include "randstate.h"
 #include "numtheory.h"
-// #include "node.h"
+#include "rsa.h"
 // #include "huffman.h"
 // #include <string.h>
 // #include "stack.h"
@@ -146,19 +146,23 @@
 //     close(output_fd);
 // }
 
+
 int main() {
     randstate_init(1024);
     // rintf("hello\n");
-    mpz_t p, a;
+    mpz_t p, q, n, e, s, d, m, c, decoded_message;
     // mpz_t x, y, z, out;
     mpz_init (p);
-    // mpz_init (a);
-    // mpz_init (z);
-    // mpz_init(out);
-    mpz_init_set_si(a, 103);
+    mpz_init (q);
+    mpz_init (n);
+    mpz_init(e);
+    mpz_init(d);
+    mpz_init(decoded_message);
+    mpz_init(c);
+    mpz_init_set_si(m, 101010);
 
 
-    // mpz_init_set_si(x, 15);
+    mpz_init_set_si(s, 100);
     // mpz_init_set_si(a, 1);
     // mpz_init_set_si(z, 53);
     // mpz_init_set_si(b, 25);
@@ -168,8 +172,7 @@ int main() {
     // mod_inverse(i, a, n);
     // gmp_printf
     // gmp_printf("i: %Zd\n", i);
-    bool z = is_prime(a, 10);
-    printf("isprime: %d\n", z);
+    // printf("isprime: %d\n", z);
 
     // pow_mod(out, x, y, z);
     // is_prime(mpz_t n, uint64_t iters);
@@ -179,7 +182,37 @@ int main() {
     //printf("The number is a prime: %d\n", num_is_prime);
     // gmp_printf("prime?: %Zd\n", is_prime(a, 10));
     // gmp_printf("odd?: %Zd\n", mpz_odd_p(a));
-    // make_prime(p, 16, 1000);
+
+    rsa_make_pub(p, q, n, e, 32, 100);
+    // make_prime(p, 64, 1000);
+    // gmp_printf("p: %Zd\n", p);
+    // gmp_printf("q: %Zd\n", q);
+    // gmp_printf("n: %Zd %ZX\n", n, n);
+    // gmp_printf("e: %Zd %ZX\n", e, e);
+
+    // char username[500];
+    rsa_make_priv(d, e, p, q);
+    
+
+    // FILE *ptr = fopen("example.txt","r");
+    // rsa_read_priv(n, d, ptr);
+
+    // gmp_printf("n: %Zd %ZX\n", n, n);
+    // gmp_printf("e: %Zd %ZX\n", e, e);
+    // gmp_printf("s: %Zd %ZX\n", s, s);
+    // printf("username: %s\n", username);
+    // rsa_make_priv(d, e, p, q);
+    gmp_printf("m: %Zd\n", m);
+
+    rsa_encrypt(c, m, e, n);
+    gmp_printf("c: %Zd\n", c);
+    rsa_decrypt(decoded_message, c, d, n);
+    gmp_printf("decoded message: %Zd\n", decoded_message);
+
+
+    
+
+
     randstate_clear();
     return 1;
 }

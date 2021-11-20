@@ -97,11 +97,11 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     }
     if ((mpz_cmp_si(t, 0)) < 0) {   // if t < 0
         mpz_add (t, t, n);          // t = t + n
-        gmp_printf("t: %Zd\n", t);
+        // gmp_printf("t: %Zd\n", t);
     }
     
     mpz_set (i, t); // set i to t
-    gmp_printf("i: %Zd\n", i);
+    // gmp_printf("i: %Zd\n", i);
     
 
     mpz_clear (r);
