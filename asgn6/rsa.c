@@ -141,6 +141,8 @@ void rsa_encrypt(mpz_t c, mpz_t m, mpz_t e, mpz_t n) {
 }
 
 void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
+    
+    
     // Calculate the block size k. This should be k = b(log2(n)−1)/8.
 
     int k = (mpz_sizeinbase(n, 2) - 1) / 8;
@@ -148,25 +150,82 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     /* Dynamically allocate an array that can hold k bytes. This array should be of type (uint8_t *) and
     will serve as the block. */ 
 
-    uint8_t *ptr = (uint8_t *)malloc(k);
+    uint8_t *buffer = (uint8_t *)malloc(k);
 
     /* Set the zeroth byte of the block to 0xFF. This effectively prepends the workaround byte that we
     need. */
-    ptr[0] = 0xFF;
+    buffer[0] = 0xFF;
+
+    mpz_t c;
+    mpz_init(c);
 
 
+    int numofbytesread = fread(buffer+1, 1, k-1, infile);
+
+    mpz_t m;
+    mpz_init(m);
+
+    while (numofbytesread > 0) {
+        mpz_import(m, numofbytesread+1, 1, sizeof(buffer[0]), 1, 0, buffer);
+        rsa_encrypt(c, m, e, n);
+        gmp_fprintf(outfile, "%ZX\n", c);
+        
+        numofbytesread = fread(buffer+1, 1, k-1, infile);
+    }
+    
     
 
+
+    mpz_clear(m);
+    mpz_clear(c);
 }
 
 void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
     pow_mod(m, c, d, n);
 }
 
-void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d);
+void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
 
-void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n);
+    int k = (mpz_sizeinbase(n, 2) - 1) / 8;
+    uint8_t *buffer = (uint8_t *)malloc(k);
 
-bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n);
+    mpz_t c;
+    mpz_init(c);
+
+    int fields_read = gmp_fscanf(infile, "%ZX\n", c);
+
+    mpz_t m;
+    mpz_init(m);
+
+    unsigned long valid_bytes = 0;
+
+    while (fields_read != EOF) {
+        rsa_decrypt(m, c, d, n);
+        mpz_export(buffer, &valid_bytes, 1, sizeof(buffer[0]), 1, 0, m);
+        
+        fwrite(buffer+1, 1, valid_bytes-1, outfile);
+
+        fields_read = gmp_fscanf(infile, "%ZX\n", c);
+    }
+    
+    mpz_clear(m);
+    mpz_clear(c);
+}
+
+void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
+    pow_mod(s, m, d, n);
+}
+
+bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
+    mpz_t t;
+    mpz_init(t);
+    pow_mod(t, s, e, n);
+    // gmp_printf("t: %Zd\n", t);
+    if (mpz_cmp(t,m) == 0){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
