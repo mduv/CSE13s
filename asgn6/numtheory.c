@@ -43,24 +43,18 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
 // Computes the inverse i of a modulo n. In the event that a modular inverse cannot be found, set i to 0.
 void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     // initialize variables
-    mpz_t r, r_inverse, t, t_inverse, q, aux1, aux2, fake_i;
+    mpz_t r, r_inverse, t, t_inverse, q, aux1, aux2;
     mpz_init (r);
-    mpz_init (aux2);
     mpz_init (r_inverse);
-    // mpz_init (t);
-    // mpz_init (t_inverse);
     mpz_init (q);
     mpz_init (aux1);
+    mpz_init (aux2);
 
     // set variables
     mpz_set (r, n); // set r to n
-    // gmp_printf("r: %Zd\n", r);
     mpz_set (r_inverse, a); // set r' to a
-    // gmp_printf("r': %Zd\n", r_inverse);
     mpz_init_set_si(t, 0); // set t to 0
     mpz_init_set_si(t_inverse, 1); // set t' to 1
-
-    
 
     while ((mpz_cmp_si(r_inverse, 0)) != 0) { // r' != 0
         // printf("loop begins..........\n");
@@ -92,8 +86,9 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     }
 
     if ((mpz_cmp_si(r, 1)) > 0) {   // if r > 1
-        mpz_init_set_si(fake_i, 0); // set fakei to 0
-        mpz_set (i, fake_i);        // set i to 0
+        // mpz_init_set_si(fake_i, 0); // set fakei to 0
+        mpz_set_si (i, 0);        // set i to 0
+        // mpz_clear(fake_i);
     }
     if ((mpz_cmp_si(t, 0)) < 0) {   // if t < 0
         mpz_add (t, t, n);          // t = t + n
@@ -111,7 +106,7 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     mpz_clear (q);
     mpz_clear (aux1);
     mpz_clear (aux2);
-    mpz_clear(fake_i);
+    
 }
 
 // Performs fast modular exponentiation, computing base raised to the exponent power modulo modulus,
