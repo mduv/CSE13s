@@ -25,7 +25,7 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
     {
         mpz_set (t, beta);              // set t to b
         mpz_mod (beta, alpha, beta);    // set b to a mod b
-        mpz_set (alpha, t);             // set a to to
+        mpz_set (alpha, t);             // set a to t
 
     }
 
@@ -131,15 +131,11 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
             // gmp_printf("v: %Zd\n", v);
         }
         mpz_mul (aux1, p, p); // p ←(p×p) mod n
-        // gmp_printf("p*p: %Zd\n", aux1);
         mpz_mod (p, aux1, mod);
-        // gmp_printf("p: %Zd\n", p);
         mpz_fdiv_q_ui(exp, exp, 2); //d ← d/2 
-        // gmp_printf("d: %Zd\n", exp);
     }
 
     mpz_set (out, v); // set out to v
-    // gmp_printf("out: %Zd\n", out);
 
     mpz_clear (p);
     mpz_clear (v);
@@ -152,9 +148,8 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
-    // int counter = 0;
 
-    if (mpz_cmp_si(n, 0) == 0) {
+    if (mpz_cmp_si(n, 0) <= 0) {
         return false;
     }
     
