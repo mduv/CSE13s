@@ -147,20 +147,39 @@
 // }
 
 int main() {
+    randstate_init(1024);
     // rintf("hello\n");
-    mpz_t a, n, i;
+    mpz_t p, a;
+    // mpz_t x, y, z, out;
+    mpz_init (p);
     // mpz_init (a);
-    // mpz_init (b);
-    mpz_init (i);
-    mpz_init_set_ui(a, 11);
-    mpz_init_set_ui(n, 8);
+    // mpz_init (z);
+    // mpz_init(out);
+    mpz_init_set_si(a, 103);
+
+
+    // mpz_init_set_si(x, 15);
+    // mpz_init_set_si(a, 1);
+    // mpz_init_set_si(z, 53);
+    // mpz_init_set_si(b, 25);
+    // mpz_init_set_si(n, 25);
     // gmp_printf("result: %d\n", (mpz_get_ui(a) == 20));
     // mod_inverse(i, a, n);
-    mod_inverse(i, a, n);
+    // mod_inverse(i, a, n);
     // gmp_printf
     // gmp_printf("i: %Zd\n", i);
+    bool z = is_prime(a, 10);
+    printf("isprime: %d\n", z);
 
+    // pow_mod(out, x, y, z);
     // is_prime(mpz_t n, uint64_t iters);
     // printf("%d\n", is_prime(n, 100));
+    // gmp_printf("powermod: %Zd\n", out);
+    // bool num_is_prime = is_prime(a, 1000);
+    //printf("The number is a prime: %d\n", num_is_prime);
+    // gmp_printf("prime?: %Zd\n", is_prime(a, 10));
+    // gmp_printf("odd?: %Zd\n", mpz_odd_p(a));
+    // make_prime(p, 16, 1000);
+    randstate_clear();
     return 1;
 }

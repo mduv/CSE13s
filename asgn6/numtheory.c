@@ -22,7 +22,7 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
     // gmp_printf("alpha: %d\n", alpha);
 
     // comparision with beta != 0
-    while ((mpz_cmp_ui(beta, 0)) != 0) // while b != 0
+    while ((mpz_cmp_si(beta, 0)) != 0) // while b != 0
     {
         mpz_set (t, beta);              // set t to b
         // gmp_printf("t: %d\n", t);
@@ -92,7 +92,7 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     }
 
     if ((mpz_cmp_si(r, 1)) > 0) {   // if r > 1
-        mpz_init_set_ui(fake_i, 0); // set fakei to 0
+        mpz_init_set_si(fake_i, 0); // set fakei to 0
         mpz_set (i, fake_i);        // set i to 0
     }
     if ((mpz_cmp_si(t, 0)) < 0) {   // if t < 0
@@ -110,6 +110,7 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     mpz_clear (t_inverse);
     mpz_clear (q);
     mpz_clear (aux1);
+    mpz_clear (aux2);
     mpz_clear(fake_i);
 }
 
@@ -117,37 +118,67 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 // and storing the computed result in out.
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
-    mpz_t p, v, aux1; // initialize p, v
+    mpz_t p, v, aux1, two, ex, b, exp, mod; // initialize p, v
     mpz_init(p);
+    mpz_init(ex);
     mpz_init(aux1);
+    mpz_init(b);
+    mpz_init(exp);
+    mpz_init(mod);
+    mpz_set (b, base);
+    mpz_set (exp, exponent);
+    mpz_set (mod, modulus);
 
-    mpz_set (p, base); // set p to base
-    mpz_init_set_ui(v, 1); // set v to 1
+    mpz_init_set_si(v, 1); // set v to 1
+    mpz_init_set_si(two, 2);
+    // gmp_printf("v: %Zd\n", v);
+    mpz_set (p, b); // set p to base
+    // gmp_printf("p: %Zd\n", p);
+    
 
-    while ((mpz_cmp_ui(exponent, 0)) > 0) { // while exp > 0
-        if(mpz_odd_p(exponent) != 0) { // if d is odd
+    while ((mpz_cmp_si(exp, 0)) > 0) { // while exp > 0
+        // printf("loop begins........\n");
+        mpz_mod(ex, exp, two); // if d is odd
+        // printf("hello\n");
+        if(mpz_cmp_si(ex, 1) == 0) { // if d is odd
+            // printf("hello\n");
+            // gmp_printf("odd?: %Zd\n", mpz_odd_p(exp));
             mpz_mul (aux1, v, p); // v ←(v×p) mod n
-            mpz_mod (v, aux1, modulus);
+            // gmp_printf("v*p: %Zd\n", aux1);
+            mpz_mod (v, aux1, mod);
+            // gmp_printf("v: %Zd\n", v);
         }
         mpz_mul (aux1, p, p); // p ←(p×p) mod n
-        mpz_mod (p, aux1, modulus);
-        mpz_fdiv_q_ui(exponent, exponent, 2); //d ← d/2 
+        // gmp_printf("p*p: %Zd\n", aux1);
+        mpz_mod (p, aux1, mod);
+        // gmp_printf("p: %Zd\n", p);
+        mpz_fdiv_q_ui(exp, exp, 2); //d ← d/2 
+        // gmp_printf("d: %Zd\n", exp);
     }
 
     mpz_set (out, v); // set out to v
+    // gmp_printf("out: %Zd\n", out);
 
     mpz_clear (p);
     mpz_clear (v);
     mpz_clear (aux1);
+    mpz_clear (two);
+    mpz_clear (b);
+    mpz_clear (exp);
+    mpz_clear (mod);
 
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
     int counter = 0;
-    mpz_t j, r, s, y, n_minus_1, a, n_minus_3, two, two_s, denom, s_minus_1; // initialize r, s
+    
+    mpz_t j, r, s, y, n_minus_1, a, n_minus_3, two, two_s, denom, s_minus_1, ex, ex1; // initialize r, s
+    
     mpz_init(r);
     mpz_init(y);
     mpz_init(a);
+    mpz_init(ex);
+    mpz_init(ex1);
     mpz_init(denom);
     mpz_init(two_s);
     mpz_init(n_minus_1);
@@ -155,53 +186,173 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_init(n_minus_1);
     mpz_sub_ui(r, n, 1); // set r to n -1
     mpz_sub_ui(n_minus_1, n, 1); // set nminus1 to n -1
+    // gmp_printf("n-1: %Zd\n", n_minus_1); 
     mpz_sub_ui(n_minus_3, n, 3);
-    mpz_init_set_ui(s, 0); // set s to 1
-    mpz_init_set_ui(two, 2); // set s to 1
+    mpz_init_set_si(s, 0); // set s to 1
+    mpz_init_set_si(two, 2); // set s to 1
 
-    if (mpz_even_p(n) != 0) { // if n is even return false
+    
+    
+    mpz_mod(ex, n, two);
+
+    if (mpz_cmp_si(ex, 0) == 0) { // if n is even return false
         return false;
     }
-    while (mpz_even_p(r) != 0) // while r is even
-    {
+        // printf("hello\n");
+
+    mpz_mod(ex1, r, two);
+    // printf("hello\n");
+    while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
+        // gmp_printf("s: %Zd\n", s);
+        // gmp_printf("s: %Zd\n", s);
+        
         mpz_add_ui(s,s,1); // s++
+        gmp_printf("s: %Zd\n", s);
         counter++;
         // r = (n-1) / 2^s
         mpz_pow_ui(denom, two, counter);
+        // gmp_printf("denom: %Zd\n", denom); 
         mpz_fdiv_q(r, n_minus_1, denom);
+        gmp_printf("r: %Zd\n", r);
+        mpz_mod(ex1, r, two);
+            // printf("hello\n");
+
+        // break;
     }
 
+
+
+    
     mpz_sub_ui(s_minus_1, s, 1);
 
+
+    
+    
+
+
+    // randstate_init(1024);
+
+    
+
     for(uint64_t i = 0; i<iters; i++) {
-        mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-3
+        // printf("hello\n");
+        
+        
+        mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
+        // gmp_printf("state: %Zd\n", state);
+        mpz_add (a, a, two); // add two
+
+        gmp_printf("rand: %Zd\n", a);
+
+        // printf("before pow mod\n");
         pow_mod(y, a, r, n);
-        if ((mpz_cmp_ui(y, 0) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 0 and y != n-1
-            mpz_init_set_ui(j, 1);
+        // printf("hello 2\n");
+        gmp_printf("y: %Zd\n", y);
+        if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
+            mpz_init_set_si(j, 1);
+            // gmp_printf("j: %Zd\n", j);
             
-            while ((mpz_cmp(j,s_minus_1) > 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
+            while ((mpz_cmp(j,s_minus_1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
+                // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
-                if (mpz_cmp_ui(y, 1) == 0) {
+                gmp_printf("yyyyy: %Zd\n", y);
+                if (mpz_cmp_si(y, 1) == 0) {    
+                    // randstate_clear();
+                    // printf("returing false1\n");
+                    mpz_clear(j);
+                    mpz_clear(r);
+                    mpz_clear(s);
+                    mpz_clear(y);
+                    mpz_clear(a);
+                    mpz_clear(ex);
+                    mpz_clear(ex1);
+                    mpz_clear(two);
+                    mpz_clear(two_s);
+                    mpz_clear(n_minus_1);
+                    mpz_clear(n_minus_3);
+                    mpz_clear(s_minus_1);
+                    mpz_clear(denom);
                     return false;
                 }
                 mpz_add_ui(j,j,1);
             }
 
             if ((mpz_cmp(y,n_minus_1) != 0)) {
+                    // randstate_clear();
+                    gmp_printf("y: %Zd\n", y);
+                    gmp_printf("n_minus_1: %Zd\n", n_minus_1);
+                    printf("returing false 2\n");
+                    mpz_clear(j);
+                    mpz_clear(r);
+                    mpz_clear(s);
+                    mpz_clear(y);
+                    mpz_clear(a);
+                    mpz_clear(ex);
+                    mpz_clear(ex1);
+                    mpz_clear(two);
+                    mpz_clear(two_s);
+                    mpz_clear(n_minus_1);
+                    mpz_clear(n_minus_3);
+                    mpz_clear(s_minus_1);
+                    mpz_clear(denom);
+                    
                 return false;
             }
         }
+        
     }
-
+    // printf("true\n");
+    // randstate_clear();
+                    printf("returing true\n");
+    mpz_clear(j);
+    mpz_clear(r);
+    mpz_clear(s);
+    mpz_clear(y);
+    mpz_clear(a);
+    mpz_clear(ex);
+    mpz_clear(ex1);
+    mpz_clear(two);
+    mpz_clear(two_s);
+    mpz_clear(n_minus_1);
+    mpz_clear(n_minus_3);
+    mpz_clear(s_minus_1);
+    mpz_clear(denom);
     return true;
     
 }
 
+
+
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
-    mpz_rrandomb (p, state, bits);
-    while (!is_prime(p, iters)) {
-        mpz_rrandomb (p, state, bits);
+    mpz_t x;
+    mpz_init(x);
+    uint64_t b = bits;
+    // mpz_init(b);
+    uint64_t its = iters;
+    // mpz_init(its);
+    // mpz_set (b, bits);
+    // mpz_set (its, iters);
+    
+    mpz_rrandomb (x, state, b);
+    // size_t y = mpz_sizeinbase (p, 2);
+    // printf("y: %zu\n", y);
+    gmp_printf("x: %Zd\n", x);
+    bool y = is_prime(x, its);
+    printf("prime?: %d\n", y);
+    printf("before while loop\n");
+    while (!y || (mpz_sizeinbase(x, 2) < b)) {
+        // mpz_set (p, x);
+        // gmp_printf("p: %Zd\n", p);
+        printf("generating rand in while loop\n");
+        mpz_rrandomb(x, state, b);
+        gmp_printf("x: %Zd\n", x);
+        y = is_prime(x, its);
+        printf("prime?: %d\n", y);
+        // printf("hello\n");
     }
+    
+    mpz_set (p, x);
+    printf("done with while loop, ready to clear\n");
 }
 
 
