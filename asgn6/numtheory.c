@@ -100,39 +100,35 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 // and storing the computed result in out.
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
-    mpz_t p, v, aux1, two, ex, b, exp, mod; // initialize p, v
+    mpz_t p, v, aux1, ex, exp, exp1, mod; // initialize p, v
     mpz_init(p);
     mpz_init(ex);
     mpz_init(aux1);
-    mpz_init(b);
     mpz_init(exp);
+    mpz_init(exp1);
     mpz_init(mod);
-    mpz_set (b, base);
     mpz_set (exp, exponent);
     mpz_set (mod, modulus);
 
     mpz_init_set_si(v, 1); // set v to 1
-    mpz_init_set_si(two, 2);
-    // gmp_printf("v: %Zd\n", v);
-    mpz_set (p, b); // set p to base
-    // gmp_printf("p: %Zd\n", p);
-    
+    mpz_set (p, base); // set p to base    
 
-    while ((mpz_cmp_si(exp, 0)) > 0) { // while exp > 0
+    while (mpz_cmp_si(exp, 0) > 0) { // while exp > 0
         // printf("loop begins........\n");
-        mpz_mod(ex, exp, two); // if d is odd
-        // printf("hello\n");
+        mpz_mod_ui(ex, exp, 2);
         if(mpz_cmp_si(ex, 1) == 0) { // if d is odd
-            // printf("hello\n");
-            // gmp_printf("odd?: %Zd\n", mpz_odd_p(exp));
-            mpz_mul (aux1, v, p); // v ←(v×p) mod n
-            // gmp_printf("v*p: %Zd\n", aux1);
+            // v ← (v×p) mod n
+            mpz_mul (aux1, v, p); 
             mpz_mod (v, aux1, mod);
-            // gmp_printf("v: %Zd\n", v);
         }
-        mpz_mul (aux1, p, p); // p ←(p×p) mod n
+
+        // p ← (p×p) mod n
+        mpz_mul (aux1, p, p); 
         mpz_mod (p, aux1, mod);
-        mpz_fdiv_q_ui(exp, exp, 2); //d ← d/2 
+
+         //d ← d/2
+        mpz_fdiv_q_ui(exp1, exp, 2); 
+        mpz_set(exp, exp1);
     }
 
     mpz_set (out, v); // set out to v
@@ -140,9 +136,8 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_clear (p);
     mpz_clear (v);
     mpz_clear (aux1);
-    mpz_clear (two);
-    mpz_clear (b);
     mpz_clear (exp);
+    mpz_clear (exp1);
     mpz_clear (mod);
 }
 
