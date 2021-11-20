@@ -157,7 +157,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
         return false;
     }
     
-    mpz_t j, r, y, a, n_minus_1, n_minus_3, two, denom, ex1;
+    mpz_t j, r, y, a, n_minus_1, n_minus_3, two, ex1;
     
     mpz_init(j);
     mpz_init(r);
@@ -166,7 +166,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_init(n_minus_1);
     mpz_init(n_minus_3);
     mpz_init_set_si(two, 2); // set two to 2
-    mpz_init(denom);
     mpz_init(ex1);
     
     mpz_sub_ui(r, n, 1); // set r to n -1
@@ -181,19 +180,12 @@ bool is_prime(mpz_t n, uint64_t iters) {
         mpz_mod_ui(ex1, r, 2);
     }
 
-    
     for(uint64_t i = 0; i<iters; i++) {        
-        
+        // random number between 0 and n-2
         mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
-        // gmp_printf("state: %Zd\n", state);
         mpz_add (a, a, two); // add two
 
-        // gmp_printf("rand: %Zd\n", a);
-
-        // printf("before pow mod\n");
         pow_mod(y, a, r, n);
-        // printf("hello 2\n");
-        // gmp_printf("y: %Zd\n", y);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
             mpz_set_ui(j, 1);
             // gmp_printf("j: %Zd\n", j);
@@ -209,7 +201,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
                     mpz_clear(n_minus_1);
                     mpz_clear(n_minus_3);
                     mpz_clear(two);
-                    mpz_clear(denom);
                     mpz_clear(ex1);
                     return false;
                 }
@@ -224,7 +215,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
                 mpz_clear(n_minus_1);
                 mpz_clear(n_minus_3);
                 mpz_clear(two);
-                mpz_clear(denom);
                 mpz_clear(ex1);
                     
                 return false;
@@ -233,7 +223,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
         
     }
 
-
     mpz_clear(j);
     mpz_clear(r);
     mpz_clear(y);
@@ -241,7 +230,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_clear(n_minus_1);
     mpz_clear(n_minus_3);
     mpz_clear(two);
-    mpz_clear(denom);
     mpz_clear(ex1);
     return true;
     
