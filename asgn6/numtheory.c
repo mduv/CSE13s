@@ -172,24 +172,27 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 bool is_prime(mpz_t n, uint64_t iters) {
     int counter = 0;
     
-    mpz_t j, r, s, y, n_minus_1, a, n_minus_3, two, two_s, denom, s_minus_1, ex, ex1; // initialize r, s
+    mpz_t one, j, r, s, y, n_minus_1, a, n_minus_3, two, two_s, denom, s_minus_1, ex, ex1; // initialize r, s
     
     mpz_init(r);
+    mpz_init(j);
     mpz_init(y);
     mpz_init(a);
     mpz_init(ex);
     mpz_init(ex1);
+    mpz_init(s_minus_1);
     mpz_init(denom);
     mpz_init(two_s);
     mpz_init(n_minus_1);
     mpz_init(n_minus_3);
-    mpz_init(n_minus_1);
+
     mpz_sub_ui(r, n, 1); // set r to n -1
     mpz_sub_ui(n_minus_1, n, 1); // set nminus1 to n -1
     // gmp_printf("n-1: %Zd\n", n_minus_1); 
     mpz_sub_ui(n_minus_3, n, 3);
     mpz_init_set_si(s, 0); // set s to 1
     mpz_init_set_si(two, 2); // set s to 1
+    mpz_init_set_si(one, 1);
 
     
     
@@ -207,13 +210,13 @@ bool is_prime(mpz_t n, uint64_t iters) {
         // gmp_printf("s: %Zd\n", s);
         
         mpz_add_ui(s,s,1); // s++
-        gmp_printf("s: %Zd\n", s);
+        // gmp_printf("s: %Zd\n", s);
         counter++;
         // r = (n-1) / 2^s
         mpz_pow_ui(denom, two, counter);
         // gmp_printf("denom: %Zd\n", denom); 
         mpz_fdiv_q(r, n_minus_1, denom);
-        gmp_printf("r: %Zd\n", r);
+        // gmp_printf("r: %Zd\n", r);
         mpz_mod(ex1, r, two);
             // printf("hello\n");
 
@@ -242,24 +245,25 @@ bool is_prime(mpz_t n, uint64_t iters) {
         // gmp_printf("state: %Zd\n", state);
         mpz_add (a, a, two); // add two
 
-        gmp_printf("rand: %Zd\n", a);
+        // gmp_printf("rand: %Zd\n", a);
 
         // printf("before pow mod\n");
         pow_mod(y, a, r, n);
         // printf("hello 2\n");
-        gmp_printf("y: %Zd\n", y);
+        // gmp_printf("y: %Zd\n", y);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
-            mpz_init_set_si(j, 1);
+            mpz_set(j, one);
             // gmp_printf("j: %Zd\n", j);
             
             while ((mpz_cmp(j,s_minus_1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
                 // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
-                gmp_printf("yyyyy: %Zd\n", y);
+                // gmp_printf("yyyyy: %Zd\n", y);
                 if (mpz_cmp_si(y, 1) == 0) {    
                     // randstate_clear();
                     // printf("returing false1\n");
                     mpz_clear(j);
+                    mpz_clear(one);
                     mpz_clear(r);
                     mpz_clear(s);
                     mpz_clear(y);
@@ -279,10 +283,11 @@ bool is_prime(mpz_t n, uint64_t iters) {
 
             if ((mpz_cmp(y,n_minus_1) != 0)) {
                     // randstate_clear();
-                    gmp_printf("y: %Zd\n", y);
-                    gmp_printf("n_minus_1: %Zd\n", n_minus_1);
-                    printf("returing false 2\n");
+                    // gmp_printf("y: %Zd\n", y);
+                    // gmp_printf("n_minus_1: %Zd\n", n_minus_1);
+                    // printf("returing false 2\n");
                     mpz_clear(j);
+                    mpz_clear(one);
                     mpz_clear(r);
                     mpz_clear(s);
                     mpz_clear(y);
@@ -303,8 +308,9 @@ bool is_prime(mpz_t n, uint64_t iters) {
     }
     // printf("true\n");
     // randstate_clear();
-                    printf("returing true\n");
+    // printf("returing true\n");
     mpz_clear(j);
+    mpz_clear(one);
     mpz_clear(r);
     mpz_clear(s);
     mpz_clear(y);
@@ -326,33 +332,25 @@ bool is_prime(mpz_t n, uint64_t iters) {
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
     mpz_t x;
     mpz_init(x);
-    uint64_t b = bits;
-    // mpz_init(b);
-    uint64_t its = iters;
-    // mpz_init(its);
-    // mpz_set (b, bits);
-    // mpz_set (its, iters);
     
-    mpz_rrandomb (x, state, b);
-    // size_t y = mpz_sizeinbase (p, 2);
-    // printf("y: %zu\n", y);
-    gmp_printf("x: %Zd\n", x);
-    bool y = is_prime(x, its);
-    printf("prime?: %d\n", y);
-    printf("before while loop\n");
-    while (!y || (mpz_sizeinbase(x, 2) < b)) {
+    mpz_rrandomb (x, state, bits);
+    // gmp_printf("x: %Zd\n", x);
+    bool y = is_prime(x, iters);
+    // printf("prime?: %d\n", y);
+    // printf("before while loop\n");
+    while (!y || (mpz_sizeinbase(x, 2) < bits)) {
         // mpz_set (p, x);
         // gmp_printf("p: %Zd\n", p);
-        printf("generating rand in while loop\n");
-        mpz_rrandomb(x, state, b);
-        gmp_printf("x: %Zd\n", x);
-        y = is_prime(x, its);
-        printf("prime?: %d\n", y);
+        // printf("generating rand in while loop\n");
+        mpz_rrandomb(x, state, bits);
+        // gmp_printf("x: %Zd\n", x);
+        y = is_prime(x, bits);
+        // printf("prime?: %d\n", y);
         // printf("hello\n");
     }
     
     mpz_set (p, x);
-    printf("done with while loop, ready to clear\n");
+    // printf("done with while loop, ready to clear\n");
 }
 
 
