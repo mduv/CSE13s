@@ -144,7 +144,6 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_clear (b);
     mpz_clear (exp);
     mpz_clear (mod);
-
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
@@ -157,9 +156,8 @@ bool is_prime(mpz_t n, uint64_t iters) {
         return false;
     }
     
-    mpz_t j, r, y, a, n_minus_1, n_minus_3, two, ex1;
+    mpz_t r, y, a, n_minus_1, n_minus_3, two, ex1;
     
-    mpz_init(j);
     mpz_init(r);
     mpz_init(y);
     mpz_init(a);
@@ -180,21 +178,18 @@ bool is_prime(mpz_t n, uint64_t iters) {
         mpz_mod_ui(ex1, r, 2);
     }
 
-    for(uint64_t i = 0; i<iters; i++) {        
+    for (uint64_t i = 0; i<iters; i++) {        
         // random number between 0 and n-2
         mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
         mpz_add (a, a, two); // add two
 
         pow_mod(y, a, r, n);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
-            mpz_set_ui(j, 1);
-            // gmp_printf("j: %Zd\n", j);
-            
-            while ((mpz_cmp_si(j,s-1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
+            int j = 1;            
+            while ((j <= s-1) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
                 // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
                 if (mpz_cmp_si(y, 1) == 0) {    
-                    mpz_clear(j);
                     mpz_clear(r);
                     mpz_clear(y);
                     mpz_clear(a);
@@ -204,11 +199,10 @@ bool is_prime(mpz_t n, uint64_t iters) {
                     mpz_clear(ex1);
                     return false;
                 }
-                mpz_add_ui(j,j,1);
+                j++;
             }
 
             if ((mpz_cmp(y,n_minus_1) != 0)) {
-                mpz_clear(j);
                 mpz_clear(r);
                 mpz_clear(y);
                 mpz_clear(a);
@@ -223,7 +217,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
         
     }
 
-    mpz_clear(j);
     mpz_clear(r);
     mpz_clear(y);
     mpz_clear(a);
@@ -232,7 +225,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_clear(two);
     mpz_clear(ex1);
     return true;
-    
 }
 
 
