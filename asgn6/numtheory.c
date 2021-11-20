@@ -87,8 +87,17 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 
     if ((mpz_cmp_si(r, 1)) > 0) {   // if r > 1
         // mpz_init_set_si(fake_i, 0); // set fakei to 0
-        mpz_set_si (i, 0);        // set i to 0
+        mpz_set_si(i, 0);        // set i to 0
         // mpz_clear(fake_i);
+            mpz_clear (r);
+            mpz_clear (r_inverse);
+            mpz_clear (t);
+            mpz_clear (t_inverse);
+            mpz_clear (q);
+            mpz_clear (aux1);
+            mpz_clear (aux2);
+            return;
+
     }
     if ((mpz_cmp_si(t, 0)) < 0) {   // if t < 0
         mpz_add (t, t, n);          // t = t + n
