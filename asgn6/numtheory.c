@@ -153,18 +153,19 @@ bool is_prime(mpz_t n, uint64_t iters) {
         return false;
     }
     
-    mpz_t j, r, s, y, a, n_minus_1, n_minus_3, two, denom, s_minus_1, ex1;
+    mpz_t j, r, y, a, n_minus_1, n_minus_3, two, denom, ex1;
+
+    int s = 0;
+    
     
     mpz_init(j);
     mpz_init(r);
-    mpz_init_set_si(s, 0); // set s to 0
     mpz_init(y);
     mpz_init(a);
     mpz_init(n_minus_1);
     mpz_init(n_minus_3);
     mpz_init_set_si(two, 2); // set two to 2
     mpz_init(denom);
-    mpz_init(s_minus_1);
     mpz_init(ex1);
     
 
@@ -176,7 +177,8 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_mod_ui(ex1, r, 2);
     while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
         
-        mpz_add_ui(s,s,1); // s++
+        // mpz_add_ui(s,s,1); // s++
+        s++;
         
         // counter++;
         // r = (n-1) / 2^s
@@ -191,7 +193,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
 
 
     
-    mpz_sub_ui(s_minus_1, s, 1);
+    // mpz_sub_ui(s_minus_1, s, 1);
 
 
 
@@ -213,7 +215,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
             mpz_set_ui(j, 1);
             // gmp_printf("j: %Zd\n", j);
             
-            while ((mpz_cmp(j,s_minus_1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
+            while ((mpz_cmp_si(j,s-1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
                 // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
                 // gmp_printf("yyyyy: %Zd\n", y);
@@ -222,14 +224,12 @@ bool is_prime(mpz_t n, uint64_t iters) {
                     // printf("returing false1\n");
                     mpz_clear(j);
                     mpz_clear(r);
-                    mpz_clear(s);
                     mpz_clear(y);
                     mpz_clear(a);
                     mpz_clear(n_minus_1);
                     mpz_clear(n_minus_3);
                     mpz_clear(two);
                     mpz_clear(denom);
-                    mpz_clear(s_minus_1);
                     mpz_clear(ex1);
                     return false;
                 }
@@ -243,14 +243,12 @@ bool is_prime(mpz_t n, uint64_t iters) {
                 // printf("returing false 2\n");
                 mpz_clear(j);
                 mpz_clear(r);
-                mpz_clear(s);
                 mpz_clear(y);
                 mpz_clear(a);
                 mpz_clear(n_minus_1);
                 mpz_clear(n_minus_3);
                 mpz_clear(two);
                 mpz_clear(denom);
-                mpz_clear(s_minus_1);
                 mpz_clear(ex1);
                     
                 return false;
@@ -262,14 +260,12 @@ bool is_prime(mpz_t n, uint64_t iters) {
 
     mpz_clear(j);
     mpz_clear(r);
-    mpz_clear(s);
     mpz_clear(y);
     mpz_clear(a);
     mpz_clear(n_minus_1);
     mpz_clear(n_minus_3);
     mpz_clear(two);
     mpz_clear(denom);
-    mpz_clear(s_minus_1);
     mpz_clear(ex1);
     return true;
     
