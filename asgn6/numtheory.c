@@ -147,7 +147,6 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
-
     if (iters > 50) {
         iters = 50;
     }
@@ -171,7 +170,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_sub_ui(n_minus_3, n, 3);
     
     mpz_mod_ui(ex1, r, 2);
-    int s = 0;
+    uint64_t s = 0;
     while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
         s++;
         mpz_fdiv_q_ui(r, r, 2);
@@ -185,9 +184,8 @@ bool is_prime(mpz_t n, uint64_t iters) {
 
         pow_mod(y, a, r, n);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
-            int j = 1;            
+            uint64_t j = 1;            
             while ((j <= s-1) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
-                // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
                 if (mpz_cmp_si(y, 1) == 0) {    
                     mpz_clear(r);
@@ -210,11 +208,9 @@ bool is_prime(mpz_t n, uint64_t iters) {
                 mpz_clear(n_minus_3);
                 mpz_clear(two);
                 mpz_clear(ex1);
-                    
                 return false;
             }
         }
-        
     }
 
     mpz_clear(r);
