@@ -153,6 +153,10 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
 bool is_prime(mpz_t n, uint64_t iters) {
     // int counter = 0;
+
+    if (mpz_cmp_si(n, 0) == 0) {
+        return false;
+    }
     
     mpz_t j, r, s, y, a, n_minus_1, n_minus_3, two, denom, s_minus_1, ex1;
     
