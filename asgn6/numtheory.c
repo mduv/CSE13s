@@ -149,14 +149,15 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
 bool is_prime(mpz_t n, uint64_t iters) {
 
+    if (iters > 50) {
+        iters = 50;
+    }
+
     if (mpz_cmp_si(n, 0) <= 0) {
         return false;
     }
     
     mpz_t j, r, y, a, n_minus_1, n_minus_3, two, denom, ex1;
-
-    int s = 0;
-    
     
     mpz_init(j);
     mpz_init(r);
@@ -168,37 +169,19 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_init(denom);
     mpz_init(ex1);
     
-
     mpz_sub_ui(r, n, 1); // set r to n -1
     mpz_sub_ui(n_minus_1, n, 1); // set nminus1 to n -1
     mpz_sub_ui(n_minus_3, n, 3);
-
     
     mpz_mod_ui(ex1, r, 2);
+    int s = 0;
     while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
-        
-        // mpz_add_ui(s,s,1); // s++
         s++;
-        
-        // counter++;
-        // r = (n-1) / 2^s
-        // mpz_pow_ui(denom, two, counter);
-        // mpz_fdiv_q(r, n_minus_1, denom);
-        // gmp_printf("r: %Zd\n", r);
         mpz_fdiv_q_ui(r, r, 2);
-
         mpz_mod_ui(ex1, r, 2);
     }
 
-
-
     
-    // mpz_sub_ui(s_minus_1, s, 1);
-
-
-
-    
-
     for(uint64_t i = 0; i<iters; i++) {        
         
         mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
@@ -218,10 +201,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
             while ((mpz_cmp_si(j,s-1) <= 0) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
                 // printf("before while pow_mod\n");
                 pow_mod(y, y, two, n);
-                // gmp_printf("yyyyy: %Zd\n", y);
                 if (mpz_cmp_si(y, 1) == 0) {    
-                    // randstate_clear();
-                    // printf("returing false1\n");
                     mpz_clear(j);
                     mpz_clear(r);
                     mpz_clear(y);
@@ -237,10 +217,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
             }
 
             if ((mpz_cmp(y,n_minus_1) != 0)) {
-                // randstate_clear();
-                // gmp_printf("y: %Zd\n", y);
-                // gmp_printf("n_minus_1: %Zd\n", n_minus_1);
-                // printf("returing false 2\n");
                 mpz_clear(j);
                 mpz_clear(r);
                 mpz_clear(y);
