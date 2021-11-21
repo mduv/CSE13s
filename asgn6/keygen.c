@@ -171,10 +171,10 @@ int main(int argc, char **argv) {
     mpz_clear(s);
     fclose(pubkeyfile);
     fclose(privkeyfile);
-    free(username);
+    // free(username);
     randstate_clear();
-    free(pub_filename);
-    free(priv_filename);
+    // free(pub_filename);
+    // free(priv_filename);
 
     return 0;
 }

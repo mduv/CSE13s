@@ -127,10 +127,10 @@ int main(int argc, char **argv) {
     mpz_clear(s);
     mpz_clear(name);
     fclose(pubkeyfile);
-    free(username);
+    // free(username);
     fclose(input);
     fclose(output);
-    free(pub_filename);
+    // free(pub_filename);
 
 
     return 0;
