@@ -111,7 +111,7 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_set (p, base); // set p to base    
 
     while (mpz_cmp_si(exp, 0) > 0) { // while exp > 0
-        mpz_mod(ex, exp, two);
+        mpz_mod_ui(ex, exp, 2);
         if(mpz_cmp_si(ex, 1) == 0) { // if d is odd
             // v ← (v×p) mod n
             mpz_mul (aux1, v, p); 
