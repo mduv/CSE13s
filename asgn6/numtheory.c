@@ -141,10 +141,8 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
-    if (iters > 50) {
-        iters = 50;
-    }
 
+    // special case numbers less than 3 as we can generate random numbers only for higher numbers
     if (mpz_cmp_si(n, 1) <= 0) {
         return false;
     }
@@ -178,11 +176,10 @@ bool is_prime(mpz_t n, uint64_t iters) {
     }
 
     for (uint64_t i = 0; i<iters; i++) {        
-        printf("for loop\n");
         // random number between 0 and n-2
         mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
-        printf("after random\n");
         mpz_add (a, a, two); // add two
+
         pow_mod(y, a, r, n);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
             int64_t j = 1;            
@@ -224,30 +221,18 @@ bool is_prime(mpz_t n, uint64_t iters) {
     return true;
 }
 
-
-
 void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
     mpz_t x;
     mpz_init(x);
     
     mpz_rrandomb (x, state, bits);
-    // gmp_printf("x: %Zd\n", x);
     bool y = is_prime(x, iters);
-    // printf("prime?: %d\n", y);
-    // printf("before while loop\n");
     while (!y || (mpz_sizeinbase(x, 2) < bits)) {
-        // mpz_set (p, x);
-        // gmp_printf("p: %Zd\n", p);
-        // printf("generating rand in while loop\n");
         mpz_rrandomb(x, state, bits);
-        // gmp_printf("x: %Zd\n", x);
         y = is_prime(x, bits);
-        // printf("prime?: %d\n", y);
-        // printf("hello\n");
     }
     
     mpz_set (p, x);
-    // printf("done with while loop, ready to clear\n");
 }
 
 
