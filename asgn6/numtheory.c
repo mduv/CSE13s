@@ -148,7 +148,13 @@ bool is_prime(mpz_t n, uint64_t iters) {
     if (mpz_cmp_si(n, 1) <= 0) {
         return false;
     }
-    
+    if (mpz_cmp_si(n, 2) == 0) {
+        return true;
+    }
+    if (mpz_cmp_si(n, 3) == 0) {
+        return true;
+    }
+
     mpz_t r, y, a, n_minus_1, n_minus_3, two, ex1;
     
     mpz_init(r);
@@ -164,23 +170,22 @@ bool is_prime(mpz_t n, uint64_t iters) {
     mpz_sub_ui(n_minus_3, n, 3);
     
     mpz_mod_ui(ex1, r, 2);
-    uint64_t s = 0;
-    printf("s: %llu\n", s);
+    int64_t s = 0;
     while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
         s++;
         mpz_fdiv_q_ui(r, r, 2);
         mpz_mod_ui(ex1, r, 2);
     }
-    printf("s: %llu\n", s);
 
     for (uint64_t i = 0; i<iters; i++) {        
+        printf("for loop\n");
         // random number between 0 and n-2
         mpz_urandomm (a, state, n_minus_3); // random number between 0 and n-4
+        printf("after random\n");
         mpz_add (a, a, two); // add two
-
         pow_mod(y, a, r, n);
         if ((mpz_cmp_si(y, 1) != 0) && (mpz_cmp(y,n_minus_1) != 0)) {   // y != 1 and y != n-1
-            uint64_t j = 1;            
+            int64_t j = 1;            
             while ((j <= s-1) && (mpz_cmp(y,n_minus_1) != 0)) {  // j ≤s−1
                 pow_mod(y, y, two, n);
                 if (mpz_cmp_si(y, 1) == 0) {    
