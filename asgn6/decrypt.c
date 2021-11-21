@@ -101,6 +101,7 @@ int main(int argc, char **argv) {
     fclose(privkeyfile);
     fclose(input);
     fclose(output);
+    free(priv_filename);
 
 
     return 0;
