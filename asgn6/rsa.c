@@ -58,15 +58,6 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
         }
     }
 
-    
-
-
-
-
-
-
-
-
     mpz_clear(totient_n);
     mpz_clear(one);
     mpz_clear(psub1);

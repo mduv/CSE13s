@@ -198,5 +198,5 @@ int main(int argc, char **argv) {
     fclose(privkeyfile);
     randstate_clear();
 
-    return 1;
+    return 0;
 }
