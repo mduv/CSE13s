@@ -37,6 +37,8 @@ int main(int argc, char **argv) {
     seed = seconds;
     iters = 50;
 
+    int permissions = 0600;
+
     // Parse command-line options using getopt() and handle them accordingly.
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -50,58 +52,63 @@ int main(int argc, char **argv) {
                     "\n\t-n pbfile       Public key file (default: rsa.pub)."
                     "\n\t-d pvfile       Private key file (default: rsa.priv)."
                     "\n\t-s seed         Random seed for testing.\n");
-            return 0;
             break;
         case 'n':
             pub_filename = optarg;
-            return 0;
             break;
         case 'd':
             priv_filename = optarg;
-            return 0;
             break;
         case 's':
             seed = atoi(optarg);
-            return 0;
             break;
         case 'b':
             bits = atoi(optarg);
-            return 0;
+            // printf("bits = %llu\n", bits);
+            // return 0;
             break;
         case 'i':
             iters = atoi(optarg);
-            return 0;
+            // printf("iters = %llu\n", iters);
             break;
         case 'v':
             verbose_mode = true;
             printf("user = \n");
             break;
-            return 0;
+            // return 0;
         }
     }
-    
     /* Open the public key files using fopen(). */
 
-    pubkeyfile = fopen(pub_filename, "r+");
+    pubkeyfile = fopen(pub_filename, "w+");
     if (pubkeyfile == NULL) {
         perror("Error: unable to open public key file.");
         return (-1);
     }
 
+
     /* Open the private key files using fopen(). */
 
-    privkeyfile = fopen(priv_filename, "r+");
+    privkeyfile = fopen(priv_filename, "w+");
     int privkeyfile_fd = fileno(privkeyfile);
+    // printf("fd: %d\n", privkeyfile_fd);
     if (privkeyfile == NULL) {
         perror("Error: unable to open private key file.");
         return (-1);
     }
     
+    
+
+    
     /* Using fchmod() and fileno(), make sure that the private key file permissions are set to 0600 */
-    fchmod(privkeyfile_fd, 0600);
+    fchmod(privkeyfile_fd, permissions);
+
 
     /* Initialize the random state using randstate_init(), using the set seed. */
     randstate_init(seed);
+
+
+
 
     /* Make the public and private keys using rsa_make_pub() and rsa_make_priv(), respectively. */
 
@@ -113,19 +120,34 @@ int main(int argc, char **argv) {
     mpz_init(m);
     mpz_init(d);
 
+
+
     rsa_make_pub(p, q, n, e, bits, iters);
+    
     rsa_make_priv(d, e, p, q);
+
+    
+
+    
 
 
     /* Get the current user’s name as a string. You will want to use getenv(). */
     char * username;
     username = getenv ("USER");
 
+    // gmp_printf("d: %Zd\n", d);
+
+    // printf("username: %s\n", username);
+
     /* Convert the username into an mpz_t with mpz_set_str(), specifying the base as 62. */
 
     mpz_t name;
-    mpz_init(q);
+    mpz_init(name);
+    // printf("hello\n");
     mpz_set_str(name, username, 62);
+    // printf("x: %d\n", x);
+
+    // gmp_printf("name: %Zd\n", name);
 
     /* Then, use rsa_sign() to compute the signature of the username. */
     mpz_t s;
@@ -161,4 +183,5 @@ int main(int argc, char **argv) {
     fclose(privkeyfile);
     randstate_clear();
 
+    return 1;
 }
