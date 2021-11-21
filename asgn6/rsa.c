@@ -206,8 +206,10 @@ bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
     mpz_init(t);
     pow_mod(t, s, e, n);
     if (mpz_cmp(t,m) == 0){
+        mpz_clear(t);
         return true;
     } else {
+        mpz_clear(t);
         return false;
     }
 }
