@@ -18,14 +18,12 @@
 static FILE *pubkeyfile = NULL;
 static FILE *privkeyfile = NULL;
 
-
 uint64_t iters;
 uint64_t bits;
 uint64_t seed;
 time_t seconds;
 
 bool verbose_mode = false;
-
 
 int main(int argc, char **argv) {
     int opt = 0;
@@ -45,45 +43,32 @@ int main(int argc, char **argv) {
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
-            printf("SYNOPSIS\n\tGenerates an RSA public/private key pair.\n\nUSAGE\n\t./keygen [-hv] [-b bits] -n pbfile -d pvfile\n\nOPTIONS"
-                    "\n\t-h              Display program usage and help."
-                    "\n\t-v              Display verbose program output."
-                    "\n\t-b bits         Minimum bits needed for public key n (default: 256)."
-                    "\n\t-i confidence   Miller-Rabin iterations for testing primes (default: 50)."
-                    "\n\t-n pbfile       Public key file (default: rsa.pub)."
-                    "\n\t-d pvfile       Private key file (default: rsa.priv)."
-                    "\n\t-s seed         Random seed for testing.\n");
+            printf("SYNOPSIS\n\tGenerates an RSA public/private key pair.\n\nUSAGE\n\t./keygen "
+                   "[-hv] [-b bits] -n pbfile -d pvfile\n\nOPTIONS"
+                   "\n\t-h              Display program usage and help."
+                   "\n\t-v              Display verbose program output."
+                   "\n\t-b bits         Minimum bits needed for public key n (default: 256)."
+                   "\n\t-i confidence   Miller-Rabin iterations for testing primes (default: 50)."
+                   "\n\t-n pbfile       Public key file (default: rsa.pub)."
+                   "\n\t-d pvfile       Private key file (default: rsa.priv)."
+                   "\n\t-s seed         Random seed for testing.\n");
             return 0;
             break;
-        case 'n':
-            pub_filename = optarg;
-            break;
-        case 'd':
-            priv_filename = optarg;
-            break;
-        case 's':
-            seed = atoi(optarg);
-            break;
-        case 'b':
-            bits = atoi(optarg);
-            break;
-        case 'i':
-            iters = atoi(optarg);
-            break;
-        case 'v':
-            verbose_mode = true;
-            break;
+        case 'n': pub_filename = optarg; break;
+        case 'd': priv_filename = optarg; break;
+        case 's': seed = atoi(optarg); break;
+        case 'b': bits = atoi(optarg); break;
+        case 'i': iters = atoi(optarg); break;
+        case 'v': verbose_mode = true; break;
         }
     }
     /* Open the public key files using fopen(). */
-
 
     pubkeyfile = fopen(pub_filename, "w+");
     if (pubkeyfile == NULL) {
         perror("Error: unable to open public key file.");
         return (-1);
     }
-
 
     /* Open the private key files using fopen(). */
 
@@ -93,19 +78,12 @@ int main(int argc, char **argv) {
         perror("Error: unable to open private key file.");
         return (-1);
     }
-    
-    
 
-    
     /* Using fchmod() and fileno(), make sure that the private key file permissions are set to 0600 */
     fchmod(privkeyfile_fd, permissions);
 
-
     /* Initialize the random state using randstate_init(), using the set seed. */
     randstate_init(seed);
-
-
-
 
     /* Make the public and private keys using rsa_make_pub() and rsa_make_priv(), respectively. */
 
@@ -118,31 +96,23 @@ int main(int argc, char **argv) {
     mpz_init(d);
     mpz_init(s);
 
-
-
     rsa_make_pub(p, q, n, e, bits, iters);
-    
+
     rsa_make_priv(d, e, p, q);
 
-
-
-    
-
-
     /* Get the current user’s name as a string. You will want to use getenv(). */
-    char * username;
-    username = getenv ("USER");
+    char *username;
+    username = getenv("USER");
 
     /* Convert the username into an mpz_t with mpz_set_str(), specifying the base as 62. */
 
     mpz_t name;
     mpz_init(name);
-    
+
     mpz_set_str(name, username, 62);
 
     /* Then, use rsa_sign() to compute the signature of the username. */
-    
-    
+
     rsa_sign(s, name, d, n);
 
     /* Write the computed public and private key to their respective files. */
@@ -150,7 +120,6 @@ int main(int argc, char **argv) {
     rsa_write_pub(n, e, s, username, pubkeyfile);
     rsa_write_priv(n, d, privkeyfile);
 
-    
     if (verbose_mode) {
         printf("user = %s\n", username);
         gmp_printf("s (%zu bits) = %Zd\n", mpz_sizeinbase(s, 2), s);
@@ -160,7 +129,6 @@ int main(int argc, char **argv) {
         gmp_printf("e (%zu bits) = %Zd\n", mpz_sizeinbase(e, 2), e);
         gmp_printf("d (%zu bits) = %Zd\n", mpz_sizeinbase(d, 2), d);
     }
-    
 
     mpz_clear(p);
     mpz_clear(q);
