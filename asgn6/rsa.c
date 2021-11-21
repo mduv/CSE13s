@@ -27,11 +27,10 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
 
 
     // Next, compute φ(n) = (p−1)(q−1)
-    mpz_t totient_n, one, psub1, qsub1;
+    mpz_t totient_n, psub1, qsub1;
     mpz_init(totient_n);
     mpz_init(psub1);
     mpz_init(qsub1);
-    mpz_init_set_si(one, 1);
 
     mpz_sub_ui(psub1, p, 1);
     mpz_sub_ui(qsub1, q, 1);
@@ -57,7 +56,6 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
     }
 
     mpz_clear(totient_n);
-    mpz_clear(one);
     mpz_clear(psub1);
     mpz_clear(qsub1);
     mpz_clear(rand);
