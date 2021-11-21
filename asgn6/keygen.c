@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
     seconds = time(NULL);
     seed = seconds;
     iters = 50;
+    bits = 256;
 
     int permissions = 0600;
 
@@ -73,12 +74,13 @@ int main(int argc, char **argv) {
             break;
         case 'v':
             verbose_mode = true;
-            printf("user = \n");
+            // printf("user = \n");
             break;
             // return 0;
         }
     }
     /* Open the public key files using fopen(). */
+
 
     pubkeyfile = fopen(pub_filename, "w+");
     if (pubkeyfile == NULL) {
@@ -126,7 +128,7 @@ int main(int argc, char **argv) {
     
     rsa_make_priv(d, e, p, q);
 
-    
+
 
     
 
@@ -143,7 +145,7 @@ int main(int argc, char **argv) {
 
     mpz_t name;
     mpz_init(name);
-    // printf("hello\n");
+    
     mpz_set_str(name, username, 62);
     // printf("x: %d\n", x);
 
@@ -153,6 +155,12 @@ int main(int argc, char **argv) {
     mpz_t s;
     mpz_init(s);
     rsa_sign(s, m, d, n);
+    gmp_printf("s: %Zd\n", s);
+
+    bool aye = rsa_verify(m, s, e, n);
+    printf("?: %d\n", aye);
+    
+
 
     /* Write the computed public and private key to their respective files. */
 
@@ -163,6 +171,11 @@ int main(int argc, char **argv) {
     if (verbose_mode) {
         printf("user = %s\n", username);
         gmp_printf("s (%zu bits) = %Zd\n", mpz_sizeinbase(s, 2), s);
+        gmp_printf("p (%zu bits) = %Zd\n", mpz_sizeinbase(p, 2), p);
+        gmp_printf("q (%zu bits) = %Zd\n", mpz_sizeinbase(q, 2), q);
+        gmp_printf("n (%zu bits) = %Zd\n", mpz_sizeinbase(n, 2), n);
+        gmp_printf("e (%zu bits) = %Zd\n", mpz_sizeinbase(e, 2), e);
+        gmp_printf("d (%zu bits) = %Zd\n", mpz_sizeinbase(d, 2), d);
         // printf("p (%d bits) = %Zd\n", bits, p);
         // printf("q (%d bits) = %Zd\n", bits, q);
         // printf("n (%d bits) = %Zd\n", bits, n);
