@@ -100,7 +100,7 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 // and storing the computed result in out.
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
-    mpz_t p, v, aux1, ex, exp, exp1, mod; // initialize p, v
+    mpz_t p, v, aux1, ex, exp, exp1, mod;
     mpz_init(p);
     mpz_init(ex);
     mpz_init(aux1);
@@ -114,7 +114,6 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_set (p, base); // set p to base    
 
     while (mpz_cmp_si(exp, 0) > 0) { // while exp > 0
-        // printf("loop begins........\n");
         mpz_mod_ui(ex, exp, 2);
         if(mpz_cmp_si(ex, 1) == 0) { // if d is odd
             // v ← (v×p) mod n
@@ -126,7 +125,7 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
         mpz_mul (aux1, p, p); 
         mpz_mod (p, aux1, mod);
 
-         //d ← d/2
+         // d ← d/2
         mpz_fdiv_q_ui(exp1, exp, 2); 
         mpz_set(exp, exp1);
     }
@@ -146,7 +145,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
         iters = 50;
     }
 
-    if (mpz_cmp_si(n, 0) <= 0) {
+    if (mpz_cmp_si(n, 1) <= 0) {
         return false;
     }
     
@@ -166,11 +165,13 @@ bool is_prime(mpz_t n, uint64_t iters) {
     
     mpz_mod_ui(ex1, r, 2);
     uint64_t s = 0;
+    printf("s: %llu\n", s);
     while (mpz_cmp_si(ex1, 0) == 0) { // while r is even
         s++;
         mpz_fdiv_q_ui(r, r, 2);
         mpz_mod_ui(ex1, r, 2);
     }
+    printf("s: %llu\n", s);
 
     for (uint64_t i = 0; i<iters; i++) {        
         // random number between 0 and n-2
