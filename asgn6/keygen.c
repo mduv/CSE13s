@@ -1,17 +1,8 @@
-// #include <stdint.h>
 #include <gmp.h>
-// #include "randstate.h"
-
-// #include "code.h"
-// #include "defines.h"
-// #include "node.h"
-// #include "huffman.h"
-// #include <string.h>
-// #include "stack.h"
-// #include "pq.h"
-// #include "header.h"
-// #include "io.h"
-
+#include <time.h>
+#include "numtheory.h"
+#include "rsa.h"
+#include "randstate.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,134 +13,152 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-// #define OPTIONS "vhi:o:"
+#define OPTIONS "vhi:b:n:d:s:"
 
-// static FILE *input = NULL;
-// static FILE *input2 = NULL;
-// uint64_t hist[ALPHABET] = { 0 };
-// Code table[ALPHABET] = { 0 };
-// uint16_t permissions;
-// uint16_t unique_symbols;
-// uint64_t file_size;
-// int output_fd = 1;
-// bool verbose_mode = false;
-// uint64_t compressed_file_size;
+static FILE *pubkeyfile = NULL;
+static FILE *privkeyfile = NULL;
 
-// void build_histogram() {
-//     uint8_t buf = 0;
-//     hist[0] = 1;
-//     hist[255] = 1;
-//     unique_symbols = 2;
-//     while (true) {
-//         buf = fgetc(input);
-//         if (feof(input)) {
-//             break;
-//         }
-//         if (hist[buf] == 0) {
-//             unique_symbols++;
-//         }
-//         hist[buf]++;
-//     }
-// }
 
-// Header header_create() {
-//     Header h;
-//     h.magic = MAGIC;
-//     h.permissions = permissions;
-//     h.tree_size = (3 * unique_symbols) - 1;
-//     h.file_size = file_size;
-//     return h;
-// }
+uint64_t iters;
+uint64_t bits;
+uint64_t seed;
+time_t seconds;
 
-// int main(int argc, char **argv) {
-//     int opt = 0;
-//     optind = 1;
+bool verbose_mode = false;
 
-//     input = stdin;
-//     input2 = stdin;
 
-//     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
-//         switch (opt) {
-//         case 'h':
-//             printf("SYNOPSIS\n\tA Huffman encoder.\n\tCompresses a file using the Huffman coding "
-//                    "algorithm.\n\nUSAGE\n\t./encode [-h] [-i infile] [-o outfile]\n\nOPTIONS\n\t-h "
-//                    "            Program usage and help.\n\t-v             Print compression "
-//                    "statistics.\n\t-i infile      Input file to compress.\n\t-o outfile     Output "
-//                    "of compressed data.\n");
-//             return 0;
-//             break;
-//         case 'i':
-//             // inputfile_name = optarg;
-//             input = fopen(optarg, "r");
-//             input2 = fopen(optarg, "r");
-//             if (input == NULL) {
-//                 perror("Error: unable to read header.");
-//                 return (-1);
-//             }
-//             struct stat stat_buf;
-//             if (stat(optarg, &stat_buf) == -1) {
-//                 perror("Error: unable to read header.");
-//                 return (-1);
-//             }
-//             permissions = stat_buf.st_mode;
-//             file_size = stat_buf.st_size;
-//             break;
-//         case 'o':
-//             output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
-//             if (output_fd < 0) {
-//                 perror("Error: unable to open file.");
-//                 return (-1);
-//             }
-//             break;
-//         case 'v':
-//             verbose_mode = true;
-//             // Uncompressed file size: 7 bytes
-//             printf("Uncompressed file size: %lu bytes\n", file_size);
-//             // Compressed file size: 32 bytes
-//             // Space saving: -357.14%
-//             break;
-//             return 0;
-//         }
-//     }
+int main(int argc, char **argv) {
+    int opt = 0;
+    optind = 1;
+    char *pub_filename = "rsa.pub";
+    char *priv_filename = "rsa.priv";
 
-//     build_histogram();
-//     Header h = header_create();
-//     //printf("h.magic:%X, h.permissions:%X, h.tree_size:%X, h.file_size:%llX\n", h.magic, h.permissions, h.tree_size, h.file_size);
-//     fchmod(output_fd, h.permissions);
-//     write(output_fd, &h, sizeof(Header));
+    seconds = time(NULL);
+    seed = seconds;
+    iters = 50;
 
-//     Node *root = build_tree(hist);
-//     dump_tree(output_fd, root);
+    // Parse command-line options using getopt() and handle them accordingly.
 
-//     build_codes(root, table);
-//     while (true) {
-//         int buf = fgetc(input2);
-//         if (feof(input2)) {
-//             break;
-//         }
-//         Code c = table[buf];
-//         write_code(output_fd, &c);
-//     }
-//     flush_codes(output_fd);
-//     delete_tree(&root);
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+        switch (opt) {
+        case 'h':
+            printf("SYNOPSIS\n\tGenerates an RSA public/private key pair.\n\nUSAGE\n\t./keygen [-hv] [-b bits] -n pbfile -d pvfile\n\nOPTIONS"
+                    "\n\t-h              Display program usage and help."
+                    "\n\t-v              Display verbose program output."
+                    "\n\t-b bits         Minimum bits needed for public key n (default: 256)."
+                    "\n\t-i confidence   Miller-Rabin iterations for testing primes (default: 50)."
+                    "\n\t-n pbfile       Public key file (default: rsa.pub)."
+                    "\n\t-d pvfile       Private key file (default: rsa.priv)."
+                    "\n\t-s seed         Random seed for testing.\n");
+            return 0;
+            break;
+        case 'n':
+            pub_filename = optarg;
+            return 0;
+            break;
+        case 'd':
+            priv_filename = optarg;
+            return 0;
+            break;
+        case 's':
+            seed = atoi(optarg);
+            return 0;
+            break;
+        case 'b':
+            bits = atoi(optarg);
+            return 0;
+            break;
+        case 'i':
+            iters = atoi(optarg);
+            return 0;
+            break;
+        case 'v':
+            verbose_mode = true;
+            printf("user = \n");
+            break;
+            return 0;
+        }
+    }
+    
+    /* Open the public key files using fopen(). */
 
-//     fclose(input);
-//     fclose(input2);
-//     if (verbose_mode) {
-//         struct stat stat_buf;
-//         if (fstat(output_fd, &stat_buf) == -1) {
-//             perror("Error: unable to read header.");
-//             return (-1);
-//         }
-//         compressed_file_size = stat_buf.st_size;
-//         printf("Compressed file size: %lu bytes\n", compressed_file_size);
+    pubkeyfile = fopen(pub_filename, "r+");
+    if (pubkeyfile == NULL) {
+        perror("Error: unable to open public key file.");
+        return (-1);
+    }
 
-//         float space_savings = 100 * (1 - ((float) compressed_file_size / file_size));
-//         printf("Space saving: %f%%\n", space_savings);
-//     }
-//     close(output_fd);
-// }
+    /* Open the private key files using fopen(). */
 
-int main() {
-    return 1;
+    privkeyfile = fopen(priv_filename, "r+");
+    int privkeyfile_fd = fileno(privkeyfile);
+    if (privkeyfile == NULL) {
+        perror("Error: unable to open private key file.");
+        return (-1);
+    }
+    
+    /* Using fchmod() and fileno(), make sure that the private key file permissions are set to 0600 */
+    fchmod(privkeyfile_fd, 0600);
+
+    /* Initialize the random state using randstate_init(), using the set seed. */
+    randstate_init(seed);
+
+    /* Make the public and private keys using rsa_make_pub() and rsa_make_priv(), respectively. */
+
+    mpz_t p, q, n, e, m, d;
+    mpz_init(p);
+    mpz_init(q);
+    mpz_init(n);
+    mpz_init(e);
+    mpz_init(m);
+    mpz_init(d);
+
+    rsa_make_pub(p, q, n, e, bits, iters);
+    rsa_make_priv(d, e, p, q);
+
+
+    /* Get the current user’s name as a string. You will want to use getenv(). */
+    char * username;
+    username = getenv ("USER");
+
+    /* Convert the username into an mpz_t with mpz_set_str(), specifying the base as 62. */
+
+    mpz_t name;
+    mpz_init(q);
+    mpz_set_str(name, username, 62);
+
+    /* Then, use rsa_sign() to compute the signature of the username. */
+    mpz_t s;
+    mpz_init(s);
+    rsa_sign(s, m, d, n);
+
+    /* Write the computed public and private key to their respective files. */
+
+    rsa_write_pub(n, e, s, username, pubkeyfile);
+    rsa_write_priv(n, d, privkeyfile);
+
+    
+    if (verbose_mode) {
+        printf("user = %s\n", username);
+        gmp_printf("s (%zu bits) = %Zd\n", mpz_sizeinbase(s, 2), s);
+        // printf("p (%d bits) = %Zd\n", bits, p);
+        // printf("q (%d bits) = %Zd\n", bits, q);
+        // printf("n (%d bits) = %Zd\n", bits, n);
+        // printf("e (%d bits) = %Zd\n", bits, e);
+        // printf("d (%d bits) = %Zd\n", bits, d);
+    }
+    
+
+    mpz_clear(p);
+    mpz_clear(q);
+    mpz_clear(n);
+    mpz_clear(e);
+    mpz_clear(m);
+    mpz_clear(d);
+    mpz_clear(name);
+    mpz_clear(s);
+    fclose(pubkeyfile);
+    fclose(privkeyfile);
+    randstate_clear();
+
 }
