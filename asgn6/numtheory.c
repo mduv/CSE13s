@@ -227,8 +227,8 @@ void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
     bool y = is_prime(x, iters);
 
     // temp check
-    //mpz_clear(x);
-    //mpz_init(x);
+    mpz_clear(x);
+    mpz_init(x);
 
     while (!y || (mpz_sizeinbase(x, 2) < bits)) {
         mpz_rrandomb(x, state, bits);
