@@ -171,6 +171,7 @@ int main(int argc, char **argv) {
     mpz_clear(s);
     fclose(pubkeyfile);
     fclose(privkeyfile);
+    free(username);
     randstate_clear();
 
     return 0;

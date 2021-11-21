@@ -127,6 +127,7 @@ int main(int argc, char **argv) {
     mpz_clear(s);
     mpz_clear(name);
     fclose(pubkeyfile);
+    free(username);
     fclose(input);
     fclose(output);
 
