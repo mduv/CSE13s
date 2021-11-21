@@ -19,7 +19,6 @@ void gcd(mpz_t d, mpz_t a, mpz_t b) {
     mpz_set (alpha, a);
     mpz_set (beta, b);    
 
-
     // comparision with beta != 0
     while ((mpz_cmp_si(beta, 0)) != 0) // while b != 0
     {
@@ -126,8 +125,8 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
         mpz_mod (p, aux1, mod);
 
          // d ← d/2
-        mpz_fdiv_q_ui(exp1, exp, 2); 
-        mpz_set(exp, exp1);
+        mpz_fdiv_q_ui(exp, exp, 2); 
+        //mpz_set(exp, exp1);
     }
 
     mpz_set (out, v); // set out to v
