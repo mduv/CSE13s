@@ -1,16 +1,8 @@
 #include <gmp.h>
+#include <time.h>
+#include "numtheory.h"
+#include "rsa.h"
 #include "randstate.h"
-
-// #include "code.h"
-// #include "defines.h"
-// #include "node.h"
-// #include "huffman.h"
-// #include <string.h>
-// #include "stack.h"
-// #include "pq.h"
-// #include "header.h"
-// #include "io.h"
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,133 +13,129 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-// #define OPTIONS "vhi:o:"
+#define OPTIONS "vhi:o:n:"
 
-// static FILE *input = NULL;
-// static FILE *input2 = NULL;
-// uint64_t hist[ALPHABET] = { 0 };
-// Code table[ALPHABET] = { 0 };
-// uint16_t permissions;
-// uint16_t unique_symbols;
-// uint64_t file_size;
-// int output_fd = 1;
-// bool verbose_mode = false;
-// uint64_t compressed_file_size;
+static FILE *input = NULL;
+static FILE *output = NULL;
+static FILE *pubkeyfile = NULL;
 
-// void build_histogram() {
-//     uint8_t buf = 0;
-//     hist[0] = 1;
-//     hist[255] = 1;
-//     unique_symbols = 2;
-//     while (true) {
-//         buf = fgetc(input);
-//         if (feof(input)) {
-//             break;
-//         }
-//         if (hist[buf] == 0) {
-//             unique_symbols++;
-//         }
-//         hist[buf]++;
-//     }
-// }
+bool verbose_mode = false;
 
-// Header header_create() {
-//     Header h;
-//     h.magic = MAGIC;
-//     h.permissions = permissions;
-//     h.tree_size = (3 * unique_symbols) - 1;
-//     h.file_size = file_size;
-//     return h;
-// }
+int main(int argc, char **argv) {
+    int opt = 0;
+    optind = 1;
+    
+    input = stdin;
+    output = stdout;
+    char *pub_filename = "rsa.pub";
 
-// int main(int argc, char **argv) {
-//     int opt = 0;
-//     optind = 1;
+    // Parse command-line options using getopt() and handle them accordingly.
 
-//     input = stdin;
-//     input2 = stdin;
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+        switch (opt) {
+        case 'h':
+            printf("SYNOPSIS\n\tEncrypts data using RSA encryption.\n\tEncrypted data is decrypted by the decrypt program.\n\nUSAGE\n\t./encrypt [-hv] [-i infile] [-o outfile] -n pubkey\n\nOPTIONS"
+                    "\n\t-h              Display program usage and help."
+                    "\n\t-v              Display verbose program output."
+                    "\n\t-i infile       Input file of data to encrypt (default: stdin)."
+                    "\n\t-o outfile      Output file for encrypted data (default: stdout)."
+                    "\n\t-n pbfile       Public key file (default: rsa.pub).\n");
+            break;
+        case 'i':
+            input = fopen(optarg, "r");
+            if (input == NULL) {
+                perror("Error: unable to read infile.");
+                return (-1);
+            }
+            break;
+        case 'o':
+            output = fopen(optarg, "w+");
+            if (output == NULL) {
+                perror("Error: unable to read outfile.");
+                return (-1);
+            }
+            break;
+        case 'n':
+            pub_filename = optarg;
+            break;
+        case 'v':
+            verbose_mode = true;
+            break;
+        }
+    }
 
-//     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
-//         switch (opt) {
-//         case 'h':
-//             printf("SYNOPSIS\n\tA Huffman encoder.\n\tCompresses a file using the Huffman coding "
-//                    "algorithm.\n\nUSAGE\n\t./encode [-h] [-i infile] [-o outfile]\n\nOPTIONS\n\t-h "
-//                    "            Program usage and help.\n\t-v             Print compression "
-//                    "statistics.\n\t-i infile      Input file to compress.\n\t-o outfile     Output "
-//                    "of compressed data.\n");
-//             return 0;
-//             break;
-//         case 'i':
-//             // inputfile_name = optarg;
-//             input = fopen(optarg, "r");
-//             input2 = fopen(optarg, "r");
-//             if (input == NULL) {
-//                 perror("Error: unable to read header.");
-//                 return (-1);
-//             }
-//             struct stat stat_buf;
-//             if (stat(optarg, &stat_buf) == -1) {
-//                 perror("Error: unable to read header.");
-//                 return (-1);
-//             }
-//             permissions = stat_buf.st_mode;
-//             file_size = stat_buf.st_size;
-//             break;
-//         case 'o':
-//             output_fd = open(optarg, O_WRONLY | O_APPEND | O_CREAT);
-//             if (output_fd < 0) {
-//                 perror("Error: unable to open file.");
-//                 return (-1);
-//             }
-//             break;
-//         case 'v':
-//             verbose_mode = true;
-//             // Uncompressed file size: 7 bytes
-//             printf("Uncompressed file size: %lu bytes\n", file_size);
-//             // Compressed file size: 32 bytes
-//             // Space saving: -357.14%
-//             break;
-//             return 0;
-//         }
-//     }
+    /* Open the public key files using fopen(). */
 
-//     build_histogram();
-//     Header h = header_create();
-//     //printf("h.magic:%X, h.permissions:%X, h.tree_size:%X, h.file_size:%llX\n", h.magic, h.permissions, h.tree_size, h.file_size);
-//     fchmod(output_fd, h.permissions);
-//     write(output_fd, &h, sizeof(Header));
 
-//     Node *root = build_tree(hist);
-//     dump_tree(output_fd, root);
+    pubkeyfile = fopen(pub_filename, "r");
+    if (pubkeyfile == NULL) {
+        perror("Error: unable to open public key file.");
+        return (-1);
+    }
 
-//     build_codes(root, table);
-//     while (true) {
-//         int buf = fgetc(input2);
-//         if (feof(input2)) {
-//             break;
-//         }
-//         Code c = table[buf];
-//         write_code(output_fd, &c);
-//     }
-//     flush_codes(output_fd);
-//     delete_tree(&root);
 
-//     fclose(input);
-//     fclose(input2);
-//     if (verbose_mode) {
-//         struct stat stat_buf;
-//         if (fstat(output_fd, &stat_buf) == -1) {
-//             perror("Error: unable to read header.");
-//             return (-1);
-//         }
-//         compressed_file_size = stat_buf.st_size;
-//         printf("Compressed file size: %lu bytes\n", compressed_file_size);
+    /* Read the public key from the opened public key file. */
 
-//         float space_savings = 100 * (1 - ((float) compressed_file_size / file_size));
-//         printf("Space saving: %f%%\n", space_savings);
-//     }
-//     close(output_fd);
-// }
-int main() {
-    return 1;
+    mpz_t p, q, n, e, m, d, s;
+    mpz_init(p);
+    mpz_init(q);
+    mpz_init(n);
+    mpz_init(e);
+    mpz_init(m);
+    mpz_init(d);
+    mpz_init(s);
+    char * username;
+    username = getenv ("USER");
+
+    
+    rsa_read_pub(n, e, s, username, pubkeyfile);
+    // gmp_printf("s: %Zd\n", s);
+
+
+    /* Convert the username that was read in to an mpz_t. This will be the expected value of the verified
+    signature. Verify the signature using rsa_verify(), reporting an error and exiting the program if
+    the signature couldn’t be verified. */
+
+    mpz_t name;
+    mpz_init(name);
+    
+    mpz_set_str(name, username, 62);
+
+    
+
+    // bool aye = rsa_verify(name, s, e, n);
+    // gmp_printf("name: %Zd\n", name);
+    // printf("aye: %d\n", aye);
+
+    if (!rsa_verify(name, s, e, n)) {
+        printf("Error: unable to verify signature.\n");
+        return (-1);
+    }
+
+    /* Encrypt the file using rsa_encrypt_file(). */
+
+    rsa_encrypt_file(input, output, n, e);
+    
+    if (verbose_mode) {
+        printf("user = %s\n", username);
+        gmp_printf("s (%zu bits) = %Zd\n", mpz_sizeinbase(s, 2), s);
+        gmp_printf("n (%zu bits) = %Zd\n", mpz_sizeinbase(n, 2), n);
+        gmp_printf("e (%zu bits) = %Zd\n", mpz_sizeinbase(e, 2), e);
+    }
+    
+
+    mpz_clear(p);
+    mpz_clear(q);
+    mpz_clear(n);
+    mpz_clear(e);
+    mpz_clear(m);
+    mpz_clear(d);
+    mpz_clear(s);
+    mpz_clear(name);
+    fclose(pubkeyfile);
+    fclose(input);
+    fclose(output);
+
+
+    return 0;
 }
