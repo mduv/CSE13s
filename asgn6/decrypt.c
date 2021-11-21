@@ -82,25 +82,16 @@ int main(int argc, char **argv) {
     mpz_init(e);
     mpz_init(d);
     
-    // rsa_read_pub(n, e, s, username, pubkeyfile);
     rsa_read_priv(n, d, privkeyfile);
-    // gmp_printf("s: %Zd\n", s);
 
 
- 
-
-    
-
-    // gmp_printf("name: %Zd\n", name);
-  
-
-    /* Encrypt the file using rsa_encrypt_file(). */
+    /* Decrypt the file using rsa_decrypt_file(). */
 
     rsa_decrypt_file(input, output, n, d);
     
     if (verbose_mode) {
         gmp_printf("n (%zu bits) = %Zd\n", mpz_sizeinbase(n, 2), n);
-        gmp_printf("e (%zu bits) = %Zd\n", mpz_sizeinbase(e, 2), e);
+        gmp_printf("d (%zu bits) = %Zd\n", mpz_sizeinbase(d, 2), d);
     }
     
 

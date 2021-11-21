@@ -89,7 +89,6 @@ int main(int argc, char **argv) {
 
     
     rsa_read_pub(n, e, s, username, pubkeyfile);
-    // gmp_printf("s: %Zd\n", s);
 
 
     /* Convert the username that was read in to an mpz_t. This will be the expected value of the verified
@@ -101,11 +100,6 @@ int main(int argc, char **argv) {
     
     mpz_set_str(name, username, 62);
 
-    
-
-    // bool aye = rsa_verify(name, s, e, n);
-    // gmp_printf("name: %Zd\n", name);
-    // printf("aye: %d\n", aye);
 
     if (!rsa_verify(name, s, e, n)) {
         printf("Error: unable to verify signature.\n");

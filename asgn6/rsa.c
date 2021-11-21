@@ -21,10 +21,8 @@ number of Miller-Rabin iterations is specified by iters. */
 void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t iters) {
 
     uint64_t bits_for_p = rand() % (((3 * nbits)/4) + 1 - nbits/4) + nbits/4;
-    // printf("bits for p: %llu\n", bits_for_p);
     make_prime(p, bits_for_p, iters);
     make_prime(q, nbits - bits_for_p, iters);
-    // printf("bits for q: %llu\n", nbits - bits_for_p);
     mpz_mul(n, p, q);
 
 
@@ -72,14 +70,8 @@ of which are written with a trailing newline. The values n, e, and s should be w
 the GMP functions for formatted output for help with writing hexstrings.*/
 
 void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
-    // mpz_t x;
-    // mpz_init(x);
-
-    // mpz_set_str(x, username, 62);
-    // rsa_sign();
     gmp_fprintf(pbfile, "%ZX\n%ZX\n%ZX\n%s\n", n, e, s, username);
 
-    // mpz_clear(x);
 }
 
 
@@ -211,7 +203,6 @@ bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
     mpz_t t;
     mpz_init(t);
     pow_mod(t, s, e, n);
-    // gmp_printf("t: %Zd\n", t);
     if (mpz_cmp(t,m) == 0){
         return true;
     } else {

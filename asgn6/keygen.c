@@ -65,18 +65,13 @@ int main(int argc, char **argv) {
             break;
         case 'b':
             bits = atoi(optarg);
-            // printf("bits = %llu\n", bits);
-            // return 0;
             break;
         case 'i':
             iters = atoi(optarg);
-            // printf("iters = %llu\n", iters);
             break;
         case 'v':
             verbose_mode = true;
-            // printf("user = \n");
             break;
-            // return 0;
         }
     }
     /* Open the public key files using fopen(). */
@@ -93,7 +88,6 @@ int main(int argc, char **argv) {
 
     privkeyfile = fopen(priv_filename, "w+");
     int privkeyfile_fd = fileno(privkeyfile);
-    // printf("fd: %d\n", privkeyfile_fd);
     if (privkeyfile == NULL) {
         perror("Error: unable to open private key file.");
         return (-1);
@@ -138,31 +132,17 @@ int main(int argc, char **argv) {
     char * username;
     username = getenv ("USER");
 
-    // gmp_printf("d: %Zd\n", d);
-
-    // printf("username: %s\n", username);
-
     /* Convert the username into an mpz_t with mpz_set_str(), specifying the base as 62. */
 
     mpz_t name;
     mpz_init(name);
     
     mpz_set_str(name, username, 62);
-    // printf("x: %d\n", x);
-
-    // gmp_printf("name: %Zd\n", name);
 
     /* Then, use rsa_sign() to compute the signature of the username. */
     
     
-    // gmp_printf("s: %Zd\n", s);
     rsa_sign(s, name, d, n);
-    // gmp_printf("s: %Zd\n", s);
-
-    // bool aye = rsa_verify(m, s, e, n);
-    // printf("?: %d\n", aye);
-    
-
 
     /* Write the computed public and private key to their respective files. */
 
@@ -178,11 +158,6 @@ int main(int argc, char **argv) {
         gmp_printf("n (%zu bits) = %Zd\n", mpz_sizeinbase(n, 2), n);
         gmp_printf("e (%zu bits) = %Zd\n", mpz_sizeinbase(e, 2), e);
         gmp_printf("d (%zu bits) = %Zd\n", mpz_sizeinbase(d, 2), d);
-        // printf("p (%d bits) = %Zd\n", bits, p);
-        // printf("q (%d bits) = %Zd\n", bits, q);
-        // printf("n (%d bits) = %Zd\n", bits, n);
-        // printf("e (%d bits) = %Zd\n", bits, e);
-        // printf("d (%d bits) = %Zd\n", bits, d);
     }
     
 
