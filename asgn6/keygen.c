@@ -114,13 +114,14 @@ int main(int argc, char **argv) {
 
     /* Make the public and private keys using rsa_make_pub() and rsa_make_priv(), respectively. */
 
-    mpz_t p, q, n, e, m, d;
+    mpz_t p, q, n, e, m, d, s;
     mpz_init(p);
     mpz_init(q);
     mpz_init(n);
     mpz_init(e);
     mpz_init(m);
     mpz_init(d);
+    mpz_init(s);
 
 
 
@@ -152,13 +153,14 @@ int main(int argc, char **argv) {
     // gmp_printf("name: %Zd\n", name);
 
     /* Then, use rsa_sign() to compute the signature of the username. */
-    mpz_t s;
-    mpz_init(s);
-    rsa_sign(s, m, d, n);
-    gmp_printf("s: %Zd\n", s);
+    
+    
+    // gmp_printf("s: %Zd\n", s);
+    rsa_sign(s, name, d, n);
+    // gmp_printf("s: %Zd\n", s);
 
-    bool aye = rsa_verify(m, s, e, n);
-    printf("?: %d\n", aye);
+    // bool aye = rsa_verify(m, s, e, n);
+    // printf("?: %d\n", aye);
     
 
 
