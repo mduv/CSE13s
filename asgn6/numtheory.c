@@ -99,10 +99,9 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 // and storing the computed result in out.
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
-    mpz_t p, v, aux1, ex, exp, two;
+    mpz_t p, v, aux1, exp, two;
     mpz_init(p);
     mpz_init(aux1);
-    mpz_init(ex);
     mpz_init(exp);
     mpz_set (exp, exponent);
 
@@ -133,7 +132,6 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_clear (p);
     mpz_clear (v);
     mpz_clear (aux1);
-    mpz_clear (ex);
     mpz_clear (exp);
     mpz_clear (two);
 }
