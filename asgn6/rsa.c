@@ -33,8 +33,8 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
     mpz_init(qsub1);
     mpz_init_set_si(one, 1);
 
-    mpz_sub(psub1, p, one);
-    mpz_sub(qsub1, q, one);
+    mpz_sub_ui(psub1, p, 1);
+    mpz_sub_ui(qsub1, q, 1);
 
     mpz_mul(totient_n, psub1, qsub1);
 
