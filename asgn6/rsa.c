@@ -194,7 +194,7 @@ void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     
     mpz_clear(m);
     mpz_clear(c);
-    free(buffer);
+    //free(buffer);
 }
 
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
