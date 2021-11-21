@@ -99,15 +99,12 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
 // and storing the computed result in out.
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
 
-    mpz_t p, v, aux1, ex, exp, exp1, mod;
+    mpz_t p, v, aux1, ex, exp;
     mpz_init(p);
     mpz_init(ex);
     mpz_init(aux1);
     mpz_init(exp);
-    mpz_init(exp1);
-    mpz_init(mod);
     mpz_set (exp, exponent);
-    mpz_set (mod, modulus);
 
     mpz_init_set_si(v, 1); // set v to 1
     mpz_set (p, base); // set p to base    
@@ -117,16 +114,15 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
         if(mpz_cmp_si(ex, 1) == 0) { // if d is odd
             // v ← (v×p) mod n
             mpz_mul (aux1, v, p); 
-            mpz_mod (v, aux1, mod);
+            mpz_mod (v, aux1, modulus);
         }
 
         // p ← (p×p) mod n
         mpz_mul (aux1, p, p); 
-        mpz_mod (p, aux1, mod);
+        mpz_mod (p, aux1, modulus);
 
          // d ← d/2
         mpz_fdiv_q_ui(exp, exp, 2); 
-        //mpz_set(exp, exp1);
     }
 
     mpz_set (out, v); // set out to v
@@ -135,8 +131,6 @@ void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_clear (v);
     mpz_clear (aux1);
     mpz_clear (exp);
-    mpz_clear (exp1);
-    mpz_clear (mod);
 }
 
 bool is_prime(mpz_t n, uint64_t iters) {
