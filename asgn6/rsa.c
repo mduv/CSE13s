@@ -161,7 +161,7 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
 
     mpz_clear(m);
     mpz_clear(c);
-    // free(buffer);
+    free(buffer);
 }
 
 void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
