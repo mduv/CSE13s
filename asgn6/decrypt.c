@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
                     "\n\t-i infile       Input file of data to decrypt (default: stdin)."
                     "\n\t-o outfile      Output file for decrypted data (default: stdout)."
                     "\n\t-n pvfile       Private key file (default: rsa.priv).\n");
+            return 0;
             break;
         case 'i':
             input = fopen(optarg, "r");

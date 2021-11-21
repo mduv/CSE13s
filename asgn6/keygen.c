@@ -53,6 +53,7 @@ int main(int argc, char **argv) {
                     "\n\t-n pbfile       Public key file (default: rsa.pub)."
                     "\n\t-d pvfile       Private key file (default: rsa.priv)."
                     "\n\t-s seed         Random seed for testing.\n");
+            return 0;
             break;
         case 'n':
             pub_filename = optarg;
