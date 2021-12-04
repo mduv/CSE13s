@@ -65,7 +65,7 @@ Node *ht_lookup(HashTable *ht, char *oldspeak) {
     // }
     uint32_t index = hash(ht->salt, oldspeak);
     index = index % ht->size;
-    if (ht->trees[index]) {
+    if (ht->trees[index] != NULL) {
         return ht->trees[index];
     } else {
         return NULL;
@@ -118,6 +118,13 @@ double ht_avg_bst_height(HashTable *ht) {
     return avg;
 }
 
-void ht_print(HashTable *ht);
+void ht_print(HashTable *ht) {
+    for (uint32_t i = 0; i < ht->size; i++) {
+        if (ht->trees[i] != NULL) {
+            bst_print(ht->trees[i]);
+        }
+        
+    }
+}
 
 
