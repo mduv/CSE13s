@@ -7,7 +7,6 @@
 #include "math.h"
 #include "node.h"
 
-
 void test_bv_set_bit() {
     uint32_t length = 100;
     BitVector *bitv = bv_create(length);
@@ -52,6 +51,3 @@ int main() {
     test_node();
     return 1;
 }
-
-
-
