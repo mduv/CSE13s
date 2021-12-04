@@ -42,6 +42,9 @@ void bv_delete(BitVector **bv) {
 // Returns the length of a bit vector.
 uint32_t bv_length(BitVector *bv) {
     // printf("length: %d\n", bv->length);
+    if (bv == NULL) {
+        return -1;
+    }
     return bv->length;
 }
 
