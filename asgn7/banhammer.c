@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "bv.h"
 #include "bf.h"
+#include "bst.h"
 #include "math.h"
 #include "node.h"
 
@@ -45,9 +46,38 @@ void test_node() {
     node_print(n);
 }
 
+void test_bst_height() {
+    char *oldspeak = "window";
+    char *newspeak = "okno";
+    Node *root = bst_create();
+    
+    root = bst_insert(root, oldspeak, newspeak);
+    oldspeak = "c";
+    newspeak = "d";
+    root = bst_insert(root, oldspeak, newspeak);
+    oldspeak = "ca";
+    newspeak = "dd";
+    root = bst_insert(root, oldspeak, newspeak);
+    oldspeak = "cbb";
+    newspeak = "NULL";
+    root = bst_insert(root, oldspeak, newspeak);
+    // root = insert(root, 6);
+    // root = insert(root, 7);
+    // root = insert(root, 10);
+    // root = insert(root, 14);
+    // root = insert(root, 4);
+    // printf("before inserting: \n");
+    // node_print(root);
+    
+    
+    // printf("after inserting: \n");
+    // node_print(root);
+    bst_print(root);
+}
+
 int main() {
     // test_bv_length();
     // test_bv_set_bit();
-    test_node();
+    test_bst_height();
     return 1;
 }

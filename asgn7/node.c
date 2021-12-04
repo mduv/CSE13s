@@ -54,7 +54,7 @@ void node_print(Node *n) {
     else if ((n->oldspeak != NULL) && (n->newspeak == NULL)) {
         printf("%s\n", n->oldspeak);
     } else {
-        printf("No node");
+        printf("No node\n");
     }
 }
 
