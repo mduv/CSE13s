@@ -119,12 +119,8 @@ uint32_t bf_count(BloomFilter *bf) {
     return count;
 }
 
-<<<<<<< HEAD
 void bf_print(BloomFilter *bf) {
     bv_print(bf->filter);
 }
 
 
-=======
-void bf_print(BloomFilter *bf);
->>>>>>> f87e36a6016d4407f53a0d8a9dd6a9c1e6f68a92
