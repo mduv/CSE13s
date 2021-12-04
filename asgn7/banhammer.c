@@ -7,6 +7,7 @@
 #include "bst.h"
 #include "math.h"
 #include "node.h"
+#include "ht.h"
 
 void test_bv_set_bit() {
     uint32_t length = 100;
@@ -47,37 +48,49 @@ void test_node() {
 }
 
 void test_bst_height() {
-    char *oldspeak = "window";
-    char *newspeak = "okno";
-    Node *root = bst_create();
+    // char *oldspeak = "window";
+    // char *newspeak = "okno";
+    // Node *root = bst_create();
     
-    root = bst_insert(root, oldspeak, newspeak);
-    oldspeak = "c";
-    newspeak = "d";
-    root = bst_insert(root, oldspeak, newspeak);
-    oldspeak = "ca";
-    newspeak = "dd";
-    root = bst_insert(root, oldspeak, newspeak);
-    oldspeak = "cbb";
-    newspeak = "NULL";
-    root = bst_insert(root, oldspeak, newspeak);
-    // root = insert(root, 6);
-    // root = insert(root, 7);
-    // root = insert(root, 10);
-    // root = insert(root, 14);
-    // root = insert(root, 4);
-    // printf("before inserting: \n");
-    // node_print(root);
-    
-    
-    // printf("after inserting: \n");
-    // node_print(root);
-    bst_print(root);
+    // root = bst_insert(root, "window", "okno");
+
+    // root = bst_insert(root, "arm", "rook");
+
+    // root = bst_insert(root, "wipe", "osoosh");
+    // root = bst_insert(root, "zounds", NULL);
+    // root = bst_insert(root, "annoy", "razdraz");
+    // root = bst_insert(root, "bad", "baddiwad");
+
+
+
+    // bst_print(root);
+
+    // printf("height: %d\n", bst_height(root));
+    // printf("size: %d\n", bst_size(root));
+
+    // Node *f = bst_find(root, "wipe");
+    // node_print(f);
+
+
+    // HashTable *ht = ht_create(10);
+    // ht_insert(ht, "arm", "rook");
+}
+
+void test_ht() {
+    HashTable *ht = ht_create(1000);
+    ht_insert(ht, "arm", "rook");
+    ht_insert(ht, "window", "okno");
+    ht_insert(ht, "wipe", "osoosh");
+    ht_insert(ht, "zounds", NULL);
+    ht_insert(ht, "annoy", "razdraz");
+    ht_insert(ht, "bad", "baddiwad");
+    printf("count: %d\n", ht_count(ht));
+    printf("avg size: %f\n", ht_avg_bst_size(ht));
+    printf("avg height: %f\n", ht_avg_bst_height(ht));
+
 }
 
 int main() {
-    // test_bv_length();
-    // test_bv_set_bit();
-    test_bst_height();
+    test_ht();
     return 1;
 }
