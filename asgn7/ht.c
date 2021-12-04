@@ -39,7 +39,15 @@ HashTable *ht_create(uint32_t size) {
 
 /* The destructor for a hash table. Each of the binary search trees trees, the underlying array of binary
 search tree root nodes, is freed. The pointer that was passed in should be set to NULL */
-void ht_delete(HashTable **ht);
+void ht_delete(HashTable **ht) {
+    if (ht == NULL) {
+        return;
+    }
+    bst_delete(((*ht)->trees));
+    free(*ht);
+    *ht = NULL;
+    return;
+}
 
 // Returns the hash table’s size.
 uint32_t ht_size(HashTable *ht) {
