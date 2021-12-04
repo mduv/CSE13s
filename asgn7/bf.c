@@ -67,13 +67,26 @@ uint32_t bf_size(BloomFilter *bf) {
 salts for three indices, and setting the bits at those indices in the underlying bit vector. */
 
 void bf_insert(BloomFilter *bf, char *oldspeak) {
+    uint32_t size = bf_size(bf);
     uint32_t index_p = hash(bf->primary, oldspeak);
+    index_p = index_p % size;
+    // printf("p hash: %d\n", index_p);
     uint32_t index_s = hash(bf->secondary, oldspeak);
+    index_s = index_s % size;
+    // printf("s hash: %d\n", index_s);
     uint32_t index_t = hash(bf->tertiary, oldspeak);
+    index_t = index_t % size;
+    // printf("t hash: %d\n", index_t);
+
 
     bv_set_bit(bf->filter, index_p);
     bv_set_bit(bf->filter, index_s);
     bv_set_bit(bf->filter, index_t);
+
+    // printf("p bit set?: %d\n", bv_get_bit(bf->filter, index_p));
+    // printf("s bit set?: %d\n", bv_get_bit(bf->filter, index_s));
+    // printf("t bit set?: %d\n", bv_get_bit(bf->filter, index_t));
+
 }
 
 
@@ -82,9 +95,13 @@ salts for three indices. If all the bits at those indices are set, return true t
 likely added to the Bloom filter. Else, return false. */
 
 bool bf_probe(BloomFilter *bf, char *oldspeak) {
+    uint32_t size = bf_size(bf);
     uint32_t index_p = hash(bf->primary, oldspeak);
+    index_p = index_p % size;
     uint32_t index_s = hash(bf->secondary, oldspeak);
+    index_s = index_s % size;
     uint32_t index_t = hash(bf->tertiary, oldspeak);
+    index_t = index_t % size;
 
     if (bv_get_bit(bf->filter, index_p) && bv_get_bit(bf->filter, index_s) && bv_get_bit(bf->filter, index_t)) {
         return true;
@@ -96,7 +113,8 @@ bool bf_probe(BloomFilter *bf, char *oldspeak) {
 // Returns the number of set bits in the Bloom filter.
 uint32_t bf_count(BloomFilter *bf) {
     uint32_t count = 0;
-    for (uint32_t i = 0; i < bv_length(bf->filter); i++) {
+    uint32_t size = bf_size(bf);
+    for (uint32_t i = 0; i < size; i++) {
         if (bv_get_bit(bf->filter, i)) {
             count++;
         }
@@ -104,6 +122,8 @@ uint32_t bf_count(BloomFilter *bf) {
     return count;
 }
 
-void bf_print(BloomFilter *bf);
+void bf_print(BloomFilter *bf) {
+    bv_print(bf->filter);
+}
 
 

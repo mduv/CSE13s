@@ -96,7 +96,7 @@ bool bv_get_bit(BitVector *bv, uint32_t i) {
 }
 
 void bv_print(BitVector *bv) {
-    printf("\nprint bitvector: ");
+    printf("\nprint bit vector: ");
     for (uint32_t i = 0; i < bv->length; i++) {
         printf("%d", bv_get_bit(bv, i));
     }

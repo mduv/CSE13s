@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bv.h"
+#include "bf.h"
 #include "math.h"
+#include "node.h"
 
 
 void test_bv_set_bit() {
@@ -26,9 +28,28 @@ void test_bv_length() {
     }
 }
 
+void test_bf() {
+    char *oldspeak = "Stupid";
+    uint32_t size = 10;
+    BloomFilter* bfilt = bf_create(size);
+    bf_insert(bfilt, oldspeak);
+    bool probe = bf_probe(bfilt, oldspeak);
+    uint32_t count = bf_count(bfilt);
+    printf("probe: %d, count: %d\n", probe, count);
+    bf_print(bfilt);
+}
+
+void test_node() {
+    char *oldspeak = "stupid";
+    char *newspeak = "hey";
+    Node *n = node_create(oldspeak, newspeak);
+    node_print(n);
+}
+
 int main() {
-    test_bv_length();
-    test_bv_set_bit();
+    // test_bv_length();
+    // test_bv_set_bit();
+    test_node();
     return 1;
 }
 
