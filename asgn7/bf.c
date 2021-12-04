@@ -10,14 +10,12 @@
 #include <stddef.h>
 #include <string.h>
 
-
 struct BloomFilter {
-    uint64_t primary [2]; // Primary hash function salt.
-    uint64_t secondary [2]; // Secondary hash function salt.
-    uint64_t tertiary [2]; // Tertiary hash function salt.
+    uint64_t primary[2]; // Primary hash function salt.
+    uint64_t secondary[2]; // Secondary hash function salt.
+    uint64_t tertiary[2]; // Tertiary hash function salt.
     BitVector *filter;
 };
-
 
 /* The constructor for a Bloom filter. The primary, secondary, and tertiary salts that should be used are
 provided in salts.h. Note that you will also have to implement the bit vector ADT for your Bloom filter,
@@ -25,7 +23,7 @@ as it will serve as the array of bits necessary for a proper Bloom filter. */
 
 BloomFilter *bf_create(uint32_t size) {
 
-    BloomFilter* bf = (BloomFilter*)malloc(sizeof(BloomFilter));
+    BloomFilter *bf = (BloomFilter *) malloc(sizeof(BloomFilter));
 
     if (bf == NULL) {
         return NULL;
@@ -36,7 +34,6 @@ BloomFilter *bf_create(uint32_t size) {
 
     bf->secondary[0] = SALT_SECONDARY_LO;
     bf->secondary[1] = SALT_SECONDARY_HI;
-
 
     bf->tertiary[0] = SALT_TERTIARY_LO;
     bf->tertiary[1] = SALT_TERTIARY_HI;
@@ -49,7 +46,7 @@ BloomFilter *bf_create(uint32_t size) {
 /* The destructor for a Bloom filter. As with all other destructors, it should free any memory allocated by
 the constructor and null out the pointer that was passed in. */
 
-void bf_delete(BloomFilter **bf) {    
+void bf_delete(BloomFilter **bf) {
     bv_delete(&((*bf)->filter));
     free(*bf);
     *bf = NULL;
@@ -76,7 +73,6 @@ void bf_insert(BloomFilter *bf, char *oldspeak) {
     bv_set_bit(bf->filter, index_t);
 }
 
-
 /* Probes the Bloom filter for oldspeak. Like with bf_insert(), oldspeak is hashed with each of the three
 salts for three indices. If all the bits at those indices are set, return true to signify that oldspeak was most
 likely added to the Bloom filter. Else, return false. */
@@ -86,7 +82,8 @@ bool bf_probe(BloomFilter *bf, char *oldspeak) {
     uint32_t index_s = hash(bf->secondary, oldspeak);
     uint32_t index_t = hash(bf->tertiary, oldspeak);
 
-    if (bv_get_bit(bf->filter, index_p) && bv_get_bit(bf->filter, index_s) && bv_get_bit(bf->filter, index_t)) {
+    if (bv_get_bit(bf->filter, index_p) && bv_get_bit(bf->filter, index_s)
+        && bv_get_bit(bf->filter, index_t)) {
         return true;
     } else {
         return false;
@@ -105,5 +102,3 @@ uint32_t bf_count(BloomFilter *bf) {
 }
 
 void bf_print(BloomFilter *bf);
-
-

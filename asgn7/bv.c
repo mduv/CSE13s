@@ -15,19 +15,18 @@ located, the function must return NULL. Else, it must return a BitVector *), or 
 BitVector. Each bit of the bit vector should be initialized to 0. */
 
 BitVector *bv_create(uint32_t length) {
-    BitVector* bv = (BitVector*)malloc(sizeof(BitVector));
+    BitVector *bv = (BitVector *) malloc(sizeof(BitVector));
     if (bv == NULL) {
         return NULL;
     }
     bv->length = length;
-    uint32_t arraysize = ceil(length/8.0);
-    bv->vector = (uint8_t*)calloc(arraysize, sizeof(uint8_t));
+    uint32_t arraysize = ceil(length / 8.0);
+    bv->vector = (uint8_t *) calloc(arraysize, sizeof(uint8_t));
     if (bv->vector == NULL) {
         return NULL;
     }
     return bv;
 }
-
 
 /* The destructor for a bit vector. Remember to set the pointer to NULL after the memory associated with
 the bit vector is freed. */
@@ -56,7 +55,7 @@ bool bv_set_bit(BitVector *bv, uint32_t i) {
     uint8_t flag = 1; // 00...1
 
     if (i >= bv->length) {
-         return false;
+        return false;
     } else {
         flag = flag << pos;
         bv->vector[k] = bv->vector[k] | flag;
@@ -74,7 +73,8 @@ bool bv_clr_bit(BitVector *bv, uint32_t i) {
     } else {
         flag = flag << pos;
         flag = ~flag;
-        bv->vector[k] = bv->vector[k] & flag;;
+        bv->vector[k] = bv->vector[k] & flag;
+        ;
         // printf("clr bit: %x\n", bv->vector[k]);
         return true;
     }
@@ -102,5 +102,3 @@ void bv_print(BitVector *bv) {
     }
     printf("\n");
 }
-
-
