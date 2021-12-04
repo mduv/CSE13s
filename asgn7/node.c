@@ -25,21 +25,22 @@ Node *node_create(char *oldspeak, char *newspeak) {
     if (oldspeak == NULL) {
         n->oldspeak = NULL;
     } else {
-        char* oldspeak_copy = strdup(oldspeak);
-        n->oldspeak = oldspeak_copy;
+        n->oldspeak = strdup(oldspeak);
     }
     // printf("oldspeak: %s\n", n->oldspeak);
     if (newspeak == NULL) {
         n->newspeak = NULL;
     } else {
-        char* newspeak_copy = strdup(newspeak);
-        n->newspeak = newspeak_copy;
+        n->newspeak = strdup(newspeak);
     }
     // printf("newspeak: %s\n", n->newspeak);
     return n;
 }
 
 void node_delete(Node **n) {
+    if (*n == NULL) {
+        return;
+    }
     free((*n)->oldspeak);
     free((*n)->newspeak);
     free(*n); 

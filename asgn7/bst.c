@@ -9,10 +9,7 @@
 
 
 Node *bst_create(void) {
-    Node* n = NULL;
-    // n->left = NULL;
-    // n->right = NULL;
-    return n;
+    return NULL;
 }
 
 uint32_t bst_height(Node *root) {
@@ -20,8 +17,6 @@ uint32_t bst_height(Node *root) {
     if (!root) {
         return 0;
     } else {
-        // Find the height of both subtrees
-        // and use the larger one
         int left_height = bst_height(root->left);
         int right_height = bst_height(root->right);
         if (left_height >= right_height) {
@@ -46,16 +41,21 @@ uint32_t bst_size(Node *root) {
 
 /* Searches for a node containing oldspeak in the binary search tree rooted at root. If a node is found, the
 pointer to the node is returned. Else, a NULL pointer is returned. */
+
 Node *bst_find(Node *root, char *oldspeak) {
-   //printf("Visiting elements: ");
-    if (root==NULL || root->oldspeak==oldspeak) { //if root->data is x then the element is found {
+    
+    // printf("iteration: %d\n", count);
+
+    if (root==NULL || strcmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
         return root;
     }
-    if(root->oldspeak < oldspeak) { 
-        return bst_find(root->left, oldspeak);
-    } else { 
+    if (strcmp(root->oldspeak, oldspeak) < 0) { 
         return bst_find(root->right, oldspeak);
+    } else { 
+        // printf("hello\n");
+        return bst_find(root->left, oldspeak);
     }
+    return NULL;
 }
 
 
@@ -64,33 +64,28 @@ Node *bst_find(Node *root, char *oldspeak) {
 Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
 
     // Return a new node if the tree is empty
-    if (root == NULL) return node_create(oldspeak, newspeak);;
-
+    if (root == NULL) { 
+        // node_print(root);
+        return node_create(oldspeak, newspeak);
+    }
     // Traverse to the right place and insert the node
-    if (oldspeak < root->oldspeak)
-        root->left = bst_insert(root->left, oldspeak, newspeak);
-    else
-        root->right = bst_insert(root->right, oldspeak, newspeak);
 
+    if (strcmp(oldspeak, root->oldspeak) == 0) {
+        // don't insert duplicates
+        return root;
+    }
+    if (strcmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
+        root->left = bst_insert(root->left, oldspeak, newspeak);
+        return root;
+    } else {
+        root->right = bst_insert(root->right, oldspeak, newspeak);
+        return root;
+    }
     return root;
-    // if(root==NULL) {
-    //     return node_create(oldspeak, newspeak);
-    // }
-    // if (oldspeak < root->oldspeak){
-    //     root->left = bst_insert(root->left, oldspeak, newspeak);
-    // }
-    // else if (oldspeak > root->oldspeak) { 
-    //     // node_print(root);
-    //     root->right = bst_insert(root->right, oldspeak, newspeak);
-    // // node_print(root);
-    // }
-    // return root;
 
 }
 
 void bst_print(Node *root) {
-    // node_print(root);
-    // printf("hello\n");
     if (root != NULL) {
         bst_print(root->left);
         node_print(root);
