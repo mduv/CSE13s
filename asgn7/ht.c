@@ -51,11 +51,9 @@ void ht_delete(HashTable **ht) {
     }
 
     uint32_t size = ht_size(*ht);
-    printf("size: %d\n", size);
     for (uint32_t i = 0; i < size; i++) {
         bst_delete(&((*ht)->trees[i]));
     }
-    printf("freeing ht\n");
     free((*ht)->trees);
     free(*ht);
     *ht = NULL;
