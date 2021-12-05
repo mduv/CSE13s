@@ -47,10 +47,10 @@ Node *bst_find(Node *root, char *oldspeak) {
     
     // printf("iteration: %d\n", count);
 
-    if (root==NULL || strcasecmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
+    if (root==NULL || strcmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
         return root;
     }
-    if (strcasecmp(root->oldspeak, oldspeak) < 0) {
+    if (strcmp(root->oldspeak, oldspeak) < 0) {
         branches++; 
         return bst_find(root->right, oldspeak);
     } else { 
@@ -72,11 +72,11 @@ Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
     }
     // Traverse to the right place and insert the node
 
-    if (strcasecmp(oldspeak, root->oldspeak) == 0) {
+    if (strcmp(oldspeak, root->oldspeak) == 0) {
         // don't insert duplicates
         return root;
     }
-    if (strcasecmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
+    if (strcmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
         root->left = bst_insert(root->left, oldspeak, newspeak);
         branches++;
         return root;
