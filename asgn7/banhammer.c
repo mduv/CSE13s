@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
     /* Initialize your Bloom filter and hash table. */
     BloomFilter *bf = bf_create(filter_size);
     
-    // HashTable *ht = ht_create(table_size);
+    HashTable *ht = ht_create(table_size);
 
     /* Read in a list of badspeak words with fscanf(). Again, badspeak is simply oldspeak without a
     newspeak translation. Badspeak is strictly forbidden. Each badspeak word should be added to the
@@ -104,8 +104,8 @@ int main(int argc, char **argv) {
 
 
 
-    // printf("bf count: %d\n", bf_count(bf));
-    test_ht();
+    printf("bf count: %d\n", bf_count(bf));
+    ht_delete(&ht);
     return 1;
 }
 

@@ -99,8 +99,8 @@ void bst_delete(Node **root) {
     if (root == NULL || *root == NULL) {
         return;
     }
-    bst_delete(&((*root)->left));
-    bst_delete(&((*root)->right));
+    bst_delete(&(*root)->left);
+    bst_delete(&(*root)->right);
     node_delete(root);
 }
 
