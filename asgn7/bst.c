@@ -28,7 +28,6 @@ uint32_t bst_height(Node *root) {
     }
 }
 
-
 // Returns the size of the binary search tree rooted at root. The size of a tree is equivalent to the number of
 // nodes in the tree.
 uint32_t bst_size(Node *root) {
@@ -36,37 +35,35 @@ uint32_t bst_size(Node *root) {
         return 0;
     } else {
         return (bst_size(root->left) + 1 + bst_size(root->right));
-    }  
+    }
 }
-
 
 /* Searches for a node containing oldspeak in the binary search tree rooted at root. If a node is found, the
 pointer to the node is returned. Else, a NULL pointer is returned. */
 
 Node *bst_find(Node *root, char *oldspeak) {
-    
+
     // printf("iteration: %d\n", count);
 
-    if (root==NULL || strcmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
+    if (root == NULL
+        || strcmp(root->oldspeak, oldspeak)
+               == 0) { // if root->oldspeak is oldspeak then the element is found {
         return root;
     }
     if (strcmp(root->oldspeak, oldspeak) < 0) {
-        branches++; 
+        branches++;
         return bst_find(root->right, oldspeak);
-    } else { 
+    } else {
         branches++;
         return bst_find(root->left, oldspeak);
     }
     return NULL;
 }
 
-
-
-
 Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
 
     // Return a new node if the tree is empty
-    if (root == NULL) { 
+    if (root == NULL) {
         // node_print(root);
         return node_create(oldspeak, newspeak);
     }
@@ -76,7 +73,7 @@ Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
         // don't insert duplicates
         return root;
     }
-    if (strcmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
+    if (strcmp(oldspeak, root->oldspeak) < 0) { // oldspeak is < root->oldspeak
         root->left = bst_insert(root->left, oldspeak, newspeak);
         branches++;
         return root;
@@ -86,7 +83,6 @@ Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
         return root;
     }
     return root;
-
 }
 
 void bst_print(Node *root) {
@@ -107,4 +103,3 @@ void bst_delete(Node **root) {
     bst_delete(&(*root)->right);
     node_delete(root);
 }
-

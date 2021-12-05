@@ -11,9 +11,6 @@
 #include <stddef.h>
 #include <string.h>
 
-
-
-
 struct HashTable {
     uint64_t salt[2];
     uint32_t size;
@@ -33,12 +30,11 @@ HashTable *ht_create(uint32_t size) {
     ht->size = size;
     ht->salt[0] = SALT_HASHTABLE_LO;
     ht->salt[1] = SALT_HASHTABLE_HI;
-    
-    ht->trees = (Node **) calloc(size, sizeof(Node*));
+
+    ht->trees = (Node **) calloc(size, sizeof(Node *));
     if (ht->trees == NULL) {
         return NULL;
     }
-    
 
     return ht;
 }
@@ -67,7 +63,6 @@ uint32_t ht_size(HashTable *ht) {
     }
     return ht->size;
 }
-
 
 /* Searches for an entry, a node, in the hash table that contains oldspeak. A node stores oldspeak and
 its newspeak translation. The index of the binary search tree to perform a look-up on is calculated by
@@ -125,7 +120,6 @@ double ht_avg_bst_size(HashTable *ht) {
     return avg;
 }
 
-
 /* Returns the average binary search tree size. This is computed as the sum of the heights over all the binary
 search trees divided by the number of non-NULL binary search trees in the hash table. You will need to
 use bst_height(), presented in §7, to compute this. */
@@ -134,7 +128,7 @@ double ht_avg_bst_height(HashTable *ht) {
     for (uint32_t i = 0; i < ht->size; i++) {
         sum += bst_height(ht->trees[i]);
     }
-    double avg = (double) ((double)sum / ht_count(ht));
+    double avg = (double) ((double) sum / ht_count(ht));
     return avg;
 }
 
@@ -143,8 +137,5 @@ void ht_print(HashTable *ht) {
         if (ht->trees[i] != NULL) {
             bst_print(ht->trees[i]);
         }
-        
     }
 }
-
-

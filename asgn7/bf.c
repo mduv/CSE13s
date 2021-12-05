@@ -75,7 +75,6 @@ void bf_insert(BloomFilter *bf, char *oldspeak) {
     index_t = index_t % size;
     // printf("t hash: %d\n", index_t);
 
-
     bv_set_bit(bf->filter, index_p);
     bv_set_bit(bf->filter, index_s);
     bv_set_bit(bf->filter, index_t);
@@ -83,7 +82,6 @@ void bf_insert(BloomFilter *bf, char *oldspeak) {
     // printf("p bit set?: %d\n", bv_get_bit(bf->filter, index_p));
     // printf("s bit set?: %d\n", bv_get_bit(bf->filter, index_s));
     // printf("t bit set?: %d\n", bv_get_bit(bf->filter, index_t));
-
 }
 
 /* Probes the Bloom filter for oldspeak. Like with bf_insert(), oldspeak is hashed with each of the three
@@ -122,5 +120,3 @@ uint32_t bf_count(BloomFilter *bf) {
 void bf_print(BloomFilter *bf) {
     bv_print(bf->filter);
 }
-
-

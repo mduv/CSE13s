@@ -6,14 +6,12 @@
 #include "node.h"
 #include "math.h"
 
-
 // struct Node {
 //     char *oldspeak;
 //     char *newspeak;
 //     Node *left;
 //     Node *right;
 // };
-
 
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
@@ -43,20 +41,17 @@ void node_delete(Node **n) {
     }
     free((*n)->oldspeak);
     free((*n)->newspeak);
-    free(*n); 
-    *n = NULL; 
+    free(*n);
+    *n = NULL;
     return;
 }
 
 void node_print(Node *n) {
     if ((n->oldspeak != NULL) && (n->newspeak != NULL)) {
-        printf("%s -> %s\n", n->oldspeak , n->newspeak);
-    }
-    else if ((n->oldspeak != NULL) && (n->newspeak == NULL)) {
+        printf("%s -> %s\n", n->oldspeak, n->newspeak);
+    } else if ((n->oldspeak != NULL) && (n->newspeak == NULL)) {
         printf("%s\n", n->oldspeak);
     } else {
         printf("No node\n");
     }
 }
-
-
