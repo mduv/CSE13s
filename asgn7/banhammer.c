@@ -20,8 +20,6 @@
 #define OPTIONS "sht:f:"
 
 bool statistics_mode = false;
-// static FILE *input = NULL;
-
 
 int myPow(int x,int n)
 {
@@ -34,23 +32,6 @@ int myPow(int x,int n)
     return(number);
 }
 
-void test_ht() {
-    HashTable *ht = ht_create(1000);
-    ht_insert(ht, "arm", "rook");
-    ht_insert(ht, "window", "okno");
-    ht_insert(ht, "wipe", "osoosh");
-    ht_insert(ht, "zounds", NULL);
-    ht_insert(ht, "annoy", "razdraz");
-    ht_insert(ht, "bad", "baddiwad");
-    printf("count: %d\n", ht_count(ht));
-    // printf("avg size: %f\n", ht_avg_bst_size(ht));
-    // printf("avg height: %f\n", ht_avg_bst_height(ht));
-
-    ht_print(ht);
-    printf("#############\n");
-    Node *l = ht_lookup(ht, "bad");
-    node_print(l);
-}
 
 int main(int argc, char **argv) {
     int opt = 0;
@@ -91,9 +72,6 @@ int main(int argc, char **argv) {
 
         }
     }
-
-    // printf("table size: %d\n", table_size);
-    // printf("filter size: %d\n", filter_size);
     
     /* Initialize your Bloom filter and hash table. */
     BloomFilter *bf = bf_create(filter_size);
@@ -114,7 +92,6 @@ int main(int argc, char **argv) {
         bf_insert(bf, bs_contents);
         ht_insert(ht, bs_contents, NULL);
     }
-    // printf("bf count: %d\n", bf_count(bf));
 
     /* Read in a list of oldspeak and newspeak pairs with fscanf(). Only the oldspeak should be added to
     the Bloom filter. The oldspeak and newspeak are added to the hash table. The list of oldspeak and
@@ -162,14 +139,11 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
                 }
             }
         }
-        // printf("Word: %s\n", word);
     }
-    // printf("thoughtcrime: %d, rightspeak: %d\n", thoughtcrime, rightspeak);
 
     avg_bst_size = ht_avg_bst_size(ht);
     avg_bst_height = ht_avg_bst_height(ht);
-    // printf("branches: %llu\n", branches);
-    // printf("lookups: %llu\n", lookups);
+
 
     avg_branch_trav = (float) branches/ (float) lookups;
     ht_load = 100.0 * ( (float) ht_count(ht)/ (float) ht_size(ht));
@@ -211,69 +185,3 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     return 1;
 }
 
-void test_bv_set_bit() {
-    uint32_t length = 100;
-    BitVector *bitv = bv_create(length);
-    bv_set_bit(bitv, 18);
-    bool returned_bit = bv_get_bit(bitv, 18);
-    if (returned_bit != 1) {
-        printf("Set bit didnt work\n");
-    }
-    bv_print(bitv);
-}
-
-void test_bv_length() {
-    uint32_t length = 100;
-    BitVector *bitv = bv_create(length);
-    uint32_t returned_length = bv_length(bitv);
-    if (returned_length != length) {
-        printf("Lengths don't match\n");
-    }
-}
-
-void test_bf() {
-    char *oldspeak = "Stupid";
-    uint32_t size = 10;
-    BloomFilter* bfilt = bf_create(size);
-    bf_insert(bfilt, oldspeak);
-    bool probe = bf_probe(bfilt, oldspeak);
-    uint32_t count = bf_count(bfilt);
-    printf("probe: %d, count: %d\n", probe, count);
-    bf_print(bfilt);
-}
-
-void test_node() {
-    char *oldspeak = "stupid";
-    char *newspeak = "hey";
-    Node *n = node_create(oldspeak, newspeak);
-    node_print(n);
-}
-
-void test_bst_height() {
-    // char *oldspeak = "window";
-    // char *newspeak = "okno";
-    // Node *root = bst_create();
-    
-    // root = bst_insert(root, "window", "okno");
-
-    // root = bst_insert(root, "arm", "rook");
-
-    // root = bst_insert(root, "wipe", "osoosh");
-    // root = bst_insert(root, "zounds", NULL);
-    // root = bst_insert(root, "annoy", "razdraz");
-    // root = bst_insert(root, "bad", "baddiwad");
-
-
-
-    // bst_print(root);
-
-    // printf("height: %d\n", bst_height(root));
-    // printf("size: %d\n", bst_size(root));
-
-    // Node *f = bst_find(root, "wipe");
-    // node_print(f);
-
-
-    // HashTable *ht = ht_create(10);
-    // ht_insert(ht, "arm", "rook");
-}
