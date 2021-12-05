@@ -96,7 +96,7 @@ void bst_print(Node *root) {
 }
 
 void bst_delete(Node **root) {
-    if (root == NULL) {
+    if (root == NULL || *root == NULL) {
         return;
     }
     bst_delete(&((*root)->left));
