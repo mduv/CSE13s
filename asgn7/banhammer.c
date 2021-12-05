@@ -171,6 +171,8 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         ht_delete(&ht);
         ht_delete(&badspeak_ht);
         ht_delete(&oldspeak_ht);
+        clear_words();
+        regfree (&re);
         return 0;
     } 
 
