@@ -131,7 +131,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     #define WORD "[a-zA-Z0-9]+"
     regex_t re;
     if (regcomp (&re , WORD , REG_EXTENDED)) {
-        fprintf(stderr , "Failed to compile regex.\n");
+        printf("Failed to compile regex.\n");
     }
 
     char *word = NULL;
