@@ -83,6 +83,11 @@ int main(int argc, char **argv) {
     Bloom filter and the hash table. The list of proscribed words will be in badspeak.txt, which can
     be found in the resources repository. */
     FILE *bs_p = fopen("badspeak.txt", "r");
+    if (bs_p == NULL) {
+        bf_delete(&bf);
+        ht_delete(&ht);
+        return -1;
+    }
     struct stat sb;
     struct stat vb;
     stat("badspeak.txt", &sb);
@@ -101,6 +106,13 @@ int main(int argc, char **argv) {
     newspeak pairs will be in newspeak.txt, which can also be found in the resources repository. */
 
     FILE *os_ns_p = fopen("newspeak.txt", "r");
+    if (os_ns_p == NULL) {
+        fclose(bs_p);
+        bf_delete(&bf);
+        ht_delete(&ht);
+        free(bs_contents);
+        return -1;
+    }
     stat("newspeak.txt", &vb);
     char *os_contents = malloc(sb.st_size);
     char *ns_contents = malloc(vb.st_size);
