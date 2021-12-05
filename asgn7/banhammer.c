@@ -13,10 +13,15 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <regex.h>
+#include "parser.h"
+#include "messages.h"
 
 #define OPTIONS "sht:f:"
 
 bool statistics_mode = false;
+// static FILE *input = NULL;
+
 
 int myPow(int x,int n)
 {
@@ -50,6 +55,7 @@ void test_ht() {
 int main(int argc, char **argv) {
     int opt = 0;
     optind = 1;
+    // input = stdin;
 
     int table_size = myPow(2,16);
     int filter_size = myPow(2,20);
@@ -92,20 +98,96 @@ int main(int argc, char **argv) {
     newspeak translation. Badspeak is strictly forbidden. Each badspeak word should be added to the
     Bloom filter and the hash table. The list of proscribed words will be in badspeak.txt, which can
     be found in the resources repository. */
-    FILE *fp = fopen("badspeak.txt", "r");
+    FILE *bs_p = fopen("badspeak.txt", "r");
     struct stat sb;
+    struct stat vb;
     stat("badspeak.txt", &sb);
-    char *file_contents = malloc(sb.st_size);
+    char *bs_contents = malloc(sb.st_size);
 
-    while (fscanf(fp, "%[^\n] ", file_contents) != EOF) {
-        bf_insert(bf, file_contents);
-        // ht_insert(ht, file_contents, NULL);
+    while (fscanf(bs_p, "%[^\n] ", bs_contents) != EOF) {
+        bf_insert(bf, bs_contents);
+        ht_insert(ht, bs_contents, NULL);
+    }
+    // printf("bf count: %d\n", bf_count(bf));
+
+    /* Read in a list of oldspeak and newspeak pairs with fscanf(). Only the oldspeak should be added to
+    the Bloom filter. The oldspeak and newspeak are added to the hash table. The list of oldspeak and
+    newspeak pairs will be in newspeak.txt, which can also be found in the resources repository. */
+
+    FILE *os_ns_p = fopen("newspeak.txt", "r");
+    stat("newspeak.txt", &vb);
+    char *os_contents = malloc(sb.st_size);
+    char *ns_contents = malloc(vb.st_size);
+
+    while (fscanf(os_ns_p, "%s %s", os_contents, ns_contents) != EOF) {
+        bf_insert(bf, os_contents);
+        ht_insert(ht, os_contents, ns_contents);
     }
 
+    /* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
+c   an start to filter out words. Read words in from stdin using the supplied parsing module. */
+    #define WORD "[a-zA-Z]+"
+    regex_t re;
+    if (regcomp (&re , WORD , REG_EXTENDED)) {
+        fprintf(stderr , "Failed to compile regex.\n");
+    }
+
+    char *word = NULL;
+
+    bool thoughtcrime = false;
+    bool rightspeak = false;
+
+    HashTable *badspeak_ht = ht_create(bf_count(bf));
+    HashTable *oldspeak_ht = ht_create(bf_count(bf));
+
+    // printf("hello\n");
+    // Node *d = ht_lookup(ht, "arcites");
+    // node_print(d);
 
 
-    printf("bf count: %d\n", bf_count(bf));
-    ht_delete(&ht);
+    while ((word = next_word(stdin , &re)) != NULL) {
+        if (bf_probe(bf, word)) {
+            Node *check = ht_lookup(ht, word);
+            // node_print(check);
+            if (check != NULL) {
+                // thoughtcrime
+                if (check->newspeak == NULL) {
+                    ht_insert(badspeak_ht, word, NULL);
+                    thoughtcrime = true;
+                } else {
+                // Rightspeak
+                    ht_insert(oldspeak_ht, word, check->newspeak);
+                    rightspeak = true;
+                }
+            }
+        }
+        // printf("Word: %s\n", word);
+    }
+    // printf("thoughtcrime: %d, rightspeak: %d\n", thoughtcrime, rightspeak);
+
+    if (thoughtcrime && !rightspeak) {
+        printf("%s", badspeak_message);
+        ht_print(badspeak_ht);
+    }
+
+    if (!thoughtcrime && rightspeak) {
+        printf("%s", goodspeak_message);
+        ht_print(oldspeak_ht);
+    }
+    
+    if (thoughtcrime && rightspeak) {
+        printf("%s", mixspeak_message);
+        ht_print(badspeak_ht);
+        ht_print(oldspeak_ht);
+    }
+
+    clear_words();
+    regfree (&re);
+
+
+    // printf("bf count: %d\n", bf_count(bf));
+    //ht_delete(&ht);
+    
     return 1;
 }
 
@@ -175,9 +257,3 @@ void test_bst_height() {
     // HashTable *ht = ht_create(10);
     // ht_insert(ht, "arm", "rook");
 }
-
-
-// int main() {
-//     test_ht();
-//     return 1;
-// }
