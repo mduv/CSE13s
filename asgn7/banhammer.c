@@ -142,6 +142,11 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     HashTable *badspeak_ht = ht_create(bf_count(bf));
     HashTable *oldspeak_ht = ht_create(bf_count(bf));
 
+    Node* badspeak_nodes[100000];
+    Node* oldspeak_nodes[100000];
+    int bsn = 0;
+    int osn = 0;
+
     while ((word = next_word(stdin , &re)) != NULL) {
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
@@ -150,10 +155,12 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
                 if (check->newspeak == NULL) {
                     ht_insert(badspeak_ht, word, NULL);
                     thoughtcrime = true;
+                    badspeak_nodes[bsn++] = node_create(word, NULL);
                 } else {
                 // Rightspeak
                     ht_insert(oldspeak_ht, word, check->newspeak);
                     rightspeak = true;
+                    oldspeak_nodes[osn++] = node_create(word, check->newspeak);
                 }
             }
         }
@@ -190,18 +197,30 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
 
     if (thoughtcrime && !rightspeak) {
         printf("%s", badspeak_message);
-        ht_print(badspeak_ht);
+        //ht_print(badspeak_ht);
+        for (int i = 0; i < bsn; i++) {
+            node_print(badspeak_nodes[i]);
+        }
     }
 
     if (!thoughtcrime && rightspeak) {
         printf("%s", goodspeak_message);
-        ht_print(oldspeak_ht);
+        //ht_print(oldspeak_ht);
+        for (int i = 0; i < osn; i++) {
+            node_print(oldspeak_nodes[i]);
+        }
     }
     
     if (thoughtcrime && rightspeak) {
         printf("%s", mixspeak_message);
-        ht_print(badspeak_ht);
-        ht_print(oldspeak_ht);
+        //ht_print(badspeak_ht);
+        //ht_print(oldspeak_ht);
+        for (int i = 0; i < bsn; i++) {
+            node_print(badspeak_nodes[i]);
+        }
+        for (int i = 0; i < osn; i++) {
+            node_print(oldspeak_nodes[i]);
+        }
     }
 
     clear_words();
