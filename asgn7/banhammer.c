@@ -162,6 +162,15 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         printf("Average branches traversed: %f\n", avg_branch_trav);
         printf("Hash table load: %0.6f%%\n", ht_load);
         printf("Bloom filter load: %0.6f%%\n", bf_load);
+        fclose(os_ns_p);
+        fclose(bs_p);
+        free(bs_contents);
+        free(os_contents);
+        free(ns_contents);
+        bf_delete(&bf);
+        ht_delete(&ht);
+        ht_delete(&badspeak_ht);
+        ht_delete(&oldspeak_ht);
         return 0;
     } 
 
