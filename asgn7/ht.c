@@ -15,7 +15,7 @@
 
 
 struct HashTable {
-    uint64_t salt [2];
+    uint64_t salt[2];
     uint32_t size;
     Node **trees;
 };
@@ -30,21 +30,25 @@ HashTable *ht_create(uint32_t size) {
     }
     ht->size = size;
     ht->salt[0] = SALT_HASHTABLE_LO;
-    ht->salt[1] = SALT_HASHTABLE_LO;
+    ht->salt[1] = SALT_HASHTABLE_HI;
     
-
-    ht->trees = (Node **) malloc(sizeof(Node**) * size);
+    ht->trees = (Node **) malloc(sizeof(Node*) * size);
+    if (ht->trees == NULL) {
+        return NULL;
+    }
     return ht;
 }
 
 /* The destructor for a hash table. Each of the binary search trees trees, the underlying array of binary
 search tree root nodes, is freed. The pointer that was passed in should be set to NULL */
 void ht_delete(HashTable **ht) {
-    if (ht == NULL) {
+    if (ht == NULL || *ht == NULL) {
         return;
     }
-    for (uint32_t i = 0; i < ht_size(*ht); i++) {
-        bst_delete(&(*ht)->trees[i]);
+
+    uint32_t size = ht_size(*ht);
+    for (uint32_t i = 0; i < size; i++) {
+        bst_delete(&((*ht)->trees[i]));
     }
     free(*ht);
     *ht = NULL;
@@ -53,6 +57,9 @@ void ht_delete(HashTable **ht) {
 
 // Returns the hash table’s size.
 uint32_t ht_size(HashTable *ht) {
+    if (ht == NULL) {
+        return 0;
+    }
     return ht->size;
 }
 
@@ -62,13 +69,14 @@ its newspeak translation. The index of the binary search tree to perform a look-
 hashing the oldspeak. If the node is found, the pointer to the node is returned. Else, a NULL pointer is
 returned. */
 Node *ht_lookup(HashTable *ht, char *oldspeak) {
-    // for (int i = 0; i < ht->size; i++) {
+    if (ht == NULL) {
+        return NULL;
+    }
 
-    // }
     uint32_t index = hash(ht->salt, oldspeak);
     index = index % ht->size;
-    if (ht->trees[index] != NULL) {
-        return ht->trees[index];
+    if (bst_find(ht->trees[index], oldspeak) != NULL) {
+        return bst_find(ht->trees[index], oldspeak);
     } else {
         return NULL;
     }

@@ -1,6 +1,7 @@
-Assignment 7 - bnlaklnda
+Assignment 7 - The Great Firewall of Santa Cruz:
+Bloom Filters, Linked Lists, Binary Trees and Hash Tables
 
-This program implements 
+This is a word filtering program for the GPRSC. It filters out and reports bad words parsed from stdin.
 
 Building
 
@@ -10,10 +11,10 @@ make
 Running
 
 Run the program with:
-$ ./encode ./decode [-v] [-h] [-i infile] [-o outfile]
+$ ./banhammer [-hs] [-t size] [-f size]
 
 OPTIONS
-    -h             Program usage and help.
-    -v             Print compression statistics.
-    -i infile      Input file to compress.
-    -o outfile     Output of compressed data.
+  -h           Program usage and help.
+  -s           Print program statistics.
+  -t size      Specify hash table size (default: 2^16).
+  -f size      Specify Bloom filter size (default: 2^20).
