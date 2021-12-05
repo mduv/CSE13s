@@ -72,11 +72,11 @@ Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
     }
     // Traverse to the right place and insert the node
 
-    if (strcmp(oldspeak, root->oldspeak) == 0) {
+    if (strcasecmp(oldspeak, root->oldspeak) == 0) {
         // don't insert duplicates
         return root;
     }
-    if (strcmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
+    if (strcasecmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
         root->left = bst_insert(root->left, oldspeak, newspeak);
         branches++;
         return root;
