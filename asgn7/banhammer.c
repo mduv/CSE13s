@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
                    "\n\t-t size         Specify hash table size (default: 2^16)."
                    "\n\t-f size         Specify Bloom filter size (default: 2^20).\n");
             break;
+            return 0;
         case 't':
             table_size = atoi(optarg);
             break;
@@ -218,6 +219,6 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     ht_delete(&oldspeak_ht);
 
     
-    return 1;
+    return 0;
 }
 
