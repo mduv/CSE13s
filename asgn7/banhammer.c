@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 c   an start to filter out words. Read words in from stdin using the supplied parsing module. */
     #define WORD "[a-zA-Z0-9_'-]+"
     regex_t re;
-    if (regcomp (&re , WORD , REG_EXTENDED | REG_ICASE)) {
+    if (regcomp (&re , WORD , REG_EXTENDED)) {
         fprintf(stderr , "Failed to compile regex.\n");
     }
 
