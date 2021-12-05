@@ -85,6 +85,9 @@ Node *ht_lookup(HashTable *ht, char *oldspeak) {
 /* Inserts the specified oldspeak and its corresponding newspeak translation into the hash table. The
 index of the binary search tree to insert into is calculated by hashing the oldspeak. */
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
+    if (ht == NULL) {
+        return;
+    }
     uint32_t index = hash(ht->salt, oldspeak);
     index = index % ht->size;
     ht->trees[index] = bst_insert(ht->trees[index], oldspeak, newspeak);
