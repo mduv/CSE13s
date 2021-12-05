@@ -47,10 +47,10 @@ Node *bst_find(Node *root, char *oldspeak) {
     
     // printf("iteration: %d\n", count);
 
-    if (root==NULL || strcmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
+    if (root==NULL || strcasecmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
         return root;
     }
-    if (strcmp(root->oldspeak, oldspeak) < 0) {
+    if (strcasecmp(root->oldspeak, oldspeak) < 0) {
         branches++; 
         return bst_find(root->right, oldspeak);
     } else { 
