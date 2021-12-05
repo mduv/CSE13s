@@ -111,8 +111,10 @@ int main(int argc, char **argv) {
     }
 
     while (fscanf(bs_p, "%s\n", bs_contents) != EOF) {
+        char *lower_word = toLower(bs_contents);
         bf_insert(bf, bs_contents);
         ht_insert(ht, bs_contents, NULL);
+        free(lower_word);
     }
 
     /* Read in a list of oldspeak and newspeak pairs with fscanf(). Only the oldspeak should be added to
@@ -135,8 +137,10 @@ int main(int argc, char **argv) {
     }
 
     while (fscanf(os_ns_p, "%s %s\n", os_contents, ns_contents) != EOF) {
+        char *lower_word = toLower(os_contents);
         bf_insert(bf, os_contents);
         ht_insert(ht, os_contents, ns_contents);
+        free(lower_word);
     }
 
     /* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
