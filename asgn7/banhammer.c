@@ -144,9 +144,6 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     HashTable *oldspeak_ht = ht_create(bf_count(bf));
 
     while ((word = next_word(stdin , &re)) != NULL) {
-        if (!statistics_mode) {
-            printf("Word: %s\n", word);
-        }
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
             if (check != NULL) {
