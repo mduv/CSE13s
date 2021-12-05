@@ -1,7 +1,7 @@
 #include "ht.h"
 #include "salts.h"
 #include "node.h"
-
+#include "parser.h"
 #include "speck.h"
 #include <math.h>
 #include <stdio.h>
@@ -32,14 +32,12 @@ HashTable *ht_create(uint32_t size) {
     ht->salt[0] = SALT_HASHTABLE_LO;
     ht->salt[1] = SALT_HASHTABLE_HI;
     
-    ht->trees = (Node **) malloc(sizeof(Node*) * size);
+    ht->trees = (Node **) calloc(size, sizeof(Node*));
     if (ht->trees == NULL) {
         return NULL;
     }
+    
 
-    for (uint32_t i = 0; i < size; i++) {
-        ht->trees[i] = NULL;
-    }
     return ht;
 }
 

@@ -38,7 +38,7 @@ Node *node_create(char *oldspeak, char *newspeak) {
 }
 
 void node_delete(Node **n) {
-    if (*n == NULL) {
+    if (n == NULL || *n == NULL) {
         return;
     }
     free((*n)->oldspeak);
