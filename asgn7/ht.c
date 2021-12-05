@@ -36,6 +36,10 @@ HashTable *ht_create(uint32_t size) {
     if (ht->trees == NULL) {
         return NULL;
     }
+
+    for (uint32_t i = 0; i < size; i++) {
+        ht->trees[i] = NULL;
+    }
     return ht;
 }
 
