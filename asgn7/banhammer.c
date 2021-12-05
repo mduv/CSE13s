@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 
     /* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
 c   an start to filter out words. Read words in from stdin using the supplied parsing module. */
-    #define WORD "[a-zA-Z0-9_][a-zA-Z0-9_'-]*"
+    #define WORD "[a-zA-Z0-9_'-]+"
     regex_t re;
     if (regcomp (&re , WORD , REG_EXTENDED)) {
         fprintf(stderr , "Failed to compile regex.\n");
@@ -192,6 +192,13 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         ht_delete(&oldspeak_ht);
         clear_words();
         regfree (&re);
+        for (int i = 0; i < bsn; i++) {
+            node_delete(&badspeak_nodes[i]);
+        }
+        for (int i = 0; i < osn; i++) {
+            node_delete(&oldspeak_nodes[i]);
+        }
+        
         return 0;
     } 
 
@@ -235,6 +242,12 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     ht_delete(&ht);
     ht_delete(&badspeak_ht);
     ht_delete(&oldspeak_ht);
+    for (int i = 0; i < bsn; i++) {
+        node_delete(&badspeak_nodes[i]);
+    }
+    for (int i = 0; i < osn; i++) {
+        node_delete(&oldspeak_nodes[i]);
+    }
 
     return 0;
 }
