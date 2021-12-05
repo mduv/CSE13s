@@ -56,6 +56,7 @@ void ht_delete(HashTable **ht) {
         bst_delete(&((*ht)->trees[i]));
     }
     printf("freeing ht\n");
+    free((*ht)->trees);
     free(*ht);
     *ht = NULL;
     return;

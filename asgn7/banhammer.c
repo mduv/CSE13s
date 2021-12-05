@@ -87,8 +87,11 @@ int main(int argc, char **argv) {
     struct stat vb;
     stat("badspeak.txt", &sb);
     char *bs_contents = malloc(sb.st_size);
+    if (bs_contents == NULL) {
+        return -1;
+    }
 
-    while (fscanf(bs_p, "%[^\n] ", bs_contents) != EOF) {
+    while (fscanf(bs_p, "%s\n", bs_contents) != EOF) {
         bf_insert(bf, bs_contents);
         ht_insert(ht, bs_contents, NULL);
     }
@@ -101,8 +104,11 @@ int main(int argc, char **argv) {
     stat("newspeak.txt", &vb);
     char *os_contents = malloc(sb.st_size);
     char *ns_contents = malloc(vb.st_size);
+    if (os_contents == NULL || ns_contents == NULL) {
+        return -1;
+    }
 
-    while (fscanf(os_ns_p, "%s %s", os_contents, ns_contents) != EOF) {
+    while (fscanf(os_ns_p, "%s %s\n", os_contents, ns_contents) != EOF) {
         bf_insert(bf, os_contents);
         ht_insert(ht, os_contents, ns_contents);
     }
@@ -178,15 +184,15 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     clear_words();
     regfree (&re);
 
-    // fclose(os_ns_p);
-    // fclose(bs_p);
-    // free(bs_contents);
-    // free(os_contents);
-    // free(ns_contents);
-    // bf_delete(&bf);
-    // ht_delete(&ht);
-    // ht_delete(&badspeak_ht);
-    // ht_delete(&oldspeak_ht);
+    fclose(os_ns_p);
+    fclose(bs_p);
+    free(bs_contents);
+    free(os_contents);
+    free(ns_contents);
+    bf_delete(&bf);
+    ht_delete(&ht);
+    ht_delete(&badspeak_ht);
+    ht_delete(&oldspeak_ht);
 
     
     return 1;
