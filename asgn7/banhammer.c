@@ -56,6 +56,11 @@ int main(int argc, char **argv) {
     int opt = 0;
     optind = 1;
     // input = stdin;
+    double avg_bst_size = 0.0;
+    double avg_bst_height = 0.0;
+    double avg_branch_trav = 0.0;
+    double ht_load = 0.0;
+    double bf_load = 0.0;
 
     int table_size = myPow(2,16);
     int filter_size = myPow(2,20);
@@ -74,15 +79,16 @@ int main(int argc, char **argv) {
                    "\n\t-t size         Specify hash table size (default: 2^16)."
                    "\n\t-f size         Specify Bloom filter size (default: 2^20).\n");
             break;
-        case 's':
-            statistics_mode = true;
-            break;
         case 't':
             table_size = atoi(optarg);
             break;
         case 'f':
             filter_size = atoi(optarg);
             break;
+        case 's':
+            statistics_mode = true;
+            break;
+
         }
     }
 
@@ -140,11 +146,6 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     HashTable *badspeak_ht = ht_create(bf_count(bf));
     HashTable *oldspeak_ht = ht_create(bf_count(bf));
 
-    // printf("hello\n");
-    // Node *d = ht_lookup(ht, "arcites");
-    // node_print(d);
-
-
     while ((word = next_word(stdin , &re)) != NULL) {
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
@@ -164,6 +165,25 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         // printf("Word: %s\n", word);
     }
     // printf("thoughtcrime: %d, rightspeak: %d\n", thoughtcrime, rightspeak);
+
+    avg_bst_size = ht_avg_bst_size(ht);
+    avg_bst_height = ht_avg_bst_height(ht);
+    // printf("branches: %llu\n", branches);
+    // printf("lookups: %llu\n", lookups);
+
+    avg_branch_trav = (float) branches/ (float) lookups;
+    ht_load = 100.0 * ( (float) ht_count(ht)/ (float) ht_size(ht));
+    bf_load = 100.0 * ( (float) bf_count(bf)/ (float) bf_size(bf));
+
+
+    if (statistics_mode) {
+        printf("Average BST size: %f\n", avg_bst_size);
+        printf("Average BST height: %f\n", avg_bst_height);
+        printf("Average branches traversed: %f\n", avg_branch_trav);
+        printf("Hash table load: %0.6f%%\n", ht_load);
+        printf("Bloom filter load: %0.6f%%\n", bf_load);
+        return 0;
+    } 
 
     if (thoughtcrime && !rightspeak) {
         printf("%s", badspeak_message);

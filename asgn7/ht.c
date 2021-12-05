@@ -20,6 +20,8 @@ struct HashTable {
     Node **trees;
 };
 
+uint64_t lookups = 0;
+
 /* The constructor for a hash table. The size parameter denotes the number of indices, or binary search
 trees, that the hash table can index up to. The salt for the hash table is provided in salts.h. */
 
@@ -73,6 +75,7 @@ its newspeak translation. The index of the binary search tree to perform a look-
 hashing the oldspeak. If the node is found, the pointer to the node is returned. Else, a NULL pointer is
 returned. */
 Node *ht_lookup(HashTable *ht, char *oldspeak) {
+    lookups++;
     if (ht == NULL) {
         return NULL;
     }
@@ -89,6 +92,7 @@ Node *ht_lookup(HashTable *ht, char *oldspeak) {
 /* Inserts the specified oldspeak and its corresponding newspeak translation into the hash table. The
 index of the binary search tree to insert into is calculated by hashing the oldspeak. */
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
+    lookups++;
     if (ht == NULL) {
         return;
     }
@@ -118,7 +122,7 @@ double ht_avg_bst_size(HashTable *ht) {
     for (uint32_t i = 0; i < ht->size; i++) {
         sum += bst_size(ht->trees[i]);
     }
-    double avg = (double) (sum / ht_count(ht));
+    double avg = (double) ((double) sum / ht_count(ht));
     return avg;
 }
 
@@ -131,7 +135,7 @@ double ht_avg_bst_height(HashTable *ht) {
     for (uint32_t i = 0; i < ht->size; i++) {
         sum += bst_height(ht->trees[i]);
     }
-    double avg = (double) (sum / ht_count(ht));
+    double avg = (double) ((double)sum / ht_count(ht));
     return avg;
 }
 

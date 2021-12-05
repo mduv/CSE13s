@@ -7,6 +7,7 @@
 #include "node.h"
 #include "math.h"
 
+uint64_t branches = 0;
 
 Node *bst_create(void) {
     return NULL;
@@ -49,10 +50,11 @@ Node *bst_find(Node *root, char *oldspeak) {
     if (root==NULL || strcmp(root->oldspeak, oldspeak) == 0) { // if root->oldspeak is oldspeak then the element is found {
         return root;
     }
-    if (strcmp(root->oldspeak, oldspeak) < 0) { 
+    if (strcmp(root->oldspeak, oldspeak) < 0) {
+        branches++; 
         return bst_find(root->right, oldspeak);
     } else { 
-        // printf("hello\n");
+        branches++;
         return bst_find(root->left, oldspeak);
     }
     return NULL;
@@ -76,9 +78,11 @@ Node *bst_insert(Node *root, char *oldspeak, char *newspeak) {
     }
     if (strcmp(oldspeak, root->oldspeak) < 0) {     // oldspeak is < root->oldspeak
         root->left = bst_insert(root->left, oldspeak, newspeak);
+        branches++;
         return root;
     } else {
         root->right = bst_insert(root->right, oldspeak, newspeak);
+        branches++;
         return root;
     }
     return root;
