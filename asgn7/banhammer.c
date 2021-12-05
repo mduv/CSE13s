@@ -16,6 +16,9 @@
 #include <regex.h>
 #include "parser.h"
 #include "messages.h"
+#include <string.h>
+#include <ctype.h>
+
 
 #define OPTIONS "sht:f:"
 
@@ -32,6 +35,16 @@ int myPow(int x,int n)
     return(number);
 }
 
+char *toLower(char *str)
+{
+    size_t len = strlen(str);
+    char *str_l = calloc(len+1, sizeof(char));
+
+    for (size_t i = 0; i < len; ++i) {
+        str_l[i] = tolower((unsigned char)str[i]);
+    }
+    return str_l;
+}
 
 int main(int argc, char **argv) {
     int opt = 0;
@@ -148,6 +161,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     int osn = 0;
 
     while ((word = next_word(stdin , &re)) != NULL) {
+        char *lower_word = toLower(word);
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
             if (check != NULL) {
@@ -164,6 +178,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
                 }
             }
         }
+        free(lower_word);
     }
 
     avg_bst_size = ht_avg_bst_size(ht);
