@@ -176,14 +176,14 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     bf_load = 100.0 * ( (float) bf_count(bf)/ (float) bf_size(bf));
 
 
-    // if (statistics_mode) {
-    //     printf("Average BST size: %f\n", avg_bst_size);
-    //     printf("Average BST height: %f\n", avg_bst_height);
-    //     printf("Average branches traversed: %f\n", avg_branch_trav);
-    //     printf("Hash table load: %0.6f%%\n", ht_load);
-    //     printf("Bloom filter load: %0.6f%%\n", bf_load);
-    //     return 0;
-    // } 
+    if (statistics_mode) {
+        printf("Average BST size: %f\n", avg_bst_size);
+        printf("Average BST height: %f\n", avg_bst_height);
+        printf("Average branches traversed: %f\n", avg_branch_trav);
+        printf("Hash table load: %0.6f%%\n", ht_load);
+        printf("Bloom filter load: %0.6f%%\n", bf_load);
+        return 0;
+    } 
 
     if (thoughtcrime && !rightspeak) {
         printf("%s", badspeak_message);
