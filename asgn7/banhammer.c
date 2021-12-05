@@ -184,15 +184,15 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     clear_words();
     regfree (&re);
 
-    // fclose(os_ns_p);
-    // fclose(bs_p);
-    // free(bs_contents);
-    // free(os_contents);
-    // free(ns_contents);
-    // bf_delete(&bf);
-    // ht_delete(&ht);
-    // ht_delete(&badspeak_ht);
-    // ht_delete(&oldspeak_ht);
+    fclose(os_ns_p);
+    fclose(bs_p);
+    free(bs_contents);
+    free(os_contents);
+    free(ns_contents);
+    bf_delete(&bf);
+    ht_delete(&ht);
+    ht_delete(&badspeak_ht);
+    ht_delete(&oldspeak_ht);
 
     
     return 1;
