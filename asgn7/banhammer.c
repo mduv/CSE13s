@@ -40,8 +40,13 @@ char *toLower(char *str)
     size_t len = strlen(str);
     char *str_l = calloc(len+1, sizeof(char));
 
-    for (size_t i = 0; i < len; ++i) {
-        str_l[i] = tolower((unsigned char)str[i]);
+    for (size_t i = 0, j = 0; i < len; i++, j++) {
+        unsigned char the_char = (unsigned char)str[i];
+        if (the_char == '_' || the_char == '-' || the_char == '\'') {
+            // do nothing;
+        } else {
+            str_l[j] = tolower((unsigned char)str[i]);
+        }
     }
     return str_l;
 }
@@ -111,8 +116,10 @@ int main(int argc, char **argv) {
     }
 
     while (fscanf(bs_p, "%s\n", bs_contents) != EOF) {
-        bf_insert(bf, bs_contents);
-        ht_insert(ht, bs_contents, NULL);
+        char *lower_bs_contents = toLower(bs_contents);
+        bf_insert(bf, lower_bs_contents);
+        ht_insert(ht, lower_bs_contents, NULL);
+        free(lower_bs_contents);
     }
 
     /* Read in a list of oldspeak and newspeak pairs with fscanf(). Only the oldspeak should be added to
@@ -135,8 +142,10 @@ int main(int argc, char **argv) {
     }
 
     while (fscanf(os_ns_p, "%s %s\n", os_contents, ns_contents) != EOF) {
-        bf_insert(bf, os_contents);
-        ht_insert(ht, os_contents, ns_contents);
+        char *lower_os_contents = toLower(os_contents);
+        bf_insert(bf, lower_os_contents);
+        ht_insert(ht, lower_os_contents, ns_contents);
+        free(lower_os_contents);
     }
 
     /* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
@@ -161,22 +170,24 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     int osn = 0;
 
     while ((word = next_word(stdin , &re)) != NULL) {
-        if (bf_probe(bf, word)) {
-            Node *check = ht_lookup(ht, word);
+        char *lower_word= toLower(word);
+        if (bf_probe(bf, lower_word)) {
+            Node *check = ht_lookup(ht, lower_word);
             if (check != NULL) {
                 // thoughtcrime
                 if (check->newspeak == NULL) {
-                    ht_insert(badspeak_ht, word, NULL);
+                    ht_insert(badspeak_ht, lower_word, NULL);
                     thoughtcrime = true;
-                    badspeak_nodes[bsn++] = node_create(word, NULL);
+                    badspeak_nodes[bsn++] = node_create(lower_word, NULL);
                 } else {
                 // Rightspeak
-                    ht_insert(oldspeak_ht, word, check->newspeak);
+                    ht_insert(oldspeak_ht, lower_word, check->newspeak);
                     rightspeak = true;
-                    oldspeak_nodes[osn++] = node_create(word, check->newspeak);
+                    oldspeak_nodes[osn++] = node_create(lower_word, check->newspeak);
                 }
             }
         }
+        free(lower_word);
     }
 
     avg_bst_size = ht_avg_bst_size(ht);
