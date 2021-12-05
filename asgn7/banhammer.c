@@ -153,20 +153,14 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
             if (check != NULL) {
                 // thoughtcrime
                 if (check->newspeak == NULL) {
-                    Node *prev_bs = ht_lookup(badspeak_ht, word);
                     ht_insert(badspeak_ht, word, NULL);
                     thoughtcrime = true;
-                    if (prev_bs != NULL) {
-                        badspeak_nodes[bsn++] = node_create(word, NULL);
-                    }
+                    badspeak_nodes[bsn++] = node_create(word, NULL);
                 } else {
                 // Rightspeak
-                    Node *prev_os = ht_lookup(oldspeak_ht, word);
                     ht_insert(oldspeak_ht, word, check->newspeak);
                     rightspeak = true;
-                    if (prev_os != NULL) {
-                        oldspeak_nodes[osn++] = node_create(word, check->newspeak);
-                    }
+                    oldspeak_nodes[osn++] = node_create(word, check->newspeak);
                 }
             }
         }
