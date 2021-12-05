@@ -85,9 +85,13 @@ void test_ht() {
     ht_insert(ht, "annoy", "razdraz");
     ht_insert(ht, "bad", "baddiwad");
     printf("count: %d\n", ht_count(ht));
-    printf("avg size: %f\n", ht_avg_bst_size(ht));
-    printf("avg height: %f\n", ht_avg_bst_height(ht));
+    // printf("avg size: %f\n", ht_avg_bst_size(ht));
+    // printf("avg height: %f\n", ht_avg_bst_height(ht));
 
+    ht_print(ht);
+    printf("#############\n");
+    Node *l = ht_lookup(ht, "bad");
+    node_print(l);
 }
 
 int main() {

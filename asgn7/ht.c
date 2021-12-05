@@ -43,7 +43,9 @@ void ht_delete(HashTable **ht) {
     if (ht == NULL) {
         return;
     }
-    bst_delete(((*ht)->trees));
+    for (uint32_t i = 0; i < ht_size(*ht); i++) {
+        bst_delete(&(*ht)->trees[i]);
+    }
     free(*ht);
     *ht = NULL;
     return;
