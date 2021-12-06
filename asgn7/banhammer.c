@@ -130,13 +130,13 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     bool thoughtcrime = false;
     bool rightspeak = false;
 
-    HashTable *badspeak_ht = ht_create(bf_count(bf));
-    HashTable *oldspeak_ht = ht_create(bf_count(bf));
+    // HashTable *badspeak_ht = ht_create(bf_count(bf));
+    // HashTable *oldspeak_ht = ht_create(bf_count(bf));
 
-    Node *badspeak_nodes[100000];
-    Node *oldspeak_nodes[100000];
-    int bsn = 0;
-    int osn = 0;
+    // Node *badspeak_nodes[100000];
+    // Node *oldspeak_nodes[100000];
+    // int bsn = 0;
+    // int osn = 0;
 
     Node* badspeak_bst = bst_create();
     Node* oldspeak_bst = bst_create();
@@ -149,15 +149,15 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
             if (check != NULL) {
                 // thoughtcrime
                 if (check->newspeak == NULL) {
-                    ht_insert(badspeak_ht, word, NULL);
+                    //ht_insert(badspeak_ht, word, NULL);
                     thoughtcrime = true;
-                    badspeak_nodes[bsn++] = node_create(word, NULL);
+                    //badspeak_nodes[bsn++] = node_create(word, NULL);
                     badspeak_bst = bst_insert(badspeak_bst, word, NULL);
                 } else {
                     // Rightspeak
-                    ht_insert(oldspeak_ht, word, check->newspeak);
+                    //ht_insert(oldspeak_ht, word, check->newspeak);
                     rightspeak = true;
-                    oldspeak_nodes[osn++] = node_create(word, check->newspeak);
+                    //oldspeak_nodes[osn++] = node_create(word, check->newspeak);
                     oldspeak_bst = bst_insert(oldspeak_bst, word, check->newspeak);
                 }
             }
@@ -184,16 +184,16 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         free(ns_contents);
         bf_delete(&bf);
         ht_delete(&ht);
-        ht_delete(&badspeak_ht);
-        ht_delete(&oldspeak_ht);
+        // ht_delete(&badspeak_ht);
+        // ht_delete(&oldspeak_ht);
         clear_words();
         regfree(&re);
-        for (int i = 0; i < bsn; i++) {
-            node_delete(&badspeak_nodes[i]);
-        }
-        for (int i = 0; i < osn; i++) {
-            node_delete(&oldspeak_nodes[i]);
-        }
+        // for (int i = 0; i < bsn; i++) {
+        //     node_delete(&badspeak_nodes[i]);
+        // }
+        // for (int i = 0; i < osn; i++) {
+        //     node_delete(&oldspeak_nodes[i]);
+        // }
         bst_delete(&badspeak_bst);
         bst_delete(&oldspeak_bst);
         
@@ -242,14 +242,14 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     free(ns_contents);
     bf_delete(&bf);
     ht_delete(&ht);
-    ht_delete(&badspeak_ht);
-    ht_delete(&oldspeak_ht);
-    for (int i = 0; i < bsn; i++) {
-        node_delete(&badspeak_nodes[i]);
-    }
-    for (int i = 0; i < osn; i++) {
-        node_delete(&oldspeak_nodes[i]);
-    }
+    // ht_delete(&badspeak_ht);
+    // ht_delete(&oldspeak_ht);
+    // for (int i = 0; i < bsn; i++) {
+    //     node_delete(&badspeak_nodes[i]);
+    // }
+    // for (int i = 0; i < osn; i++) {
+    //     node_delete(&oldspeak_nodes[i]);
+    // } 
     bst_delete(&badspeak_bst);
     bst_delete(&oldspeak_bst);
 
