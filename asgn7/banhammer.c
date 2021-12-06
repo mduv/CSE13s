@@ -16,6 +16,8 @@
 #include <regex.h>
 #include "parser.h"
 #include "messages.h"
+#include <string.h>
+#include <ctype.h>
 
 #define OPTIONS "sht:f:"
 
@@ -136,6 +138,11 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
 
     while ((word = next_word(stdin , &re)) != NULL) {
         
+        // Convert word to lower case
+        for (unsigned long i = 0; i < strlen(word); i++) {
+            word[i] = tolower(word[i]);
+        }
+
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
             if (check != NULL) {
