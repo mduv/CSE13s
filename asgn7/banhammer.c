@@ -138,15 +138,12 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     int bsn = 0;
     int osn = 0;
 
-<<<<<<< HEAD
     Node* badspeak_bst = bst_create();
     Node* oldspeak_bst = bst_create();
 
 
     while ((word = next_word(stdin , &re)) != NULL) {
-=======
-    while ((word = next_word(stdin, &re)) != NULL) {
->>>>>>> 8823eefb04670d79a1ff1672be510d1eef8c5fd8
+        
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
             if (check != NULL) {
@@ -197,13 +194,9 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         for (int i = 0; i < osn; i++) {
             node_delete(&oldspeak_nodes[i]);
         }
-<<<<<<< HEAD
         bst_delete(&badspeak_bst);
         bst_delete(&oldspeak_bst);
         
-=======
-
->>>>>>> 8823eefb04670d79a1ff1672be510d1eef8c5fd8
         return 0;
     }
 
