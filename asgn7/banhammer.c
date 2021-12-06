@@ -147,6 +147,10 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     int bsn = 0;
     int osn = 0;
 
+    Node* badspeak_bst = bst_create();
+    Node* oldspeak_bst = bst_create();
+
+
     while ((word = next_word(stdin , &re)) != NULL) {
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
@@ -156,11 +160,13 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
                     ht_insert(badspeak_ht, word, NULL);
                     thoughtcrime = true;
                     badspeak_nodes[bsn++] = node_create(word, NULL);
+                    badspeak_bst = bst_insert(badspeak_bst, word, NULL);
                 } else {
                 // Rightspeak
                     ht_insert(oldspeak_ht, word, check->newspeak);
                     rightspeak = true;
                     oldspeak_nodes[osn++] = node_create(word, check->newspeak);
+                    oldspeak_bst = bst_insert(oldspeak_bst, word, check->newspeak);
                 }
             }
         }
@@ -198,6 +204,8 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         for (int i = 0; i < osn; i++) {
             node_delete(&oldspeak_nodes[i]);
         }
+        bst_delete(&badspeak_bst);
+        bst_delete(&oldspeak_bst);
         
         return 0;
     } 
@@ -205,29 +213,33 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     if (thoughtcrime && !rightspeak) {
         printf("%s", badspeak_message);
         //ht_print(badspeak_ht);
-        for (int i = 0; i < bsn; i++) {
-            node_print(badspeak_nodes[i]);
-        }
+        // for (int i = 0; i < bsn; i++) {
+        //     node_print(badspeak_nodes[i]);
+        // }
+        bst_print(badspeak_bst);
     }
 
     if (!thoughtcrime && rightspeak) {
         printf("%s", goodspeak_message);
         //ht_print(oldspeak_ht);
-        for (int i = 0; i < osn; i++) {
-            node_print(oldspeak_nodes[i]);
-        }
+        // for (int i = 0; i < osn; i++) {
+        //     node_print(oldspeak_nodes[i]);
+        // }
+        bst_print(oldspeak_bst);
     }
     
     if (thoughtcrime && rightspeak) {
         printf("%s", mixspeak_message);
         //ht_print(badspeak_ht);
         //ht_print(oldspeak_ht);
-        for (int i = 0; i < bsn; i++) {
-            node_print(badspeak_nodes[i]);
-        }
-        for (int i = 0; i < osn; i++) {
-            node_print(oldspeak_nodes[i]);
-        }
+        // for (int i = 0; i < bsn; i++) {
+        //     node_print(badspeak_nodes[i]);
+        // }
+        // for (int i = 0; i < osn; i++) {
+        //     node_print(oldspeak_nodes[i]);
+        // }
+        bst_print(badspeak_bst);
+        bst_print(oldspeak_bst);
     }
 
     clear_words();
@@ -248,6 +260,8 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     for (int i = 0; i < osn; i++) {
         node_delete(&oldspeak_nodes[i]);
     }
+    bst_delete(&badspeak_bst);
+    bst_delete(&oldspeak_bst);
 
     return 0;
 }
