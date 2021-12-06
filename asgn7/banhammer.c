@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
                    "\n\t-s              Print program statistics."
                    "\n\t-t size         Specify hash table size (default: 2^16)."
                    "\n\t-f size         Specify Bloom filter size (default: 2^20).\n");
-            break;
             return 0;
+            break;
         case 't': table_size = atoi(optarg); break;
         case 'f': filter_size = atoi(optarg); break;
         case 's': statistics_mode = true; break;
