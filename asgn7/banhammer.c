@@ -17,20 +17,18 @@
 #include "parser.h"
 #include "messages.h"
 
-
 #define OPTIONS "sht:f:"
 
 bool statistics_mode = false;
 
-int myPow(int x,int n)
-{
+int myPow(int x, int n) {
     int i; /* Variable used in loop counter */
     int number = 1;
 
     for (i = 0; i < n; ++i)
         number *= x;
 
-    return(number);
+    return (number);
 }
 
 int main(int argc, char **argv) {
@@ -43,16 +41,16 @@ int main(int argc, char **argv) {
     double ht_load = 0.0;
     double bf_load = 0.0;
 
-    int table_size = myPow(2,16);
-    int filter_size = myPow(2,20);
+    int table_size = myPow(2, 16);
+    int filter_size = myPow(2, 20);
 
     // Parse command-line options using getopt() and handle them accordingly.
-
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h':
-            printf("SYNOPSIS\n\tA word filtering program for the GPRSC.\n\tFilters out and reports bad words parsed from stdin."
+            printf("SYNOPSIS\n\tA word filtering program for the GPRSC.\n\tFilters out and reports "
+                   "bad words parsed from stdin."
                    "\n\nUSAGE\n\t./banhammer [-hs] [-t size] [-f size]"
                    "n\nOPTIONS"
                    "\n\t-h              Program usage and help."
@@ -61,22 +59,15 @@ int main(int argc, char **argv) {
                    "\n\t-f size         Specify Bloom filter size (default: 2^20).\n");
             break;
             return 0;
-        case 't':
-            table_size = atoi(optarg);
-            break;
-        case 'f':
-            filter_size = atoi(optarg);
-            break;
-        case 's':
-            statistics_mode = true;
-            break;
-
+        case 't': table_size = atoi(optarg); break;
+        case 'f': filter_size = atoi(optarg); break;
+        case 's': statistics_mode = true; break;
         }
     }
-    
+
     /* Initialize your Bloom filter and hash table. */
     BloomFilter *bf = bf_create(filter_size);
-    
+
     HashTable *ht = ht_create(table_size);
 
     /* Read in a list of badspeak words with fscanf(). Again, badspeak is simply oldspeak without a
@@ -126,12 +117,12 @@ int main(int argc, char **argv) {
         ht_insert(ht, os_contents, ns_contents);
     }
 
-    /* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
+/* Now that the lexicon of badspeak and oldspeak/newspeak translations has been populated, you
 c   an start to filter out words. Read words in from stdin using the supplied parsing module. */
-    #define WORD "[a-zA-Z0-9_'-]+"
+#define WORD "[a-zA-Z0-9_'-]+"
     regex_t re;
-    if (regcomp (&re , WORD , REG_EXTENDED)) {
-        fprintf(stderr , "Failed to compile regex.\n");
+    if (regcomp(&re, WORD, REG_EXTENDED)) {
+        fprintf(stderr, "Failed to compile regex.\n");
     }
 
     char *word = NULL;
@@ -142,16 +133,20 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     HashTable *badspeak_ht = ht_create(bf_count(bf));
     HashTable *oldspeak_ht = ht_create(bf_count(bf));
 
-    Node* badspeak_nodes[100000];
-    Node* oldspeak_nodes[100000];
+    Node *badspeak_nodes[100000];
+    Node *oldspeak_nodes[100000];
     int bsn = 0;
     int osn = 0;
 
+<<<<<<< HEAD
     Node* badspeak_bst = bst_create();
     Node* oldspeak_bst = bst_create();
 
 
     while ((word = next_word(stdin , &re)) != NULL) {
+=======
+    while ((word = next_word(stdin, &re)) != NULL) {
+>>>>>>> 8823eefb04670d79a1ff1672be510d1eef8c5fd8
         if (bf_probe(bf, word)) {
             Node *check = ht_lookup(ht, word);
             if (check != NULL) {
@@ -162,7 +157,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
                     badspeak_nodes[bsn++] = node_create(word, NULL);
                     badspeak_bst = bst_insert(badspeak_bst, word, NULL);
                 } else {
-                // Rightspeak
+                    // Rightspeak
                     ht_insert(oldspeak_ht, word, check->newspeak);
                     rightspeak = true;
                     oldspeak_nodes[osn++] = node_create(word, check->newspeak);
@@ -175,11 +170,9 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     avg_bst_size = ht_avg_bst_size(ht);
     avg_bst_height = ht_avg_bst_height(ht);
 
-
-    avg_branch_trav = (float) branches/ (float) lookups;
-    ht_load = 100.0 * ( (float) ht_count(ht)/ (float) ht_size(ht));
-    bf_load = 100.0 * ( (float) bf_count(bf)/ (float) bf_size(bf));
-
+    avg_branch_trav = (float) branches / (float) lookups;
+    ht_load = 100.0 * ((float) ht_count(ht) / (float) ht_size(ht));
+    bf_load = 100.0 * ((float) bf_count(bf) / (float) bf_size(bf));
 
     if (statistics_mode) {
         printf("Average BST size: %f\n", avg_bst_size);
@@ -197,18 +190,22 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         ht_delete(&badspeak_ht);
         ht_delete(&oldspeak_ht);
         clear_words();
-        regfree (&re);
+        regfree(&re);
         for (int i = 0; i < bsn; i++) {
             node_delete(&badspeak_nodes[i]);
         }
         for (int i = 0; i < osn; i++) {
             node_delete(&oldspeak_nodes[i]);
         }
+<<<<<<< HEAD
         bst_delete(&badspeak_bst);
         bst_delete(&oldspeak_bst);
         
+=======
+
+>>>>>>> 8823eefb04670d79a1ff1672be510d1eef8c5fd8
         return 0;
-    } 
+    }
 
     if (thoughtcrime && !rightspeak) {
         printf("%s", badspeak_message);
@@ -227,7 +224,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         // }
         bst_print(oldspeak_bst);
     }
-    
+
     if (thoughtcrime && rightspeak) {
         printf("%s", mixspeak_message);
         //ht_print(badspeak_ht);
@@ -243,7 +240,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     }
 
     clear_words();
-    regfree (&re);
+    regfree(&re);
 
     fclose(os_ns_p);
     fclose(bs_p);
@@ -265,4 +262,3 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
 
     return 0;
 }
-
