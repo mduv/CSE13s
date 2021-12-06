@@ -132,12 +132,11 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
     bool thoughtcrime = false;
     bool rightspeak = false;
 
-    Node* badspeak_bst = bst_create();
-    Node* oldspeak_bst = bst_create();
+    Node *badspeak_bst = bst_create();
+    Node *oldspeak_bst = bst_create();
 
+    while ((word = next_word(stdin, &re)) != NULL) {
 
-    while ((word = next_word(stdin , &re)) != NULL) {
-        
         // Convert word to lower case
         for (unsigned long i = 0; i < strlen(word); i++) {
             word[i] = tolower(word[i]);
@@ -183,7 +182,7 @@ c   an start to filter out words. Read words in from stdin using the supplied pa
         regfree(&re);
         bst_delete(&badspeak_bst);
         bst_delete(&oldspeak_bst);
-        
+
         return 0;
     }
 
